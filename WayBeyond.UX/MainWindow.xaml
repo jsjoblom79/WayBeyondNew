@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WayBeyond.UX"
+        xmlns:setting="clr-namespace:WayBeyond.UX.File.Settings"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <DataTemplate DataType="{x:Type setting:SettingsViewModel}">
+            <setting:SettingsView/>
+        </DataTemplate>
         
     </Window.Resources>
     <Grid>
@@ -48,6 +53,11 @@
         </Menu>
         
         <ContentControl Grid.Row="1" Content="{Binding CurrentViewModel}"/>
-        
+        <ContentControl Grid.Row="2" Margin="3" FontSize="16" FontWeight="DemiBold"
+                        HorizontalAlignment="Center" Height="27.62">
+            <b:Interaction.Behaviors>
+                <local:ShowNotificationMessageBehavior Message="{Binding CurrentStatus}"/>
+            </b:Interaction.Behaviors>
+        </ContentControl>
     </Grid>
 </Window>

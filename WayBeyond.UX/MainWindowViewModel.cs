@@ -4,14 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity;
+using WayBeyond.UX.File.Settings;
 
 namespace WayBeyond.UX
 {
     public class MainWindowViewModel : BindableBase
     {
+        private SettingsViewModel _settingsViewModel;
+
         public MainWindowViewModel()
         {
             NavigateCommand = new RelayCommand<string>(OnNavigation);
+            _settingsViewModel = ContainerHelper.Container.Resolve<SettingsViewModel>();
         }
 
         
@@ -33,6 +38,9 @@ namespace WayBeyond.UX
             {
                 case "exit":
                     Exit();
+                    break;
+                case "settings":
+                    CurrentViewModel = _settingsViewModel;
                     break;
                 default:
                     break;

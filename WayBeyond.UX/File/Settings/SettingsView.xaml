@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="WayBeyond.UX.File.Settings.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WayBeyond.UX.File.Settings"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded">
+            <b:CallMethodAction TargetObject="{Binding}" MethodName="OnViewLoaded"/>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
+    <Grid Margin="3">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="search" FontFamily="{StaticResource FontAwesome}" FontSize="16" Margin="3"/>
+                <TextBox Margin="3" Width="250" Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}" ToolTip="Search by entering a settings key."/>
+                <Button Content="x" FontFamily="{StaticResource FontAwesome}" Command="{Binding ClearSearch}"
+                        Background="Transparent" BorderThickness="0" Margin="3" ToolTip="Clear current search term."/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Content="plus; Setting" Command="{Binding AddSettingCommand}" Margin="3" FontFamily="{StaticResource FontAwesome}"
+                        Background="Transparent" BorderThickness="0" FontSize="14" ToolTip="Add a new setting."/>
+            </StackPanel>
+        </Grid>
+        <DataGrid ItemsSource="{Binding ApplicationSettings}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                  Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="Auto"/>
+                <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="Auto"/>
+                <DataGridTemplateColumn Header="Edit">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="edit" Command="{Binding DataContext.EditSettingCommand,
+                                RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding}" FontFamily="{StaticResource FontAwesome}"
+                                        Background="Transparent" BorderThickness="0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Delete">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="trash" Command="{Binding DataContext.DeleteSettingCommand,
+                                RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding}" FontFamily="{StaticResource FontAwesome}"
+                                        Background="Transparent" BorderThickness="0"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

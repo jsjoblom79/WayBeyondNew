@@ -32,4 +32,8 @@
     <ProjectReference Include="..\WayBeyond.Data\WayBeyond.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+  </ItemGroup>
+
 </Project>

@@ -31,10 +31,7 @@ namespace WayBeyond.UX
                 .CreateLogger();
             InitializeComponent();
 
-            MainWindowViewModel.Exit += OnExit;
-            
-            
-            
+            MainWindowViewModel.Exit += OnExit; 
         }
 
         private async void OnExit()

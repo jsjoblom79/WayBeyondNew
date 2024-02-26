@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:WayBeyond.UX"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <FontFamily x:Key="FontAwesome">/Fonts/Font Awesome 6 Free Solid.otf#Font Awesome 6 Free Solid</FontFamily>
+        <!-- https://fontawesome.com/search?o=r&m=free&s=solid&f=classic -->
     </Application.Resources>
 </Application>
