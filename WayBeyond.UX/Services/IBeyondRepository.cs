@@ -11,5 +11,8 @@ namespace WayBeyond.UX.Services
     {
         //Settings
         Task<List<Setting>> GetAllSettingsAsync();
+        Task<int> UpdateSettingsAsync(Setting setting);
+        Task<int> AddSettingsAsync(Setting setting);
+        Task<int> DeleteSettingsAsync(Setting setting);
     }
 }

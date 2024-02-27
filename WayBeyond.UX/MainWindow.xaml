@@ -15,7 +15,6 @@
         <DataTemplate DataType="{x:Type setting:SettingsViewModel}">
             <setting:SettingsView/>
         </DataTemplate>
-        
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

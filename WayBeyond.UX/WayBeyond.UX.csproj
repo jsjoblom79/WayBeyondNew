@@ -8,10 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Font Awesome 6 Free Solid.otf" />
     <None Remove="Resources\WayBeyond.db" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\Font Awesome 6 Free Solid.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <EmbeddedResource Include="Resources\WayBeyond.db" />
   </ItemGroup>
 
@@ -30,10 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WayBeyond.Data\WayBeyond.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Fonts\" />
   </ItemGroup>
 
 </Project>

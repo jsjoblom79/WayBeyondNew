@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity;
+using WayBeyond.Data.Models;
 using WayBeyond.UX.File.Settings;
 
 namespace WayBeyond.UX
@@ -17,9 +18,19 @@ namespace WayBeyond.UX
         {
             NavigateCommand = new RelayCommand<string>(OnNavigation);
             _settingsViewModel = ContainerHelper.Container.Resolve<SettingsViewModel>();
+            
         }
 
-        
+
+
+        private string _currentStatus;
+
+        public string CurrentStatus
+        {
+            get { return _currentStatus; }
+            set { SetProperty(ref _currentStatus, value); }
+        }
+
         private BindableBase _currentViewModel;
 
         public BindableBase CurrentViewModel
@@ -45,6 +56,12 @@ namespace WayBeyond.UX
                 default:
                     break;
             }
+        }
+
+        
+        private void UpdateStatus(string message)
+        {
+            CurrentStatus = message;
         }
         #endregion
     }
