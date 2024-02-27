@@ -70,6 +70,35 @@ namespace WayBeyond.UX.Services
             entity.State = EntityState.Modified;
             return _db.SaveChangesAsync();
         }
+
+
+        #endregion
+
+        #region Clients
+        public Task<List<Client>> GetAllClientsAsync()
+        {
+            return _db.Clients.ToListAsync();
+        }
+
+        public Task<int> AddClientAsync(Client client)
+        {
+            _db.Clients.Add(client);
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> UpdateClientAsync(Client client)
+        {
+            var entity = _db.Entry(client);
+            entity.State = EntityState.Modified;
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteClientAsync(Client client)
+        {
+            var entity = _db.Entry(client);
+            entity.State = EntityState.Deleted;
+            return _db.SaveChangesAsync();
+        }
         #endregion
     }
 }

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity;
 using WayBeyond.Data.Models;
+using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
 using WayBeyond.UX.File.Settings;
 
@@ -17,6 +18,7 @@ namespace WayBeyond.UX
         private AddEditSettingViewModel _addEditSettingViewModel;
         private RemoteConnectionsViewModel _remoteConnectionViewModel;
         private AddEditRemoteConnectionViewModel _addEditRemoteConnectionViewModel;
+        private ClientMaintenanceViewModel _clientMaintenanceViewModel;
 
         public MainWindowViewModel()
         {
@@ -25,6 +27,7 @@ namespace WayBeyond.UX
             _addEditSettingViewModel = ContainerHelper.Container.Resolve<AddEditSettingViewModel>();
             _remoteConnectionViewModel = ContainerHelper.Container.Resolve<RemoteConnectionsViewModel>();
             _addEditRemoteConnectionViewModel = ContainerHelper.Container.Resolve<AddEditRemoteConnectionViewModel>();
+            _clientMaintenanceViewModel = ContainerHelper.Container.Resolve<ClientMaintenanceViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -71,6 +74,9 @@ namespace WayBeyond.UX
                     break;
                 case "connection":
                     CurrentViewModel = _remoteConnectionViewModel;
+                    break;
+                case "maintenance":
+                    CurrentViewModel = _clientMaintenanceViewModel;
                     break;
                 default:
                     break;

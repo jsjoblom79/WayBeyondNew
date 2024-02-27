@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:WayBeyond.UX"
         xmlns:setting="clr-namespace:WayBeyond.UX.File.Settings"
         xmlns:remote="clr-namespace:WayBeyond.UX.File.Remote"
+        xmlns:client="clr-namespace:WayBeyond.UX.File.Maintenance"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -24,6 +25,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type remote:AddEditRemoteConnectionViewModel}">
             <remote:AddEditRemoteConnectionView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type client:ClientMaintenanceViewModel}">
+            <client:ClientMaintenanceView/>
         </DataTemplate>
     </Window.Resources>
     <Grid>
