@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using WayBeyond.UX;
 
 namespace WayBeyond4.UX.File.Settings
 {
-    public class EditableSetting: ValidatableBindableBase
+    public class EditableSetting : ValidatableBindableBase
     {
 
         private long _id;
@@ -20,7 +21,7 @@ namespace WayBeyond4.UX.File.Settings
 
 
         private string _key;
-
+        [Required]
         public string Key
         {
             get { return _key; }
@@ -29,7 +30,7 @@ namespace WayBeyond4.UX.File.Settings
 
 
         private string _value;
-
+        [Required]
         public string Value
         {
             get { return _value; }

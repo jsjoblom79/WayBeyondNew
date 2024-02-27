@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WayBeyond.UX"
         xmlns:setting="clr-namespace:WayBeyond.UX.File.Settings"
+        xmlns:remote="clr-namespace:WayBeyond.UX.File.Remote"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -14,6 +15,15 @@
     <Window.Resources>
         <DataTemplate DataType="{x:Type setting:SettingsViewModel}">
             <setting:SettingsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type setting:AddEditSettingViewModel}">
+            <setting:AddEditSettingView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type remote:RemoteConnectionsViewModel}">
+            <remote:RemoteConnectionsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type remote:AddEditRemoteConnectionViewModel}">
+            <remote:AddEditRemoteConnectionView/>
         </DataTemplate>
     </Window.Resources>
     <Grid>

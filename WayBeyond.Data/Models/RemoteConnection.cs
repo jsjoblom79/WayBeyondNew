@@ -21,9 +21,9 @@ public partial class RemoteConnection
 
     public string? Name { get; set; }
 
-    public string? CreateDate { get; set; }
+    public DateTime? CreateDate { get; set; }
 
-    public string? UpatedDate { get; set; }
+    public DateTime? UpatedDate { get; set; }
 
     public virtual ICollection<FileLocation> FileLocations { get; set; } = new List<FileLocation>();
 }

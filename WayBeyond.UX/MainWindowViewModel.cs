@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity;
 using WayBeyond.Data.Models;
+using WayBeyond.UX.File.Remote;
 using WayBeyond.UX.File.Settings;
 
 namespace WayBeyond.UX
@@ -13,15 +14,30 @@ namespace WayBeyond.UX
     public class MainWindowViewModel : BindableBase
     {
         private SettingsViewModel _settingsViewModel;
+        private AddEditSettingViewModel _addEditSettingViewModel;
+        private RemoteConnectionsViewModel _remoteConnectionViewModel;
+        private AddEditRemoteConnectionViewModel _addEditRemoteConnectionViewModel;
 
         public MainWindowViewModel()
         {
             NavigateCommand = new RelayCommand<string>(OnNavigation);
             _settingsViewModel = ContainerHelper.Container.Resolve<SettingsViewModel>();
+            _addEditSettingViewModel = ContainerHelper.Container.Resolve<AddEditSettingViewModel>();
+            _remoteConnectionViewModel = ContainerHelper.Container.Resolve<RemoteConnectionsViewModel>();
+            _addEditRemoteConnectionViewModel = ContainerHelper.Container.Resolve<AddEditRemoteConnectionViewModel>();
+
+            _settingsViewModel.Completed += UpdateStatus;
+            _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
+            _addEditSettingViewModel.Completed += SettingsComplete;
+
+            _remoteConnectionViewModel.AddConnectionRequest += AddEditRemoteConnectionCommand;
+            _remoteConnectionViewModel.EditConnectionRequest += AddEditRemoteConnectionCommand;
+            _remoteConnectionViewModel.Completed += UpdateStatus;
+            _addEditRemoteConnectionViewModel.Completed += RemoteSettingComplete;
             
         }
 
-
+        
 
         private string _currentStatus;
 
@@ -53,16 +69,44 @@ namespace WayBeyond.UX
                 case "settings":
                     CurrentViewModel = _settingsViewModel;
                     break;
+                case "connection":
+                    CurrentViewModel = _remoteConnectionViewModel;
+                    break;
                 default:
                     break;
             }
         }
 
-        
+        private void SettingsComplete(string obj)
+        {
+            CurrentViewModel = _settingsViewModel;
+            UpdateStatus(obj);
+        }
+        private void RemoteSettingComplete(string obj)
+        {
+            CurrentViewModel = _remoteConnectionViewModel;
+            UpdateStatus(obj);
+        }
+        private void AddEditSettingCommand(Setting obj, bool editMode)
+        {
+            _addEditSettingViewModel.EditMode = editMode;
+            _addEditSettingViewModel.SetSetting(obj);
+            CurrentViewModel = _addEditSettingViewModel;
+        }
+
         private void UpdateStatus(string message)
         {
             CurrentStatus = message;
         }
+
+
+        private void AddEditRemoteConnectionCommand(RemoteConnection obj, bool editMode)
+        {
+            _addEditRemoteConnectionViewModel.EditMode = editMode;
+            _addEditRemoteConnectionViewModel.SetRemoteConnection(obj);
+            CurrentViewModel = _addEditRemoteConnectionViewModel;
+        }
+
         #endregion
     }
 }

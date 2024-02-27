@@ -14,5 +14,11 @@ namespace WayBeyond.UX.Services
         Task<int> UpdateSettingsAsync(Setting setting);
         Task<int> AddSettingsAsync(Setting setting);
         Task<int> DeleteSettingsAsync(Setting setting);
+
+        //RemoteConnections
+        Task<List<RemoteConnection>> GetAllRemoteConnectionsAsync();
+        Task<int> UpdateRemoteConnectionsAsync(RemoteConnection connection);
+        Task<int> AddRemoteConnectionAsync(RemoteConnection connection);
+        Task<int> DeleteRemoteConnectionAsync(RemoteConnection connection);
     }
 }

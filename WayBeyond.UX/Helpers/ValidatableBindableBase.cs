@@ -11,7 +11,7 @@ using System.Windows.Media.Effects;
 
 namespace WayBeyond.UX
 {
-    public class ValidatableBindableBase : BindableBase
+    public class ValidatableBindableBase : BindableBase, INotifyDataErrorInfo
     {
         private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
