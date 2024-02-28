@@ -26,6 +26,13 @@ namespace WayBeyond.UX.Services
         Task<int> AddClientAsync(Client client);
         Task<int> UpdateClientAsync(Client client);
         Task<int> DeleteClientAsync(Client client);
-    
+
+        //FileLocations
+        Task<List<FileLocation>> GetAllFileLocationsAsync();
+        Task<int> AddFileLocationsAsync(FileLocation location);
+        Task<int> UpdateFileLocationsAsync(FileLocation location);
+        Task<int> DeleteFileLocationsAsync(FileLocation location);
+
+
     }
 }

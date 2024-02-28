@@ -7,6 +7,7 @@
         xmlns:setting="clr-namespace:WayBeyond.UX.File.Settings"
         xmlns:remote="clr-namespace:WayBeyond.UX.File.Remote"
         xmlns:client="clr-namespace:WayBeyond.UX.File.Maintenance"
+        xmlns:location="clr-namespace:WayBeyond.UX.File.Location"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -31,6 +32,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type client:AddEditClientViewModel}">
             <client:AddEditClientView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type location:FileLocationViewModel}">
+            <location:FileLocationView/>
         </DataTemplate>
     </Window.Resources>
     <Grid>

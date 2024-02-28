@@ -108,5 +108,31 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
         #endregion
+        #region FileLocations
+        public Task<List<FileLocation>> GetAllFileLocationsAsync()
+        {
+            return _db.FileLocations.ToListAsync();
+        }
+
+        public Task<int> AddFileLocationsAsync(FileLocation location)
+        {
+            _db.FileLocations.Add(location);
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> UpdateFileLocationsAsync(FileLocation location)
+        {
+            var entity = _db.Entry(location);
+            entity.State = EntityState.Modified;
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteFileLocationsAsync(FileLocation location)
+        {
+            var entity = _db.Entry(location);
+            entity.State = EntityState.Deleted;
+            return _db.SaveChangesAsync();
+        }
+        #endregion
     }
 }
