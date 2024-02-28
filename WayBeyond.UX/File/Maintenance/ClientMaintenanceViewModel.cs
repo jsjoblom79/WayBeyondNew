@@ -16,6 +16,11 @@ namespace WayBeyond.UX.File.Maintenance
         public ClientMaintenanceViewModel(IBeyondRepository db)
         {
             _db = db;
+            ClearSearchTerm = new RelayCommand(OnClearSearchTerm);
+            AddNewClient = new RelayCommand(OnAddNewClient);
+            EditCommand = new RelayCommand<Client>(OnEditClient);
+            DeleteCommand = new RelayCommand<Client>(OnDeleteClient);
+
         }
 
         #region Properties
@@ -46,14 +51,43 @@ namespace WayBeyond.UX.File.Maintenance
         #endregion
 
         #region Methods
+        public RelayCommand ClearSearchTerm { get; private set; }
+        public RelayCommand AddNewClient { get; private set; }
+        public RelayCommand<Client> EditCommand { get; private set; }
+        public RelayCommand<Client> DeleteCommand { get; private set; }
+
+        public event Action<Client,bool> AddEditClientRequest;
+        public event Action<string> Completed;
+        
         public async void OnViewLoaded()
         {
             _allClients = await _db.GetAllClientsAsync();
             Clients = new ObservableCollection<Client>(_allClients);
         }
+
+        private async void OnEditClient(Client client)
+        {
+            AddEditClientRequest(client, true);
+        }
+        private async void OnDeleteClient(Client client)
+        {
+            if (await _db.DeleteClientAsync(client) > 0)
+            {
+                OnViewLoaded();
+                Completed($"Client: {client.ClientName} has been deleted.");
+            }
+        }
+        private async void OnAddNewClient()
+        {
+            AddEditClientRequest(new Client(), false);
+        }
+        private async void OnClearSearchTerm()
+        {
+            SearchTerm = null;
+        }
         private void FilterClients(string? searchTerm)
         {
-            if(searchTerm == null)
+            if(string.IsNullOrWhiteSpace(searchTerm))
             {
                 Clients = new ObservableCollection<Client>(_allClients);
             }

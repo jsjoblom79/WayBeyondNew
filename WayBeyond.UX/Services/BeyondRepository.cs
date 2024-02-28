@@ -73,7 +73,6 @@ namespace WayBeyond.UX.Services
 
 
         #endregion
-
         #region Clients
         public Task<List<Client>> GetAllClientsAsync()
         {
@@ -82,8 +81,17 @@ namespace WayBeyond.UX.Services
 
         public Task<int> AddClientAsync(Client client)
         {
-            _db.Clients.Add(client);
-            return _db.SaveChangesAsync();
+            try
+            {
+                _db.Clients.Add(client);
+                return _db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
 
         public Task<int> UpdateClientAsync(Client client)

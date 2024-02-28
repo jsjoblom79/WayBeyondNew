@@ -19,6 +19,7 @@ namespace WayBeyond.UX
         private RemoteConnectionsViewModel _remoteConnectionViewModel;
         private AddEditRemoteConnectionViewModel _addEditRemoteConnectionViewModel;
         private ClientMaintenanceViewModel _clientMaintenanceViewModel;
+        private AddEditClientViewModel _addEditClientViewModel;
 
         public MainWindowViewModel()
         {
@@ -28,6 +29,7 @@ namespace WayBeyond.UX
             _remoteConnectionViewModel = ContainerHelper.Container.Resolve<RemoteConnectionsViewModel>();
             _addEditRemoteConnectionViewModel = ContainerHelper.Container.Resolve<AddEditRemoteConnectionViewModel>();
             _clientMaintenanceViewModel = ContainerHelper.Container.Resolve<ClientMaintenanceViewModel>();
+            _addEditClientViewModel = ContainerHelper.Container.Resolve<AddEditClientViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -37,6 +39,10 @@ namespace WayBeyond.UX
             _remoteConnectionViewModel.EditConnectionRequest += AddEditRemoteConnectionCommand;
             _remoteConnectionViewModel.Completed += UpdateStatus;
             _addEditRemoteConnectionViewModel.Completed += RemoteSettingComplete;
+
+            _clientMaintenanceViewModel.AddEditClientRequest += AddEditClientCommand;
+            _clientMaintenanceViewModel.Completed += UpdateStatus;
+            _addEditClientViewModel.Completed += AddEditClientComplete;
             
         }
 
@@ -81,6 +87,19 @@ namespace WayBeyond.UX
                 default:
                     break;
             }
+        }
+
+        private void AddEditClientComplete(string obj)
+        {
+            CurrentViewModel = _clientMaintenanceViewModel;
+            UpdateStatus(obj);
+        }
+
+        private void AddEditClientCommand(Client client, bool arg2)
+        {
+            _addEditClientViewModel.EditMode = arg2;
+            _addEditClientViewModel.SetClient(client);
+            CurrentViewModel = _addEditClientViewModel;
         }
 
         private void SettingsComplete(string obj)

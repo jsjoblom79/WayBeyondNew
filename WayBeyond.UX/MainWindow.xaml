@@ -29,6 +29,9 @@
         <DataTemplate DataType="{x:Type client:ClientMaintenanceViewModel}">
             <client:ClientMaintenanceView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type client:AddEditClientViewModel}">
+            <client:AddEditClientView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
