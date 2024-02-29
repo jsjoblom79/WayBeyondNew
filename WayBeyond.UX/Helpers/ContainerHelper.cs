@@ -17,6 +17,8 @@ namespace WayBeyond.UX
         {
             _container = new UnityContainer();
             _container.RegisterType<IBeyondRepository, BeyondRepository>(
+                new ContainerControlledLifetimeManager()).
+                RegisterType<IRando, Rando>(
                 new ContainerControlledLifetimeManager());
                 
         }

@@ -173,6 +173,7 @@ namespace WayBeyond.UX
         {
             _addEditDropFormatViewModel.EditMode = editmode;
             _addEditDropFormatViewModel.SetDropFormat(format);
+            _addEditDropFormatViewModel.GetFieldProperties();
             CurrentViewModel = _addEditDropFormatViewModel;
         }
 

@@ -62,5 +62,40 @@
                 </StackPanel>
             </Grid>
         </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" VerticalAlignment="Bottom" DataContext="{Binding EditableDropDetailFormat}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Label Content="Format Id:" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
+                <Label Content="Field:" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="0"/>
+                <Label Content="Position:" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
+                <Label Content="Field Type:" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0"/>
+                <TextBlock Text="{Binding Id}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"/>
+                <ComboBox ItemsSource="{Binding Fields, RelativeSource={RelativeSource Mode=FindAncestor,AncestorLevel=2,AncestorType=Grid}}" SelectedItem="{Binding DetailField}" Width="150" Height="23" Margin="3"
+                          Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
+                <TextBox Text="{Binding DetailPosition}" Width="50" Height="23" Margin="3"
+                         Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
+                <ComboBox ItemsSource="{Binding FieldTypes}" SelectedItem="{Binding DetailFieldType}" Width="150" Height="23" Margin="3"
+                          Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
+            </Grid>
+            <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Add Format Detail" Command="{Binding AddDetailCommand}" Width="Auto" Height="23" Margin="3"/>
+                    <Button Content="Cancel" Command="{Binding ClearDetailCommand}" Width="75" Height="23" Margin="3"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>
