@@ -95,7 +95,7 @@ namespace WayBeyond.UX.File.Drops.Drop
                 editingdropFormat.UpdateDate = DateTime.Now;
                 editingdropFormat.CreateDate = editableDropFormat.CreateDate;
                 editingdropFormat.UpdatedBy = Environment.UserName;
-                if(await _db.UpdateDropFromatAsync(editingdropFormat) > 0)
+                if(await _db.UpdateObjectAsync(editingdropFormat) > 0)
                 {
                     Completed($"Drop Format: {editingdropFormat.DropName} has been successfully updated.");
                 }

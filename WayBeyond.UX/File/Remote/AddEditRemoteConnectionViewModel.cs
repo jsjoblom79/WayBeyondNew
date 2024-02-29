@@ -76,7 +76,7 @@ namespace WayBeyond.UX.File.Remote
                 editingRemoteConnection.UpatedDate = DateTime.Now;
                 editingRemoteConnection.Name = editableConnection.Name;
 
-                _db.UpdateRemoteConnectionsAsync(editingRemoteConnection);
+                _db.UpdateObjectAsync(editingRemoteConnection);
                 Completed($"Remote Connection: {editingRemoteConnection.Name} has been Upated.");
             }
             else

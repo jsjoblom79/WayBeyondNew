@@ -21,18 +21,6 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<int> UpdateRemoteConnectionsAsync(RemoteConnection connection)
-        {
-            var entity = _db.Entry(connection);
-            entity.State = EntityState.Modified;
-            return _db.SaveChangesAsync();
-        }
-        public Task<int> DeleteRemoteConnectionAsync(RemoteConnection connection)
-        {
-            var entity = _db.Entry(connection);
-            entity.State = EntityState.Deleted;
-            return _db.SaveChangesAsync();
-        }
         public Task<List<RemoteConnection>> GetAllRemoteConnectionsAsync()
         {
             return _db.RemoteConnections.ToListAsync();
@@ -47,30 +35,10 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        
-
-        public Task<int> DeleteSettingsAsync(Setting setting)
-        {
-            var entity = _db.Entry(setting);
-            entity.State = EntityState.Deleted;
-            return _db.SaveChangesAsync();
-        }
-
-        
         public Task<List<Setting>> GetAllSettingsAsync()
         {
             return _db.Settings.ToListAsync();
         }
-
-
-
-        public Task<int> UpdateSettingsAsync(Setting setting)
-        {
-            var entity = _db.Entry(setting);
-            entity.State = EntityState.Modified;
-            return _db.SaveChangesAsync();
-        }
-
 
         #endregion
         #region Clients
@@ -94,21 +62,6 @@ namespace WayBeyond.UX.Services
             
         }
 
-        public Task<int> UpdateClientAsync(Client client)
-        {
-            var entity = _db.Entry(client);
-            entity.State = EntityState.Modified;
-            return _db.SaveChangesAsync();
-        }
-
-        public Task<int> DeleteClientAsync(Client client)
-        {
-            var entity = _db.Entry(client);
-            entity.State = EntityState.Deleted;
-            return _db.SaveChangesAsync();
-        }
-
-
         public Task<List<Client>> GetClientByDropFormatIdAsync(long id)
         {
             return _db.Clients.Where(c => c.DropFormatId == id).ToListAsync();
@@ -126,19 +79,6 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<int> UpdateFileLocationsAsync(FileLocation location)
-        {
-            var entity = _db.Entry(location);
-            entity.State = EntityState.Modified;
-            return _db.SaveChangesAsync();
-        }
-
-        public Task<int> DeleteFileLocationsAsync(FileLocation location)
-        {
-            var entity = _db.Entry(location);
-            entity.State = EntityState.Deleted;
-            return _db.SaveChangesAsync();
-        }
         #endregion
         #region DropFormats
         public Task<List<DropFormat>> GetAllDropFormatsAsync()
@@ -152,19 +92,6 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<int> UpdateDropFromatAsync(DropFormat dropFormat)
-        {
-            var entity = _db.Entry(dropFormat);
-            entity.State = EntityState.Modified;
-            return _db.SaveChangesAsync();
-        }
-
-        public Task<int> DeleteDropFromatAsync(DropFormat dropFormat)
-        {
-            var entity = _db.Entry(dropFormat);
-            entity.State = EntityState.Deleted;
-            return _db.SaveChangesAsync();
-        }
         #endregion
 
         #region DropFormatDetails
@@ -179,24 +106,18 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<int> UpdateDropFormatDetailAsync(DropFormatDetail detail)
-        {
-            var entity = _db.Entry(detail);
-            entity.State = EntityState.Modified;
-            return _db.SaveChangesAsync();
-        }
-
-        public Task<int> DeleteDropFormatDetailAsync(DropFormatDetail detail)
-        {
-            var entity = _db.Entry(detail);
-            entity.State = EntityState.Deleted;
-            return _db.SaveChangesAsync();
-        }
-
-        public Task<int> DeleteObject(object obj)
+        #endregion
+        #region Generic_Update_Delete
+        public Task<int> DeleteObjectAsync(object obj)
         {
             var entity = _db.Entry(obj);
             entity.State = EntityState.Deleted;
+            return _db.SaveChangesAsync();
+        }
+        public Task<int> UpdateObjectAsync(object obj)
+        {
+            var entity = _db.Entry(obj);
+            entity.State = EntityState.Modified;
             return _db.SaveChangesAsync();
         }
         #endregion

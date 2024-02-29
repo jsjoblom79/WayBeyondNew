@@ -94,7 +94,7 @@ namespace WayBeyond.UX.File.Settings
 
         private async void OnDeleteCommand(Setting setting)
         {
-            if(await _db.DeleteSettingsAsync(setting) > 0)
+            if(await _db.DeleteObjectAsync(setting) > 0)
             {
                 OnViewLoaded();
                 Completed($"Setting: {setting.Key} has been deleted.");

@@ -68,7 +68,7 @@ namespace WayBeyond.UX.File.Settings
             {
                 editingSetting.Key = editableSetting.Key;
                 editingSetting.Value = editableSetting.Value;
-                _db.UpdateSettingsAsync(editingSetting);
+                _db.UpdateObjectAsync(editingSetting);
                 Completed($"Setting: {editingSetting.Key} has been updated.");
             }
             else

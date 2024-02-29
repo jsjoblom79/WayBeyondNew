@@ -73,7 +73,7 @@ namespace WayBeyond.UX.File.Maintenance
             editingClient.FileFormatId = editableClient.FileFormatId;
             if (EditMode)
             {
-                await _db.UpdateClientAsync(editingClient);
+                await _db.UpdateObjectAsync(editingClient);
                 Completed($"Client: {editingClient.ClientName} has been update.");
             }
             else

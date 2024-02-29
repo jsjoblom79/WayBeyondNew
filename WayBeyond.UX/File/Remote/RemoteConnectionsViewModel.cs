@@ -77,7 +77,7 @@ namespace WayBeyond.UX.File.Remote
 
         private async void OnDeleteConnectionCommand(RemoteConnection connection)
         {
-            if(await _db.DeleteRemoteConnectionAsync(connection) > 0)
+            if(await _db.DeleteObjectAsync(connection) > 0)
             {
                 OnViewLoaded();
                 Completed($"Remote Connection: {connection.Name} has been deleted.");

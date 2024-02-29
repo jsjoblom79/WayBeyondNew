@@ -72,7 +72,7 @@ namespace WayBeyond.UX.File.Drops.Drop
         }
         private async void OnDeleteFromatCommand(DropFormat dropFormat)
         {
-            if(await _db.DeleteDropFromatAsync(dropFormat) > 0)
+            if(await _db.DeleteObjectAsync(dropFormat) > 0)
             {
                 OnViewLoaded();
                 Completed($"Drop Format: {dropFormat.DropName} has been deleted.");

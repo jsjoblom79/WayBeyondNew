@@ -71,7 +71,7 @@ namespace WayBeyond.UX.File.Maintenance
         }
         private async void OnDeleteClient(Client client)
         {
-            if (await _db.DeleteClientAsync(client) > 0)
+            if (await _db.DeleteObjectAsync(client) > 0)
             {
                 OnViewLoaded();
                 Completed($"Client: {client.ClientName} has been deleted.");

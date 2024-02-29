@@ -29,20 +29,20 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
     
-    <Grid Width="300" 
+    <Grid Width="500" 
             DataContext="{Binding NewEditableSetting}" Grid.Row="0" VerticalAlignment="Bottom">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" Grid.Row="0" Content="Key:" HorizontalAlignment="Right"/>
         <Label Grid.Column="0" Grid.Row="1" Content="Value:" HorizontalAlignment="Right"/>
-        <TextBox x:Name="SettingKey" Grid.Column="1" Grid.Row="0"  Text="{Binding Key, ValidatesOnNotifyDataErrors=True}" Width="120" Margin="3" HorizontalAlignment="Left"/>
-        <TextBox x:Name="SettingValue" Grid.Column="1" Grid.Row="1" Text="{Binding Value, ValidatesOnNotifyDataErrors=True}" Width="120" Margin="3" HorizontalAlignment="Left"/>
+        <TextBox x:Name="SettingKey" Grid.Column="1" Grid.Row="0"  Text="{Binding Key, ValidatesOnNotifyDataErrors=True}" Width="200" Margin="3" HorizontalAlignment="Left"/>
+        <TextBox x:Name="SettingValue" Grid.Column="1" Grid.Row="1" Text="{Binding Value, ValidatesOnNotifyDataErrors=True}" Width="450" Margin="3" HorizontalAlignment="Left"/>
     </Grid>
     <Grid Width="300" Height="35" Grid.Row="1">
         <StackPanel Margin="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">

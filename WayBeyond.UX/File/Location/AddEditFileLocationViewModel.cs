@@ -94,7 +94,7 @@ namespace WayBeyond.UX.File.Location
             editingFileLocation.RemoteConnectionId = editableFileLocation.RemoteConnectionId;
             if (EditMode)
             {
-                if(await _db.UpdateFileLocationsAsync(editingFileLocation) >0)
+                if(await _db.UpdateObjectAsync(editingFileLocation) >0)
                 {
                     Completed($"File Location: {editingFileLocation.FileLocationName} was successfully updated.");
                 }

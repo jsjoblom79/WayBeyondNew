@@ -75,7 +75,7 @@ namespace WayBeyond.UX.File.Location
 
         private async void OnDeleteCommand(FileLocation location)
         {
-            if( await _db.DeleteFileLocationsAsync(location) > 0)
+            if( await _db.DeleteObjectAsync(location) > 0)
             {
                 OnViewLoaded();
                 Complete($"File Location: {location.FileLocationName} has been delete.");
