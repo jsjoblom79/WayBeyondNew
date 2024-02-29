@@ -107,6 +107,12 @@ namespace WayBeyond.UX.Services
             entity.State = EntityState.Deleted;
             return _db.SaveChangesAsync();
         }
+
+
+        public Task<List<Client>> GetClientByDropFormatIdAsync(long id)
+        {
+            return _db.Clients.Where(c => c.DropFormatId == id).ToListAsync();
+        }
         #endregion
         #region FileLocations
         public Task<List<FileLocation>> GetAllFileLocationsAsync()
@@ -130,6 +136,66 @@ namespace WayBeyond.UX.Services
         public Task<int> DeleteFileLocationsAsync(FileLocation location)
         {
             var entity = _db.Entry(location);
+            entity.State = EntityState.Deleted;
+            return _db.SaveChangesAsync();
+        }
+        #endregion
+        #region DropFormats
+        public Task<List<DropFormat>> GetAllDropFormatsAsync()
+        {
+            return _db.DropFormats.ToListAsync();
+        }
+
+        public Task<int> AddDropFormatAsync(DropFormat dropFormat)
+        {
+            _db.DropFormats.Add(dropFormat);
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> UpdateDropFromatAsync(DropFormat dropFormat)
+        {
+            var entity = _db.Entry(dropFormat);
+            entity.State = EntityState.Modified;
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteDropFromatAsync(DropFormat dropFormat)
+        {
+            var entity = _db.Entry(dropFormat);
+            entity.State = EntityState.Deleted;
+            return _db.SaveChangesAsync();
+        }
+        #endregion
+
+        #region DropFormatDetails
+        public Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id)
+        {
+            return _db.DropFormatDetails.Where(d => d.DropFormatId == id).ToListAsync();
+        }
+
+        public Task<int> AddDropFormatDetailAsync(DropFormatDetail detail)
+        {
+            _db.DropFormatDetails.Add(detail);
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> UpdateDropFormatDetailAsync(DropFormatDetail detail)
+        {
+            var entity = _db.Entry(detail);
+            entity.State = EntityState.Modified;
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteDropFormatDetailAsync(DropFormatDetail detail)
+        {
+            var entity = _db.Entry(detail);
+            entity.State = EntityState.Deleted;
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteObject(object obj)
+        {
+            var entity = _db.Entry(obj);
             entity.State = EntityState.Deleted;
             return _db.SaveChangesAsync();
         }

@@ -26,6 +26,7 @@ namespace WayBeyond.UX.Services
         Task<int> AddClientAsync(Client client);
         Task<int> UpdateClientAsync(Client client);
         Task<int> DeleteClientAsync(Client client);
+        Task<List<Client>> GetClientByDropFormatIdAsync(long id);
 
         //FileLocations
         Task<List<FileLocation>> GetAllFileLocationsAsync();
@@ -33,6 +34,17 @@ namespace WayBeyond.UX.Services
         Task<int> UpdateFileLocationsAsync(FileLocation location);
         Task<int> DeleteFileLocationsAsync(FileLocation location);
 
+        //DropFormats
+        Task<List<DropFormat>> GetAllDropFormatsAsync();
+        Task<int> AddDropFormatAsync(DropFormat dropFormat);
+        Task<int> UpdateDropFromatAsync(DropFormat dropFormat);
+        Task<int> DeleteDropFromatAsync(DropFormat dropFormat);
 
+
+        //DropFormatDetails
+        Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id);
+        Task<int> AddDropFormatDetailAsync(DropFormatDetail detail);
+        Task<int> UpdateDropFormatDetailAsync(DropFormatDetail detail);
+        Task<int> DeleteDropFormatDetailAsync(DropFormatDetail detail);
     }
 }

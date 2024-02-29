@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="WayBeyond.UX.File.Drops.Drop.AddEditDropFormatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WayBeyond.UX.File.Drops.Drop"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" DataContext="{Binding EditableDropFormat}" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Drop Id:" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="0"/>
+                <Label Content="Drop Name:" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
+                <Label Content="Create Date:" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0"/>
+                <Label Content="Update Date:" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="0"/>
+                <Label Content="Updated By:" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="0"/>
+                <Label Content="Id:" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
+                <Label Content="Details:" HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0"/>
+                <TextBox Text="{Binding DropId}" HorizontalAlignment="Right" Width="120" Height="23" VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+                <TextBox Text="{Binding DropName}" HorizontalAlignment="Right" Width="120" Height="23" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="{Binding CreateDate}" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center" Width="Auto" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="{Binding UpdateDate}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="{Binding UpdatedBy}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="5" Grid.Column="1"/>
+                <TextBlock Text="{Binding Id}" Width="Auto" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0"/>
+                <DataGrid ItemsSource="{Binding DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                        <DataGridTextColumn Header="Field" Binding="{Binding Field}"/>
+                        <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
+                        <DataGridTextColumn Header="FieldType" Binding="{Binding FieldType}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Add" Command="{Binding AddEditDropFormat}" Visibility="{Binding EditMode, Converter={StaticResource NegVisConvert}}" Width="75" Margin="3"/>
+                    <Button Content="Save" Command="{Binding AddEditDropFormat}" Visibility="{Binding EditMode, Converter={StaticResource VisConverter}}" Width="75" Margin="3"/>
+                    <Button Content="Cancel"  Command="{Binding CancelCommand}" Width="75" Margin="3"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

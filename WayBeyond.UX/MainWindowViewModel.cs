@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Unity;
 using WayBeyond.Data.Models;
+using WayBeyond.UX.File.Drops.Drop;
 using WayBeyond.UX.File.Location;
 using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
@@ -23,6 +24,8 @@ namespace WayBeyond.UX
         private AddEditClientViewModel _addEditClientViewModel;
         private FileLocationViewModel _fileLocationViewModel;
         private AddEditFileLocationViewModel _addEditFileLocationViewModel;
+        private DropFormatViewModel _dropFormatViewModel;
+        private AddEditDropFormatViewModel _addEditDropFormatViewModel;
 
         public MainWindowViewModel()
         {
@@ -35,6 +38,8 @@ namespace WayBeyond.UX
             _addEditClientViewModel = ContainerHelper.Container.Resolve<AddEditClientViewModel>();
             _fileLocationViewModel = ContainerHelper.Container.Resolve<FileLocationViewModel>();
             _addEditFileLocationViewModel = ContainerHelper.Container.Resolve<AddEditFileLocationViewModel>();
+            _dropFormatViewModel = ContainerHelper.Container.Resolve<DropFormatViewModel>();
+            _addEditDropFormatViewModel = ContainerHelper.Container.Resolve<AddEditDropFormatViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -53,7 +58,11 @@ namespace WayBeyond.UX
             _fileLocationViewModel.AddEditCommandRequest += AddEditFileLocationCommand;
             _fileLocationViewModel.Complete += UpdateStatus;
             _addEditFileLocationViewModel.Completed += AddEditFileLocationComplete;
-            
+
+            //Drop Formats
+            _dropFormatViewModel.AddEditDropFormatRequest += AddEditDropFormatCommand;
+            _dropFormatViewModel.Completed += UpdateStatus;
+            _addEditDropFormatViewModel.Completed += AddEditDropFileFormatCompleted;
         }
 
         private string _currentStatus;
@@ -94,6 +103,9 @@ namespace WayBeyond.UX
                     break;
                 case "location":
                     CurrentViewModel = _fileLocationViewModel;
+                    break;
+                case "drop":
+                    CurrentViewModel = _dropFormatViewModel;
                     break;
                 default:
                     break;
@@ -153,6 +165,20 @@ namespace WayBeyond.UX
         private void AddEditFileLocationComplete(string obj)
         {
             CurrentViewModel = _fileLocationViewModel;
+            UpdateStatus(obj);
+        }
+
+
+        private void AddEditDropFormatCommand(DropFormat format, bool editmode)
+        {
+            _addEditDropFormatViewModel.EditMode = editmode;
+            _addEditDropFormatViewModel.SetDropFormat(format);
+            CurrentViewModel = _addEditDropFormatViewModel;
+        }
+
+        private void AddEditDropFileFormatCompleted(string obj)
+        {
+            CurrentViewModel = _dropFormatViewModel;
             UpdateStatus(obj);
         }
 

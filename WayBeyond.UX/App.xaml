@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WayBeyond.UX"
              xmlns:conv="clr-namespace:WayBeyond.UX.Converters"
+             xmlns:behave="http://schemas.microsoft.com/xaml/behaviors"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <FontFamily x:Key="FontAwesome">/Fonts/Font Awesome 6 Free Solid.otf#Font Awesome 6 Free Solid</FontFamily>
@@ -10,4 +11,5 @@
         <conv:NegatableBooleanToVisibilityConverter x:Key="VisConverter"/>
         <conv:NegatableBooleanToVisibilityConverter x:Key="NegVisConvert" Negate="True"/>
     </Application.Resources>
+    
 </Application>

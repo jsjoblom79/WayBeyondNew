@@ -83,10 +83,10 @@ namespace WayBeyond.UX.File.Location
         }
         private async void OnAddEditFileLocation()
         {
-            UpdateClient(EditableFileLocation, _editingFileLocation);
+            UpdateFileLocation(EditableFileLocation, _editingFileLocation);
         }
 
-        private async void UpdateClient(EditableFileLocation editableFileLocation, FileLocation editingFileLocation)
+        private async void UpdateFileLocation(EditableFileLocation editableFileLocation, FileLocation editingFileLocation)
         {
             editingFileLocation.FileLocationName = editableFileLocation.FileLocationName;
             editingFileLocation.Path = editableFileLocation.Path;
@@ -100,7 +100,7 @@ namespace WayBeyond.UX.File.Location
                 }
             }else
             {
-                if(await _db.AddFileLocationsAsync(editingFileLocation) >0)
+                if(await _db.AddFileLocationsAsync(editingFileLocation) > 0)
                 {
                     Completed($"File Location: {editingFileLocation.FileLocationName} was successfully added.");
                 }

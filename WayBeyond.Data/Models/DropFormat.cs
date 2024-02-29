@@ -11,9 +11,9 @@ public partial class DropFormat
 
     public string? DropName { get; set; }
 
-    public string? CreateDate { get; set; }
+    public DateTime? CreateDate { get; set; }
 
-    public string? UpdateDate { get; set; }
+    public DateTime? UpdateDate { get; set; }
 
     public string? UpdatedBy { get; set; }
 
@@ -21,3 +21,5 @@ public partial class DropFormat
 
     public virtual ICollection<DropFormatDetail> DropFormatDetails { get; set; } = new List<DropFormatDetail>();
 }
+
+

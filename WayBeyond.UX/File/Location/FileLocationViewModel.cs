@@ -60,6 +60,7 @@ namespace WayBeyond.UX.File.Location
         public async void OnViewLoaded()
         {
             _allFileLocations = await _db.GetAllFileLocationsAsync();
+            FileLocations = new ObservableCollection<FileLocation>(_allFileLocations);
         }
 
         private async void OnAddCommand()
@@ -74,7 +75,9 @@ namespace WayBeyond.UX.File.Location
 
         private async void OnDeleteCommand(FileLocation location)
         {
-            if( await _db.DeleteFileLocationsAsync(location) > 0){
+            if( await _db.DeleteFileLocationsAsync(location) > 0)
+            {
+                OnViewLoaded();
                 Complete($"File Location: {location.FileLocationName} has been delete.");
             }
 

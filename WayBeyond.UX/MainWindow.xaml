@@ -8,6 +8,7 @@
         xmlns:remote="clr-namespace:WayBeyond.UX.File.Remote"
         xmlns:client="clr-namespace:WayBeyond.UX.File.Maintenance"
         xmlns:location="clr-namespace:WayBeyond.UX.File.Location"
+        xmlns:fdrop="clr-namespace:WayBeyond.UX.File.Drops.Drop"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -39,6 +40,12 @@
         <DataTemplate DataType="{x:Type location:AddEditFileLocationViewModel}">
             <location:AddEditFileLocationView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type fdrop:DropFormatViewModel}">
+            <fdrop:DropFormatView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type fdrop:AddEditDropFormatViewModel}">
+            <fdrop:AddEditDropFormatView/>
+        </DataTemplate>
    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -57,6 +64,13 @@
                           CommandParameter="maintenance" Margin="3"/>
                 <MenuItem Header="File Locations" Command="{Binding NavigateCommand}"
                           CommandParameter="location" Margin="3"/>
+                <Separator/>
+                <MenuItem Header="Drops" Margin="3">
+                    <MenuItem Header="Drop File Format" Command="{Binding NavigateCommand}"
+                              CommandParameter="drop" Margin="3"/>
+                    <MenuItem Header="Client File Format" Command="{Binding NavigateCommand}"
+                              CommandParameter="fileformat" Margin="3"/>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="Exit" Command="{Binding NavigateCommand}"
                           CommandParameter="exit" Margin="3"/>

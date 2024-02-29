@@ -17,3 +17,5 @@ public partial class DropFormatDetail
 
     public virtual DropFormat? DropFormat { get; set; }
 }
+
+
