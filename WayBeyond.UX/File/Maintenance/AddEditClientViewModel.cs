@@ -62,7 +62,7 @@ namespace WayBeyond.UX.File.Maintenance
             UpdateClient(EditableClient, _editingClient);
         }
 
-        private void UpdateClient(EditableClient editableClient, Client editingClient)
+        private async void UpdateClient(EditableClient editableClient, Client editingClient)
         {
             editingClient.ClientId = editableClient.ClientId;
             editingClient.ClientName = editableClient.ClientName;
@@ -73,12 +73,12 @@ namespace WayBeyond.UX.File.Maintenance
             editingClient.FileFormatId = editableClient.FileFormatId;
             if (EditMode)
             {
-                _db.UpdateClientAsync(editingClient);
+                await _db.UpdateClientAsync(editingClient);
                 Completed($"Client: {editingClient.ClientName} has been update.");
             }
             else
             {
-                _db.AddClientAsync(editingClient);
+                await _db.AddClientAsync(editingClient);
                 Completed($"Client: {editingClient.ClientName} has been added.");
             }
         }

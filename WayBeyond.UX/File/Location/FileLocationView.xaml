@@ -7,6 +7,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:CallMethodAction TargetObject="{Binding}" MethodName="OnViewLoaded"/>
@@ -29,9 +30,13 @@
                 FontFamily="{StaticResource FontAwesome}"/>
             </StackPanel>
             <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Content="add;" FontFamily="{StaticResource FontAwesome}" Command="{Binding AddCommand}"
-                Background="Transparent" BorderThickness="0" Margin="0,0,0,0"/>
-                <TextBlock Text="File Location" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0"/>
+                <Button Command="{Binding AddCommand}" ToolTip="Add File Location"
+                Background="Transparent" BorderThickness="0" Margin="0,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="add" FontFamily="{StaticResource FontAwesome}" FontSize="14" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                        <TextBlock Text="File Location" VerticalAlignment="Center" FontSize="15" Margin="0,0,10,0" FontWeight="Bold"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">

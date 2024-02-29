@@ -22,6 +22,7 @@ namespace WayBeyond.UX
         private ClientMaintenanceViewModel _clientMaintenanceViewModel;
         private AddEditClientViewModel _addEditClientViewModel;
         private FileLocationViewModel _fileLocationViewModel;
+        private AddEditFileLocationViewModel _addEditFileLocationViewModel;
 
         public MainWindowViewModel()
         {
@@ -33,6 +34,7 @@ namespace WayBeyond.UX
             _clientMaintenanceViewModel = ContainerHelper.Container.Resolve<ClientMaintenanceViewModel>();
             _addEditClientViewModel = ContainerHelper.Container.Resolve<AddEditClientViewModel>();
             _fileLocationViewModel = ContainerHelper.Container.Resolve<FileLocationViewModel>();
+            _addEditFileLocationViewModel = ContainerHelper.Container.Resolve<AddEditFileLocationViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -46,10 +48,13 @@ namespace WayBeyond.UX
             _clientMaintenanceViewModel.AddEditClientRequest += AddEditClientCommand;
             _clientMaintenanceViewModel.Completed += UpdateStatus;
             _addEditClientViewModel.Completed += AddEditClientComplete;
+
+            //File Locations
+            _fileLocationViewModel.AddEditCommandRequest += AddEditFileLocationCommand;
+            _fileLocationViewModel.Complete += UpdateStatus;
+            _addEditFileLocationViewModel.Completed += AddEditFileLocationComplete;
             
         }
-
-        
 
         private string _currentStatus;
 
@@ -136,6 +141,19 @@ namespace WayBeyond.UX
             _addEditRemoteConnectionViewModel.EditMode = editMode;
             _addEditRemoteConnectionViewModel.SetRemoteConnection(obj);
             CurrentViewModel = _addEditRemoteConnectionViewModel;
+        }
+
+        private void AddEditFileLocationCommand(FileLocation location, bool arg2)
+        {
+            _addEditFileLocationViewModel.EditMode = arg2;
+            _addEditFileLocationViewModel.SetFileLocation(location);
+            CurrentViewModel = _addEditFileLocationViewModel;
+        }
+
+        private void AddEditFileLocationComplete(string obj)
+        {
+            CurrentViewModel = _fileLocationViewModel;
+            UpdateStatus(obj);
         }
 
         #endregion

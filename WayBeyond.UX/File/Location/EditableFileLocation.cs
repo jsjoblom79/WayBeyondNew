@@ -42,9 +42,9 @@ namespace WayBeyond.UX.File.Location
             set { SetProperty(ref _fileType, value); }
         }
 
-        private long _remoteConnectionId;
+        private long? _remoteConnectionId;
 
-        public long RemoteConnectionId
+        public long? RemoteConnectionId
         {
             get { return _remoteConnectionId; }
             set { SetProperty(ref _remoteConnectionId, value); }

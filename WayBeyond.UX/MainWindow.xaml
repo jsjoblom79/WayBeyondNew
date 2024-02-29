@@ -36,7 +36,10 @@
         <DataTemplate DataType="{x:Type location:FileLocationViewModel}">
             <location:FileLocationView/>
         </DataTemplate>
-    </Window.Resources>
+        <DataTemplate DataType="{x:Type location:AddEditFileLocationViewModel}">
+            <location:AddEditFileLocationView/>
+        </DataTemplate>
+   </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
