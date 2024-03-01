@@ -93,7 +93,6 @@ namespace WayBeyond.UX.Services
         }
 
         #endregion
-
         #region DropFormatDetails
         public Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id)
         {
@@ -118,6 +117,30 @@ namespace WayBeyond.UX.Services
         {
             var entity = _db.Entry(obj);
             entity.State = EntityState.Modified;
+            return _db.SaveChangesAsync();
+        }
+        #endregion
+        #region FileFormats
+        public Task<List<FileFormat>> GetAllFileFormatsAsync()
+        {
+            return _db.FileFormats.ToListAsync();
+        }
+
+        public Task<int> AddFileFormatAsync(FileFormat format)
+        {
+            _db.FileFormats.Add(format);
+            return _db.SaveChangesAsync();
+        }
+        #endregion
+        #region FileFormatDetails
+        public Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long id)
+        {
+            return _db.FileFormatDetails.Where(d => d.FileFormatId == id).ToListAsync();
+        }
+
+        public Task<int> AddFileFormatDetailAsync(FileFormatDetail detail)
+        {
+            _db.FileFormatDetails.Add(detail);
             return _db.SaveChangesAsync();
         }
         #endregion

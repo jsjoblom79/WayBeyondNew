@@ -69,6 +69,7 @@ namespace WayBeyond.Data.Models
         public double PatientPaid { get; set; }
         public DateTime? PatientPaidDate { get; set; }
         public DateTime? DateLastPay { get; set; }
+        public string? Skip { get; set; }
 
         public string? DebtorHomePhone
         {

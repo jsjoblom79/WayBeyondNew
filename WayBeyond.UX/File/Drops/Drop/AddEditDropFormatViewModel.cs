@@ -111,7 +111,8 @@ namespace WayBeyond.UX.File.Drops.Drop
         private void OnCancelCommand() => Completed($"Add/Edit Drop Format has been Cancelled.");
         private void OnClearDetailCommand()
         {
-            EditableDropDetailFormat = null;
+            EditableDropDetailFormat = new();
+            EditableDropDetailFormat.DropFormatId = EditableDropFormat.Id;
         }
         private async void OnAddDetailCommand()
         {
@@ -122,6 +123,7 @@ namespace WayBeyond.UX.File.Drops.Drop
 
         private async void UpdateDropDetailFormat(EditableDropDetailFormat editableDropDetailFormat, DropFormatDetail editingDropDetailFormat)
         {
+            editingDropDetailFormat.Id = 0;
             editingDropDetailFormat.DropFormatId = editableDropDetailFormat.DropFormatId;
             editingDropDetailFormat.Field = editableDropDetailFormat.DetailField;
             editingDropDetailFormat.Position = editableDropDetailFormat.DetailPosition;

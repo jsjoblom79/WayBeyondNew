@@ -9,6 +9,8 @@ public partial class FileFormat
 
     public long? ClientId { get; set; }
 
+    public string? FileFormatName { get; set; }
+
     public string? CreateDate { get; set; }
 
     public string? UpdateDate { get; set; }

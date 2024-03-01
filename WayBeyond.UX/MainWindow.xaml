@@ -9,6 +9,7 @@
         xmlns:client="clr-namespace:WayBeyond.UX.File.Maintenance"
         xmlns:location="clr-namespace:WayBeyond.UX.File.Location"
         xmlns:fdrop="clr-namespace:WayBeyond.UX.File.Drops.Drop"
+        xmlns:format="clr-namespace:WayBeyond.UX.File.Drops.Formats"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -46,6 +47,9 @@
         <DataTemplate DataType="{x:Type fdrop:AddEditDropFormatViewModel}">
             <fdrop:AddEditDropFormatView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type format:FileFormatViewModel}">
+            <format:FileFormatView/>
+        </DataTemplate>
    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -69,7 +73,7 @@
                     <MenuItem Header="Drop File Format" Command="{Binding NavigateCommand}"
                               CommandParameter="drop" Margin="3"/>
                     <MenuItem Header="Client File Format" Command="{Binding NavigateCommand}"
-                              CommandParameter="fileformat" Margin="3"/>
+                              CommandParameter="format" Margin="3"/>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Exit" Command="{Binding NavigateCommand}"

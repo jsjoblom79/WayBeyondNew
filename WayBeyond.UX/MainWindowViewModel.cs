@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Unity;
 using WayBeyond.Data.Models;
 using WayBeyond.UX.File.Drops.Drop;
+using WayBeyond.UX.File.Drops.Formats;
 using WayBeyond.UX.File.Location;
 using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
@@ -26,6 +27,7 @@ namespace WayBeyond.UX
         private AddEditFileLocationViewModel _addEditFileLocationViewModel;
         private DropFormatViewModel _dropFormatViewModel;
         private AddEditDropFormatViewModel _addEditDropFormatViewModel;
+        private FileFormatViewModel _fileFormatViewModel;
 
         public MainWindowViewModel()
         {
@@ -40,6 +42,7 @@ namespace WayBeyond.UX
             _addEditFileLocationViewModel = ContainerHelper.Container.Resolve<AddEditFileLocationViewModel>();
             _dropFormatViewModel = ContainerHelper.Container.Resolve<DropFormatViewModel>();
             _addEditDropFormatViewModel = ContainerHelper.Container.Resolve<AddEditDropFormatViewModel>();
+            _fileFormatViewModel = ContainerHelper.Container.Resolve<FileFormatViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -63,7 +66,13 @@ namespace WayBeyond.UX
             _dropFormatViewModel.AddEditDropFormatRequest += AddEditDropFormatCommand;
             _dropFormatViewModel.Completed += UpdateStatus;
             _addEditDropFormatViewModel.Completed += AddEditDropFileFormatCompleted;
+
+            //FileFormats
+            _fileFormatViewModel.AddEditFileFormatRequest += AddEditFileFormatCommand;
+            _fileFormatViewModel.Completed += UpdateStatus;
         }
+
+        
 
         private string _currentStatus;
 
@@ -106,6 +115,9 @@ namespace WayBeyond.UX
                     break;
                 case "drop":
                     CurrentViewModel = _dropFormatViewModel;
+                    break;
+                case "format":
+                    CurrentViewModel = _fileFormatViewModel;
                     break;
                 default:
                     break;
@@ -183,6 +195,10 @@ namespace WayBeyond.UX
             UpdateStatus(obj);
         }
 
+        private void AddEditFileFormatCommand(FileFormat format, bool arg2)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

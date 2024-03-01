@@ -43,9 +43,11 @@
                 <TextBlock Text="{Binding UpdateDate}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="4" Grid.Column="1"/>
                 <TextBlock Text="{Binding UpdatedBy}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="5" Grid.Column="1"/>
                 <TextBlock Text="{Binding Id}" Width="Auto" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0"/>
-                <DataGrid ItemsSource="{Binding DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto"
+                <DataGrid ItemsSource="{Binding DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto" Height="150"
                           AutoGenerateColumns="False"
-                          CanUserAddRows="False">
+                          CanUserAddRows="False"
+                          ScrollViewer.CanContentScroll="True"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
                         <DataGridTextColumn Header="Field" Binding="{Binding Field}"/>
@@ -67,7 +69,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" VerticalAlignment="Bottom" DataContext="{Binding EditableDropDetailFormat}">
+            <Grid Grid.Row="0" VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -82,17 +84,17 @@
                 <Label Content="Field:" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="0"/>
                 <Label Content="Position:" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
                 <Label Content="Field Type:" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0"/>
-                <TextBlock Text="{Binding Id}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"/>
-                <ComboBox ItemsSource="{Binding Fields, RelativeSource={RelativeSource Mode=FindAncestor,AncestorLevel=2,AncestorType=Grid}}" SelectedItem="{Binding DetailField}" Width="150" Height="23" Margin="3"
+                <TextBlock Text="{Binding EditableDropDetailFormat.DropFormatId}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"/>
+                <ComboBox ItemsSource="{Binding Fields}" SelectedItem="{Binding EditableDropDetailFormat.DetailField}" Width="150" Height="23" Margin="3"
                           Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left"/>
-                <TextBox Text="{Binding DetailPosition}" Width="50" Height="23" Margin="3"
+                <TextBox Text="{Binding EditableDropDetailFormat.DetailPosition}" Width="50" Height="23" Margin="3"
                          Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
-                <ComboBox ItemsSource="{Binding FieldTypes}" SelectedItem="{Binding DetailFieldType}" Width="150" Height="23" Margin="3"
+                <ComboBox ItemsSource="{Binding FieldTypes}" SelectedItem="{Binding EditableDropDetailFormat.DetailFieldType}" Width="150" Height="23" Margin="3"
                           Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
             </Grid>
             <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Add Format Detail" Command="{Binding AddDetailCommand}" Width="Auto" Height="23" Margin="3"/>
+                    <Button Content="Add Format Detail" Command="{Binding AddDetailCommand}" Width="110" Height="23" Margin="3"/>
                     <Button Content="Cancel" Command="{Binding ClearDetailCommand}" Width="75" Height="23" Margin="3"/>
                 </StackPanel>
             </Grid>
