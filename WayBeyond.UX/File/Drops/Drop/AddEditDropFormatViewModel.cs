@@ -135,7 +135,7 @@ namespace WayBeyond.UX.File.Drops.Drop
 
         private void OnAddEditDropFormat() => UpdateDropFileFormat(EditableDropFormat, _editingdropFormat);
         
-        private Task<List<DropFormatDetail>> GetDropFormatDetail(long id) => _db.GetAllDropFormatDetailsByDropFormatId(id);
+        private async Task<List<DropFormatDetail>> GetDropFormatDetail(long id) => await _db.GetAllDropFormatDetailsByDropFormatId(id);
 
         private async void UpdateDropFileFormat(EditableDropFormat editableDropFormat, DropFormat editingdropFormat)
         {
@@ -167,7 +167,7 @@ namespace WayBeyond.UX.File.Drops.Drop
         }
         public async void GetFieldProperties()
         {
-            Fields = new ObservableCollection<string>(await _rando.GetDebtorProperties());
+            Fields = new ObservableCollection<string>(await _rando.GetDebtorPropertiesAsync());
         }
         #endregion
     }

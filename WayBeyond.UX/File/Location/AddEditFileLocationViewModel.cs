@@ -11,10 +11,12 @@ namespace WayBeyond.UX.File.Location
 {
     public class AddEditFileLocationViewModel : BindableBase
     {
-        IBeyondRepository _db;
-        public AddEditFileLocationViewModel(IBeyondRepository db)
+        private IBeyondRepository _db;
+        private IRando _rando;
+        public AddEditFileLocationViewModel(IBeyondRepository db, IRando rando)
         {
             _db = db;
+            _rando = rando;
             AddEditFileLocation = new RelayCommand(OnAddEditFileLocation, CanSave);
             CancelCommand = new RelayCommand(OnCancelCommand);
         }
@@ -106,6 +108,8 @@ namespace WayBeyond.UX.File.Location
                 }
             }
         }
+
+
         #endregion
     }
 }

@@ -10,7 +10,20 @@ namespace WayBeyond.UX.Services
 {
     public class Rando : IRando
     {
-        public Task<List<string>> GetDebtorProperties()
+        public Task<List<string>> GetColumnTypesAsync()
+        {
+            return Task.FromResult(new List<string>
+            {
+                "double",
+                "string",
+                "DateTime",
+                "long",
+                "int",
+                "StateZip"
+            });
+        }
+
+        public Task<List<string>> GetDebtorPropertiesAsync()
         {
             List<string> fields = new List<string>();
             foreach (var field in typeof(Debtor).GetProperties())
@@ -20,5 +33,6 @@ namespace WayBeyond.UX.Services
 
             return Task.FromResult(fields);
         }
+
     }
 }

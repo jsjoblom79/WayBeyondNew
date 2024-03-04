@@ -4,6 +4,7 @@ using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WayBeyond.Data.Models;
 
 namespace WayBeyond.UX.File.Location
 {
@@ -34,9 +35,9 @@ namespace WayBeyond.UX.File.Location
             set { SetProperty(ref _path, value); }
         }
 
-        private string _fileType;
+        private FileType _fileType;
 
-        public string FileType
+        public FileType FileType
         {
             get { return _fileType; }
             set { SetProperty(ref _fileType, value); }

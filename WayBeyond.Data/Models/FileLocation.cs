@@ -11,7 +11,7 @@ public partial class FileLocation
 
     public string? Path { get; set; }
 
-    public string? FileType { get; set; }
+    public FileType FileType { get; set; }
 
     public long? RemoteConnectionId { get; set; }
 

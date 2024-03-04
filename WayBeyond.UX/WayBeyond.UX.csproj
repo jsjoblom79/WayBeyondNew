@@ -10,10 +10,14 @@
   <ItemGroup>
     <None Remove="Fonts\Font Awesome 6 Free Solid.otf" />
     <None Remove="Resources\WayBeyond.db" />
+    <None Remove="Resources\wbd.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Fonts\Font Awesome 6 Free Solid.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\wbd.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <EmbeddedResource Include="Resources\WayBeyond.db" />
@@ -26,6 +30,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageReference Include="Renci.SshNet.Async" Version="1.4.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.8" />

@@ -51,7 +51,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="edit" FontFamily="{StaticResource FontAwesome}" FontSize="14" Background="Transparent" BorderThickness="0"
-                                        Command="{Binding EditFileFormatCommand, RelativeSource={RelativeSource AncestorLevel={x:Type DataGrid}}}"
+                                        Command="{Binding DataContext.EditFileFormatCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding}" Margin="3"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -60,7 +60,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="trash" FontFamily="{StaticResource FontAwesome}" FontSize="14" Background="Transparent" BorderThickness="0"
-                                        Command="{Binding DeleteFileFormatCommand, RelativeSource={RelativeSource AncestorLevel={x:Type DataGrid}}}"
+                                        Command="{Binding DataContext.DeleteFileFormatCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding}" Margin="3"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -28,6 +28,7 @@ namespace WayBeyond.UX
         private DropFormatViewModel _dropFormatViewModel;
         private AddEditDropFormatViewModel _addEditDropFormatViewModel;
         private FileFormatViewModel _fileFormatViewModel;
+        private AddEditFileFormatViewModel _addEditFileFormatViewModel;
 
         public MainWindowViewModel()
         {
@@ -43,6 +44,7 @@ namespace WayBeyond.UX
             _dropFormatViewModel = ContainerHelper.Container.Resolve<DropFormatViewModel>();
             _addEditDropFormatViewModel = ContainerHelper.Container.Resolve<AddEditDropFormatViewModel>();
             _fileFormatViewModel = ContainerHelper.Container.Resolve<FileFormatViewModel>();
+            _addEditFileFormatViewModel = ContainerHelper.Container.Resolve<AddEditFileFormatViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -70,9 +72,8 @@ namespace WayBeyond.UX
             //FileFormats
             _fileFormatViewModel.AddEditFileFormatRequest += AddEditFileFormatCommand;
             _fileFormatViewModel.Completed += UpdateStatus;
+            _addEditFileFormatViewModel.Completed += AddEditFileFormatCompleted;
         }
-
-        
 
         private string _currentStatus;
 
@@ -197,8 +198,18 @@ namespace WayBeyond.UX
 
         private void AddEditFileFormatCommand(FileFormat format, bool arg2)
         {
-            throw new NotImplementedException();
+            _addEditFileFormatViewModel.EditMode = arg2;
+            _addEditFileFormatViewModel.SetFileFormat(format);
+            _addEditFileFormatViewModel.GetFieldsAndColumns();
+            CurrentViewModel = _addEditFileFormatViewModel;
         }
+
+        private void AddEditFileFormatCompleted(string obj)
+        {
+            CurrentViewModel = _fileFormatViewModel;
+            UpdateStatus(obj);
+        }
+
         #endregion
     }
 }

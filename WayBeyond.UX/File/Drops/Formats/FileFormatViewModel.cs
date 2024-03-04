@@ -16,6 +16,10 @@ namespace WayBeyond.UX.File.Drops.Formats
         public FileFormatViewModel(IBeyondRepository db)
         {
             _db = db;
+            ClearSearchTerm = new RelayCommand(OnClearSearchTerm);
+            AddFileFormatCommand = new RelayCommand(OnAddFileFormatCommand);
+            EditFileFormatCommand = new RelayCommand<FileFormat>(OnEditFileFormatCommand);
+            DeleteFileFormatCommand = new RelayCommand<FileFormat>(OnDeleteFileFormatCommand);
         }
 
         #region Properties
@@ -56,6 +60,7 @@ namespace WayBeyond.UX.File.Drops.Formats
         {
             _allFileFormats = await _db.GetAllFileFormatsAsync();
             FileFormats = new ObservableCollection<FileFormat>(_allFileFormats);
+            
         }
 
         private void FilterFileFormats()
@@ -70,6 +75,20 @@ namespace WayBeyond.UX.File.Drops.Formats
             }
         }
 
+        private void OnClearSearchTerm() => SearchTerm = null;
+
+        private void OnAddFileFormatCommand() => AddEditFileFormatRequest(new FileFormat(), false);
+
+        private void OnEditFileFormatCommand(FileFormat fileFormat) => AddEditFileFormatRequest(fileFormat, true);
+
+        private async void OnDeleteFileFormatCommand(FileFormat format)
+        {
+            if(await _db.DeleteObjectAsync(format) > 0)
+            {
+                OnViewLoaded();
+                Completed($"File Format: {format.FileFormatName} has been deleted.");
+            }
+        }
         #endregion
     }
 }
