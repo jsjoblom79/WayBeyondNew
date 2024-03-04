@@ -17,6 +17,7 @@ namespace WayBeyond.UX.Services
         //RemoteConnections
         Task<List<RemoteConnection>> GetAllRemoteConnectionsAsync();
         Task<int> AddRemoteConnectionAsync(RemoteConnection connection);
+        Task<RemoteConnection> GetRemoteConnectionByIdAsync(long? id);
 
         //Client
         Task<List<Client>> GetAllClientsAsync();
@@ -30,7 +31,7 @@ namespace WayBeyond.UX.Services
         //DropFormats
         Task<List<DropFormat>> GetAllDropFormatsAsync();
         Task<int> AddDropFormatAsync(DropFormat dropFormat);
-
+        Task<DropFormat> GetDropFormatByIdAsync(long? id);
 
         //DropFormatDetails
         Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id);
@@ -39,6 +40,7 @@ namespace WayBeyond.UX.Services
         //FileFormats
         Task<List<FileFormat>> GetAllFileFormatsAsync();
         Task<int> AddFileFormatAsync(FileFormat format);
+        Task<FileFormat> GetFileFormatByIdAsync(long? id);
 
         //FileFormatDetails
         Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long id);

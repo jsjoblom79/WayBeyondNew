@@ -51,6 +51,16 @@ namespace WayBeyond.UX.File.Location
             set { SetProperty(ref _remoteConnectionId, value); }
         }
 
+        private RemoteConnection _remoteConnection;
+
+        public RemoteConnection RemoteConnection
+        {
+            get { return _remoteConnection; }
+            set { SetProperty(ref _remoteConnection, value);
+                if(value != null) RemoteConnectionId = value.Id;
+            }
+        }
+
 
     }
 }

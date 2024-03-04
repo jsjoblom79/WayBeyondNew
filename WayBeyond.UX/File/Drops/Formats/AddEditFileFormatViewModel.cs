@@ -24,6 +24,7 @@ namespace WayBeyond.UX.File.Drops.Formats
             CancelCommand = new RelayCommand(OnCancelCommand);
             AddDetailCommand = new RelayCommand(OnAddDetailCommand);
             ClearDetailCommand = new RelayCommand(OnClearDetailCommand);
+            DeleteFileFormatDetail = new RelayCommand<FileFormatDetail>(OnDeleteFileFormatDetail);
         }
 
         #region Properties
@@ -78,6 +79,7 @@ namespace WayBeyond.UX.File.Drops.Formats
         public RelayCommand CancelCommand { get; private set; }
         public RelayCommand AddDetailCommand { get; private set; }
         public RelayCommand ClearDetailCommand { get; private set; }
+        public RelayCommand<FileFormatDetail> DeleteFileFormatDetail { get; private set; }
 
         public event Action<string> Completed;
 
@@ -175,6 +177,13 @@ namespace WayBeyond.UX.File.Drops.Formats
             ColumnTypes = new ObservableCollection<string>(await _rando.GetColumnTypesAsync());
         }
         
+        private async void OnDeleteFileFormatDetail(FileFormatDetail detail)
+        {
+            if(await _db.DeleteObjectAsync(detail) > 0)
+            {
+                EditableAddEditFileFormat.FileFormatDetails = await _db.GetAllFileFormatDetailsByFileFormatIdAsync(_editingFileFormat.Id);
+            }
+        }
 
         #endregion
     }

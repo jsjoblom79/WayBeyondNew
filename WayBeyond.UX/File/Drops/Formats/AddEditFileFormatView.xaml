@@ -16,7 +16,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Width="Auto" DataContext="{Binding EditableAddEditFileFormat}"
+            <Grid Grid.Row="0" Width="Auto"
                   Margin="5,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -46,21 +46,30 @@
                         <TextBlock Text="Detail:" HorizontalAlignment="Right"/>
                     </StackPanel>
                 </Label>
-                <TextBlock Text="{Binding Id}" Width="120" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
-                <TextBox Text="{Binding FileFormatName}" Width="120" Height="23" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Grid.Row="1" Grid.Column="1"/>
-                <TextBlock Text="{Binding CreateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="{Binding UpdateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
-                <TextBlock Text="{Binding UpdatedBy}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
-                <DataGrid ItemsSource="{Binding FileFormatDetails}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="5" Grid.Column="1"
+                <TextBlock Text="{Binding EditableAddEditFileFormat.Id}" Width="120" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+                <TextBox Text="{Binding EditableAddEditFileFormat.FileFormatName}" Width="120" Height="23" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableAddEditFileFormat.CreateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableAddEditFileFormat.UpdateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableAddEditFileFormat.UpdatedBy}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
+                <DataGrid ItemsSource="{Binding EditableAddEditFileFormat.FileFormatDetails}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="5" Grid.Column="1"
+                          Width="300" Height="175"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                          Height="Auto" Width="Auto">
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Field" Binding="{Binding Field}" Width="Auto"/>
                         <DataGridTextColumn Header="Column" Binding="{Binding FileColumn}" Width="Auto"/>
                         <DataGridTextColumn Header="Type" Binding="{Binding ColumnType}" Width="Auto"/>
                         <DataGridTextColumn Header="Special Case" Binding="{Binding SpecialCase}" Width="Auto"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="trash" FontFamily="{StaticResource FontAwesome}" 
+                                            Command="{Binding DataContext.DeleteFileFormatDetail, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}" Background="Transparent" BorderThickness="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

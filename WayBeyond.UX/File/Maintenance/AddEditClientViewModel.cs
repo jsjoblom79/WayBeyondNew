@@ -40,6 +40,24 @@ namespace WayBeyond.UX.File.Maintenance
             set { SetProperty(ref _editableClient, value); }
         }
 
+
+        private List<FileFormat> _fileFormats;
+
+        public List<FileFormat> FileFormats
+        {
+            get { return _fileFormats; }
+            set { SetProperty(ref _fileFormats, value); }
+        }
+
+
+        private List<DropFormat> _dropFormats;
+
+        public List<DropFormat> DropFormats
+        {
+            get { return _dropFormats; }
+            set { SetProperty(ref _dropFormats, value); }
+        }
+
         #endregion
 
         #region Methods
@@ -91,9 +109,11 @@ namespace WayBeyond.UX.File.Maintenance
             EditableClient = new EditableClient();
             EditableClient.ErrorsChanged += RaiseCanExecuteChanged;
             CopyEditingClient(_editingClient, EditableClient);
+            FileFormats = await _db.GetAllFileFormatsAsync();
+            DropFormats = await _db.GetAllDropFormatsAsync();
         }
 
-        private void CopyEditingClient(Client editingClient, EditableClient editableClient)
+        private async void CopyEditingClient(Client editingClient, EditableClient editableClient)
         {
             editableClient.Id = editingClient.Id;
             if (EditMode)
@@ -105,6 +125,8 @@ namespace WayBeyond.UX.File.Maintenance
                 editableClient.AssemblyName = editingClient.AssemblyName;
                 editableClient.DropFormatId = editingClient.DropFormatId;
                 editableClient.FileFormatId = editingClient.FileFormatId;
+                editableClient.FileFormat = await _db.GetFileFormatByIdAsync(editingClient.FileFormatId);
+                editableClient.DropFormat = await _db.GetDropFormatByIdAsync(editingClient.DropFormatId);
             }
         }
 

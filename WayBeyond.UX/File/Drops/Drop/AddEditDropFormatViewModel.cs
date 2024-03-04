@@ -24,6 +24,7 @@ namespace WayBeyond.UX.File.Drops.Drop
             CancelCommand = new RelayCommand(OnCancelCommand);
             AddDetailCommand = new RelayCommand(OnAddDetailCommand);
             ClearDetailCommand = new RelayCommand(OnClearDetailCommand);
+            DeleteDropDetail = new RelayCommand<DropFormatDetail>(OnDeleteDropFormatDetail);
         }
 
         #region Properties
@@ -70,6 +71,7 @@ namespace WayBeyond.UX.File.Drops.Drop
         public RelayCommand CancelCommand { get; private set; }
         public RelayCommand AddDetailCommand { get; private set; }
         public RelayCommand ClearDetailCommand { get; private set; }
+        public RelayCommand<DropFormatDetail> DeleteDropDetail { get; private set; }
 
         public event Action<string> Completed;
 
@@ -168,6 +170,14 @@ namespace WayBeyond.UX.File.Drops.Drop
         public async void GetFieldProperties()
         {
             Fields = new ObservableCollection<string>(await _rando.GetDebtorPropertiesAsync());
+        }
+
+        private async void OnDeleteDropFormatDetail(DropFormatDetail detail)
+        {
+            if(await _db.DeleteObjectAsync(detail) > 0)
+            {
+                EditableDropFormat.DropFormatDetails = await GetDropFormatDetail(EditableDropFormat.Id);
+            }
         }
         #endregion
     }

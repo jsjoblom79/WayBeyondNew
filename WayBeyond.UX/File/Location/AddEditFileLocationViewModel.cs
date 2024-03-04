@@ -19,6 +19,7 @@ namespace WayBeyond.UX.File.Location
             _rando = rando;
             AddEditFileLocation = new RelayCommand(OnAddEditFileLocation, CanSave);
             CancelCommand = new RelayCommand(OnCancelCommand);
+            RemoveRemoteConnection = new RelayCommand(OnRemoveRemoteConnection);
         }
 
         #region Properties
@@ -40,15 +41,25 @@ namespace WayBeyond.UX.File.Location
             set { SetProperty(ref _editableFileLocation, value); }
         }
 
+        private List<RemoteConnection> _remoteConnections;
+
+        public List<RemoteConnection> RemoteConnections
+        {
+            get { return _remoteConnections; }
+            set { SetProperty(ref _remoteConnections, value); }
+        }
+
+
         #endregion
 
         #region Methods
         public RelayCommand AddEditFileLocation { get; private set; }
         public RelayCommand CancelCommand { get; private set; }
+        public RelayCommand RemoveRemoteConnection { get; private set; }
 
         public event Action<string> Completed;
 
-        public void SetFileLocation(FileLocation location)
+        public async void SetFileLocation(FileLocation location)
         {
             _editingFileLocation = location;
             if (EditableFileLocation != null) EditableFileLocation.ErrorsChanged -= RaiseCanExecuteChanged;
@@ -56,9 +67,10 @@ namespace WayBeyond.UX.File.Location
             EditableFileLocation = new EditableFileLocation();
             EditableFileLocation.ErrorsChanged += RaiseCanExecuteChanged;
             CopyEditingFileLocation(_editingFileLocation, EditableFileLocation);
+            RemoteConnections = await _db.GetAllRemoteConnectionsAsync();
         }
 
-        private void CopyEditingFileLocation(FileLocation editingFileLocation, EditableFileLocation editableFileLocation)
+        private async void CopyEditingFileLocation(FileLocation editingFileLocation, EditableFileLocation editableFileLocation)
         {
             editableFileLocation.Id = editingFileLocation.Id;
             if (EditMode)
@@ -67,6 +79,7 @@ namespace WayBeyond.UX.File.Location
                 editableFileLocation.Path = editingFileLocation.Path;
                 editableFileLocation.RemoteConnectionId = editingFileLocation.RemoteConnectionId;
                 editableFileLocation.FileType = editingFileLocation.FileType;
+                editableFileLocation.RemoteConnection = await _db.GetRemoteConnectionByIdAsync(editingFileLocation.RemoteConnectionId);
             }
         }
 
@@ -109,6 +122,10 @@ namespace WayBeyond.UX.File.Location
             }
         }
 
+        private void OnRemoveRemoteConnection()
+        {
+            EditableFileLocation.RemoteConnectionId = null;
+        }
 
         #endregion
     }

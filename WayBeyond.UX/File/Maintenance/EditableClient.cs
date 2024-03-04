@@ -1,4 +1,6 @@
-﻿namespace WayBeyond.UX.File.Maintenance
+﻿using WayBeyond.Data.Models;
+
+namespace WayBeyond.UX.File.Maintenance
 {
     public class EditableClient : ValidatableBindableBase
     {
@@ -66,6 +68,28 @@
             get { return _fileFormatId; }
             set { SetProperty(ref _fileFormatId, value); }
         }
+
+
+        private DropFormat _dropFormat;
+
+        public DropFormat DropFormat
+        {
+            get { return _dropFormat; }
+            set { SetProperty(ref _dropFormat, value);
+                if(value != null) DropFormatId = value.Id;
+                    }
+        }
+
+        private FileFormat _fileFormat;
+
+        public FileFormat FileFormat
+        {
+            get { return _fileFormat; }
+            set { SetProperty(ref _fileFormat, value); 
+                if(value != null) FileFormatId = value.Id;
+            }
+        }
+
 
 
     }

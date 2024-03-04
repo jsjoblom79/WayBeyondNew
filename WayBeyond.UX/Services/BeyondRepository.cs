@@ -26,6 +26,10 @@ namespace WayBeyond.UX.Services
             return _db.RemoteConnections.ToListAsync();
         }
 
+        public Task<RemoteConnection> GetRemoteConnectionByIdAsync(long? id)
+        {
+            return Task.FromResult(_db.RemoteConnections.Find(id));
+        }
 
         #endregion
         #region Settings
@@ -92,6 +96,10 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
+        public Task<DropFormat> GetDropFormatByIdAsync(long? id)
+        {
+            return Task.FromResult(_db.DropFormats.Find(id));
+        }
         #endregion
         #region DropFormatDetails
         public Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id)
@@ -131,6 +139,10 @@ namespace WayBeyond.UX.Services
             _db.FileFormats.Add(format);
             return _db.SaveChangesAsync();
         }
+        public Task<FileFormat> GetFileFormatByIdAsync(long? id)
+        {
+            return Task.FromResult(_db.FileFormats.Find(id));
+        }
         #endregion
         #region FileFormatDetails
         public Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long id)
@@ -143,6 +155,10 @@ namespace WayBeyond.UX.Services
             _db.FileFormatDetails.Add(detail);
             return _db.SaveChangesAsync();
         }
+
+
+
+
         #endregion
     }
 }

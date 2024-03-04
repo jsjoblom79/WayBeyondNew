@@ -16,7 +16,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0" DataContext="{Binding EditableDropFormat}" HorizontalAlignment="Center">
+            <Grid Grid.Row="0" HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -37,13 +37,13 @@
                 <Label Content="Updated By:" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="0"/>
                 <Label Content="Id:" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
                 <Label Content="Details:" HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0"/>
-                <TextBox Text="{Binding DropId}" HorizontalAlignment="Right" Width="120" Height="23" VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="1"/>
-                <TextBox Text="{Binding DropName}" HorizontalAlignment="Right" Width="120" Height="23" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="{Binding CreateDate}" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center" Width="Auto" Grid.Row="3" Grid.Column="1"/>
-                <TextBlock Text="{Binding UpdateDate}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="4" Grid.Column="1"/>
-                <TextBlock Text="{Binding UpdatedBy}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="5" Grid.Column="1"/>
-                <TextBlock Text="{Binding Id}" Width="Auto" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0"/>
-                <DataGrid ItemsSource="{Binding DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto" Height="150"
+                <TextBox Text="{Binding EditableDropFormat.DropId}" HorizontalAlignment="Right" Width="120" Height="23" VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+                <TextBox Text="{Binding EditableDropFormat.DropName}" HorizontalAlignment="Right" Width="120" Height="23" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableDropFormat.CreateDate}" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center" Width="Auto" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableDropFormat.UpdateDate}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableDropFormat.UpdatedBy}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="5" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableDropFormat.Id}" Width="Auto" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0"/>
+                <DataGrid ItemsSource="{Binding EditableDropFormat.DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto" Height="150"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           ScrollViewer.CanContentScroll="True"
@@ -53,6 +53,15 @@
                         <DataGridTextColumn Header="Field" Binding="{Binding Field}"/>
                         <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
                         <DataGridTextColumn Header="FieldType" Binding="{Binding FieldType}"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="trash" FontFamily="{StaticResource FontAwesome}"
+                                            Command="{Binding DataContext.DeleteDropDetail, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                            CommandParameter="{Binding}" Background="Transparent" BorderThickness="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
