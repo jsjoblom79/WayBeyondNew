@@ -46,9 +46,15 @@ namespace WayBeyond.UX.Services
 
         #endregion
         #region Clients
-        public Task<List<Client>> GetAllClientsAsync()
+        public async Task<List<Client>> GetAllClientsAsync()
         {
-            return _db.Clients.ToListAsync();
+            var clients = _db.Clients;
+            foreach (var client in clients)
+            {
+                client.DropFormat = await GetDropFormatByIdAsync(client.DropFormatId);
+                client.FileFormat = await GetFileFormatByIdAsync(client.FileFormatId);
+            }
+            return clients.ToList();
         }
 
         public Task<int> AddClientAsync(Client client)
@@ -85,7 +91,15 @@ namespace WayBeyond.UX.Services
 
         public Task<List<FileLocation>> GetFileLocationByNameAsync(string name)
         {
-            return _db.FileLocations.Where(l => l.FileLocationName == name).ToListAsync();
+            var locations = _db.FileLocations.Where(l => l.FileLocationName == name);
+            foreach (var location in locations)
+            {
+                if(location.FileType == FileType.REMOTE)
+                {
+                    location.RemoteConnection = _db.RemoteConnections.Find(location.RemoteConnectionId);
+                }
+            }
+            return locations.ToListAsync();
         }
         #endregion
         #region DropFormats
@@ -100,13 +114,15 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<DropFormat> GetDropFormatByIdAsync(long? id)
+        public async Task<DropFormat> GetDropFormatByIdAsync(long? id)
         {
-            return Task.FromResult(_db.DropFormats.Find(id));
+            var format = _db.DropFormats.Find(id);
+            format.DropFormatDetails = await GetAllDropFormatDetailsByDropFormatId(id);
+            return format;
         }
         #endregion
         #region DropFormatDetails
-        public Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id)
+        public Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long? id)
         {
             return _db.DropFormatDetails.Where(d => d.DropFormatId == id).ToListAsync();
         }
@@ -143,13 +159,15 @@ namespace WayBeyond.UX.Services
             _db.FileFormats.Add(format);
             return _db.SaveChangesAsync();
         }
-        public Task<FileFormat> GetFileFormatByIdAsync(long? id)
+        public async Task<FileFormat> GetFileFormatByIdAsync(long? id)
         {
-            return Task.FromResult(_db.FileFormats.Find(id));
+            var format = _db.FileFormats.Find(id);
+            format.FileFormatDetails = await GetAllFileFormatDetailsByFileFormatIdAsync(id);
+            return format;
         }
         #endregion
         #region FileFormatDetails
-        public Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long id)
+        public Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long? id)
         {
             return _db.FileFormatDetails.Where(d => d.FileFormatId == id).ToListAsync();
         }

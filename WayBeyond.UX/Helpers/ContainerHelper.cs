@@ -19,6 +19,10 @@ namespace WayBeyond.UX
             _container.RegisterType<IBeyondRepository, BeyondRepository>(
                 new ContainerControlledLifetimeManager()).
                 RegisterType<IRando, Rando>(
+                new ContainerControlledLifetimeManager()).
+                RegisterType<ITransfer, Transfer>(
+                new ContainerControlledLifetimeManager()).
+                RegisterType<IClientProcess, ClientProcess>(
                 new ContainerControlledLifetimeManager());
                 
         }

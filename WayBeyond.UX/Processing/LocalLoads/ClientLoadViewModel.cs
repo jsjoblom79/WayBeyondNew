@@ -14,11 +14,15 @@ namespace WayBeyond.UX.Processing.LocalLoads
     {
         private IBeyondRepository _db;
         private ITransfer _transfer;
-        public ClientLoadViewModel(IBeyondRepository db, ITransfer transfer)
+        private IClientProcess _clientProcess;
+        public ClientLoadViewModel(IBeyondRepository db, ITransfer transfer, IClientProcess cp)
         {
             _db = db;   
             _transfer = transfer;
             _fileObjects = new List<FileObject>();
+            _clientProcess = cp;
+            ClearSelections = new RelayCommand(OnClearSelections);
+            ProcessSelections = new RelayCommand(OnProcessSelections);
         }
 
         #region Properties
@@ -40,9 +44,56 @@ namespace WayBeyond.UX.Processing.LocalLoads
             set { SetProperty(ref _placementFiles, value); }
         }
 
+
+        private Client _selectedClient;
+
+        public Client SelectedClient
+        {
+            get { return _selectedClient; }
+            set { SetProperty(ref _selectedClient, value);
+                if (SelectedFile != null)
+                { 
+                    Process = true;
+                }
+                else
+                {
+                    Process = false;
+                }
+                
+            }
+        }
+
+        private FileObject _selectedFile;
+
+        public FileObject SelectedFile
+        {
+            get { return _selectedFile; }
+            set { SetProperty(ref _selectedFile, value);
+                if(SelectedClient != null)
+                {
+                    Process = true;
+                }
+                else
+                {
+                    Process = false;
+                }
+            }
+        }
+
+        private bool _process;
+
+        public bool Process
+        {
+            get { return _process; }
+            set { SetProperty(ref _process, value); }
+        }
+
         #endregion
 
         #region Methods
+        public RelayCommand ClearSelections { get; private set; }
+        public RelayCommand ProcessSelections { get; private set; }
+
         public async void OnViewLoaded()
         {
             foreach (var location in await _db.GetFileLocationByNameAsync("Placements"))
@@ -51,6 +102,15 @@ namespace WayBeyond.UX.Processing.LocalLoads
             }
             Clients = new ObservableCollection<Client>(await _db.GetAllClientsAsync());
             PlacementFiles = new ObservableCollection<FileObject>(_fileObjects);
+        }
+        private async void OnProcessSelections()
+        {
+            _clientProcess.ProcessClientFile(SelectedFile, SelectedClient);
+        }
+        private async void OnClearSelections()
+        {
+            SelectedClient = null;
+            SelectedFile = null;
         }
         #endregion
     }

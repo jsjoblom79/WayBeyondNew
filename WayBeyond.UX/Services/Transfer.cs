@@ -25,7 +25,7 @@ namespace WayBeyond.UX.Services
                 return GetRemoteFiles(location);
             }
         }
-
+        #region PrivateMethods
         private async Task<List<FileObject>> GetRemoteFiles(FileLocation location)
         {
             using (SftpClient client = new SftpClient(GetConnectionInfo(location.RemoteConnection)))
@@ -55,7 +55,7 @@ namespace WayBeyond.UX.Services
                 }
             }
         }
-        #region PrivateMethods
+        
         private List<FileObject> GetLocalFiles(FileLocation location)
         {
             List<FileObject> files = new List<FileObject>();

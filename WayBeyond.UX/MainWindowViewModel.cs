@@ -12,6 +12,7 @@ using WayBeyond.UX.File.Location;
 using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
 using WayBeyond.UX.File.Settings;
+using WayBeyond.UX.Processing.LocalLoads;
 
 namespace WayBeyond.UX
 {
@@ -29,6 +30,7 @@ namespace WayBeyond.UX
         private AddEditDropFormatViewModel _addEditDropFormatViewModel;
         private FileFormatViewModel _fileFormatViewModel;
         private AddEditFileFormatViewModel _addEditFileFormatViewModel;
+        private ClientLoadViewModel _clientLoadViewModel;
 
         public MainWindowViewModel()
         {
@@ -45,6 +47,7 @@ namespace WayBeyond.UX
             _addEditDropFormatViewModel = ContainerHelper.Container.Resolve<AddEditDropFormatViewModel>();
             _fileFormatViewModel = ContainerHelper.Container.Resolve<FileFormatViewModel>();
             _addEditFileFormatViewModel = ContainerHelper.Container.Resolve<AddEditFileFormatViewModel>();
+            _clientLoadViewModel = ContainerHelper.Container.Resolve<ClientLoadViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -119,6 +122,9 @@ namespace WayBeyond.UX
                     break;
                 case "format":
                     CurrentViewModel = _fileFormatViewModel;
+                    break;
+                case "load":
+                    CurrentViewModel = _clientLoadViewModel;
                     break;
                 default:
                     break;

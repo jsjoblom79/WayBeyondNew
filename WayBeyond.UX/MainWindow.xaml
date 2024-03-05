@@ -10,6 +10,7 @@
         xmlns:location="clr-namespace:WayBeyond.UX.File.Location"
         xmlns:fdrop="clr-namespace:WayBeyond.UX.File.Drops.Drop"
         xmlns:format="clr-namespace:WayBeyond.UX.File.Drops.Formats"
+        xmlns:proc="clr-namespace:WayBeyond.UX.Processing.LocalLoads"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -52,6 +53,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type format:AddEditFileFormatViewModel}">
             <format:AddEditFileFormatView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type proc:ClientLoadViewModel}">
+            <proc:ClientLoadView/>
         </DataTemplate>
    </Window.Resources>
     <Grid>

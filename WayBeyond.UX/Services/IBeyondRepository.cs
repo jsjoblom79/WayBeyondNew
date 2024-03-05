@@ -35,7 +35,7 @@ namespace WayBeyond.UX.Services
         Task<DropFormat> GetDropFormatByIdAsync(long? id);
 
         //DropFormatDetails
-        Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long id);
+        Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long? id);
         Task<int> AddDropFormatDetailAsync(DropFormatDetail detail);
 
         //FileFormats
@@ -44,7 +44,7 @@ namespace WayBeyond.UX.Services
         Task<FileFormat> GetFileFormatByIdAsync(long? id);
 
         //FileFormatDetails
-        Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long id);
+        Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long? id);
         Task<int> AddFileFormatDetailAsync(FileFormatDetail detail);
 
         //Generic Delete and Update
