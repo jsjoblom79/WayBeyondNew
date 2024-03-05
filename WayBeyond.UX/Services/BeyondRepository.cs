@@ -83,6 +83,10 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
+        public Task<List<FileLocation>> GetFileLocationByNameAsync(string name)
+        {
+            return _db.FileLocations.Where(l => l.FileLocationName == name).ToListAsync();
+        }
         #endregion
         #region DropFormats
         public Task<List<DropFormat>> GetAllDropFormatsAsync()
@@ -155,6 +159,7 @@ namespace WayBeyond.UX.Services
             _db.FileFormatDetails.Add(detail);
             return _db.SaveChangesAsync();
         }
+
 
 
 

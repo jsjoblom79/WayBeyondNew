@@ -15,6 +15,7 @@ namespace WayBeyond.UX.Services
     {
         public Task<List<FileObject>> GetFileObjectsAsync(FileLocation location)
         {
+
             if(location.FileType == FileType.LOCAL)
             {
                 return Task.FromResult(GetLocalFiles(location));

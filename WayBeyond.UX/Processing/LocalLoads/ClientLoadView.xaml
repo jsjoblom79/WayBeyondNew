@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="WayBeyond.UX.Processing.LocalLoads.ClientLoadView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WayBeyond.UX.Processing.LocalLoads"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid ItemsSource="{Binding PlacementFiles}"
+                      AutoGenerateColumns="True"
+                      CanUserAddRows="False"
+                      Margin="3"
+                      Grid.Column="0">
+                
+            </DataGrid>
+            <DataGrid ItemsSource="{Binding Clients}"
+                      AutoGenerateColumns="True"
+                      CanUserAddRows="False"
+                      Margin="3"
+                      Grid.Column="1">
+                
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

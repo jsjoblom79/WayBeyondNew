@@ -27,6 +27,7 @@ namespace WayBeyond.UX.Services
         //FileLocations
         Task<List<FileLocation>> GetAllFileLocationsAsync();
         Task<int> AddFileLocationsAsync(FileLocation location);
+        Task<List<FileLocation>> GetFileLocationByNameAsync(string name);
 
         //DropFormats
         Task<List<DropFormat>> GetAllDropFormatsAsync();
