@@ -13,6 +13,7 @@ namespace WayBeyond.Data.Models
         public string FullPath { get; set; }
         public DateTime CreateDate { get; set; }
         public FileType FileType { get; set; }
+        public RemoteConnection? RemoteConnection { get; set; }
 
         public int CompareTo(FileObject? other) => other.CreateDate.CompareTo(this.CreateDate);
     }

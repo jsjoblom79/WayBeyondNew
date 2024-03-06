@@ -10,5 +10,6 @@ namespace WayBeyond.UX.Services
     public interface ITransfer
     {
         Task<List<FileObject>> GetFileObjectsAsync(FileLocation location);
+        Task<FileObject> DownloadFileAsync(FileObject path);
     }
 }

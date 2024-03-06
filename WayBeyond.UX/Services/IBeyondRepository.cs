@@ -47,6 +47,9 @@ namespace WayBeyond.UX.Services
         Task<List<FileFormatDetail>> GetAllFileFormatDetailsByFileFormatIdAsync(long? id);
         Task<int> AddFileFormatDetailAsync(FileFormatDetail detail);
 
+        //Settings
+        ValueTask<Setting> GetSettingByKeyAsync(string key);
+
         //Generic Delete and Update
         Task<int> DeleteObjectAsync(object obj);
         Task<int> UpdateObjectAsync(object obj);

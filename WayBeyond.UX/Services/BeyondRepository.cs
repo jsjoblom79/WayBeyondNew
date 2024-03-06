@@ -177,6 +177,14 @@ namespace WayBeyond.UX.Services
             _db.FileFormatDetails.Add(detail);
             return _db.SaveChangesAsync();
         }
+        #endregion
+
+        #region Settings
+
+        public ValueTask<Setting> GetSettingByKeyAsync(string key)
+        {
+            return _db.Settings.FindAsync(key);
+        }
 
 
 

@@ -10,13 +10,23 @@ namespace WayBeyond.UX.Services
 {
     public class ClientProcess : IClientProcess
     {
-        public Task<bool> ProcessClientFile(FileObject file, Client client)
+        private ITransfer _transfer;
+        public ClientProcess(ITransfer transfer)
         {
-
+            _transfer = transfer;   
+        }
+        public async Task<bool> ProcessClientFile(FileObject file, Client client)
+        {
+            FileObject downloadedFile = file;
+            if (file.FileType == FileType.REMOTE)
+            {
+                downloadedFile = await _transfer.DownloadFileAsync(file);
+            }
+            
             ExcelService excelService = new ExcelService();
-            excelService.ReadClientFile(client, file);
+            excelService.ReadClientFile(client, downloadedFile);
 
-            return Task.FromResult(true);
+            return true;
         }
     }
 }
