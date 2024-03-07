@@ -1,5 +1,6 @@
 ﻿using Renci.SshNet;
 using Renci.SshNet.Async;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,7 +62,15 @@ namespace WayBeyond.UX.Services
         {
             using (SftpClient client = new SftpClient(GetConnectionInfo(location.RemoteConnection)))
             {
-                client.Connect();
+                try
+                {
+                    client.Connect();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"{ex.Message} using Location: {location.FileLocationName}", ex);
+                }
+                
                 if (client.IsConnected)
                 {
                     List<FileObject> files = new List<FileObject>();

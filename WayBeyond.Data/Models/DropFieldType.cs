@@ -8,7 +8,7 @@ namespace WayBeyond.Data.Models
 {
     public enum DropFieldType
     {
-        STRING,
+        STRING ,
         DATE,
         CURRENCY
     }

@@ -27,7 +27,7 @@ namespace WayBeyond.UX.Services
             var debtors = new List<Debtor>();
             _xlWrkBks = _xlApp.Workbooks;
             _xlWrkBk = _xlWrkBks.Open(file.FullPath);
-            _xlWrkSht = _xlWrkBk.Worksheets["Sheet1"];
+            _xlWrkSht = _xlWrkBk.Worksheets["TESTFILE"];
 
             var debtor = new Debtor();
             foreach(var detail in client.FileFormat.FileFormatDetails)

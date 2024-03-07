@@ -11,7 +11,7 @@ public partial class DropFormatDetail
 
     public long? Position { get; set; }
 
-    public long? FieldType { get; set; }
+    public string? FieldType { get; set; }
 
     public long? DropFormatId { get; set; }
 

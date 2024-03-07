@@ -24,8 +24,8 @@ namespace WayBeyond.UX.File.Drops.Drop
         }
 
 
-        private long? _detailFieldType;
-        public long? DetailFieldType
+        private string? _detailFieldType;
+        public string? DetailFieldType
         {
             get { return _detailFieldType; }
             set { SetProperty(ref _detailFieldType, value); }
