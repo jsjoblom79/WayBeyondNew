@@ -58,5 +58,24 @@ namespace WayBeyond.UX.File.Drops.Formats
             set { SetProperty(ref _fileFormatDetails, value); }
         }
 
+
+        private int? _fileStartLine;
+
+        public int? FileStartLine
+        {
+            get => _fileStartLine;
+            set => SetProperty(ref _fileStartLine, value);
+        }
+
+
+        private string? _columnForClientDebtorNumber;
+
+        public string? ColumnForClientDebtorNumber
+        {
+            get => _columnForClientDebtorNumber;
+            set => SetProperty(ref _columnForClientDebtorNumber, value);
+        }
+
+
     }
 }

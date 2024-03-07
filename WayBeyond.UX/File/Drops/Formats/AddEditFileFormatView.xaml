@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WayBeyond.UX.File.Drops.Formats"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Background="white">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -14,13 +14,13 @@
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Width="Auto"
                   Margin="5,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -29,18 +29,28 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Label Content="Id:" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
                 <Label HorizontalAlignment="Left" Grid.Row="1" Grid.Column="0">
                     <StackPanel HorizontalAlignment="Left">
-                        <TextBlock Text="File Format" HorizontalAlignment="Right"/>
-                        <TextBlock Text="Name:" HorizontalAlignment="Right"/>
+                        <TextBlock Text="File Format" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Name:" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Label>
-                <Label Content="Create Date:" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
-                <Label Content="Update Date:" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0"/>
-                <Label Content="Updated By:" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="0"/>
-                <Label HorizontalAlignment="Left" Grid.Row="5" Grid.Column="0">
+                <Label Content="File Start Line:" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
+                <Label HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Column Client" HorizontalAlignment="Center"/>
+                        <TextBlock Text="DebtorNumber:" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Label>
+                <Label Content="Create Date:" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="0"/>
+                <Label Content="Update Date:" HorizontalAlignment="Left" Grid.Row="5" Grid.Column="0"/>
+                <Label Content="Updated By:" HorizontalAlignment="Left" Grid.Row="6" Grid.Column="0"/>
+                
+                <Label HorizontalAlignment="Left" Grid.Row="7" Grid.Column="0">
                     <StackPanel HorizontalAlignment="Right">
                         <TextBlock Text="File Format" HorizontalAlignment="Right"/>
                         <TextBlock Text="Detail:" HorizontalAlignment="Right"/>
@@ -48,11 +58,15 @@
                 </Label>
                 <TextBlock Text="{Binding EditableAddEditFileFormat.Id}" Width="120" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
                 <TextBox Text="{Binding EditableAddEditFileFormat.FileFormatName}" Width="120" Height="23" HorizontalAlignment="Left" VerticalContentAlignment="Center"  Grid.Row="1" Grid.Column="1"/>
-                <TextBlock Text="{Binding EditableAddEditFileFormat.CreateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="{Binding EditableAddEditFileFormat.UpdateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
-                <TextBlock Text="{Binding EditableAddEditFileFormat.UpdatedBy}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
-                <DataGrid ItemsSource="{Binding EditableAddEditFileFormat.FileFormatDetails}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="5" Grid.Column="1"
-                          Width="300" Height="175"
+                <TextBox Text="{Binding EditableAddEditFileFormat.FileStartLine}" Width="120" Height="23" HorizontalAlignment="Left" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBox Text="{Binding EditableAddEditFileFormat.ColumnForClientDebtorNumber}" Width="120" Height="23" HorizontalAlignment="Left" VerticalContentAlignment="Center" Grid.Row="3" Grid.Column="1"
+                         ToolTip="This column is used to determine empty rows at the bottom of the records so they are not included in the Drop Files."/>
+                <TextBlock Text="{Binding EditableAddEditFileFormat.CreateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableAddEditFileFormat.UpdateDate}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1"/>
+                <TextBlock Text="{Binding EditableAddEditFileFormat.UpdatedBy}" Width="Auto" Height="23" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1"/>
+                
+                <DataGrid ItemsSource="{Binding EditableAddEditFileFormat.FileFormatDetails}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="7" Grid.Column="1"
+                          Width="Auto" Height="Auto"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           ScrollViewer.HorizontalScrollBarVisibility="Auto">

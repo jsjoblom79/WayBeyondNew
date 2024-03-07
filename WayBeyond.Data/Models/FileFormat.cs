@@ -17,6 +17,10 @@ public partial class FileFormat
 
     public string? UpdatedBy { get; set; }
 
+    public int? FileStartLine { get; set; }
+
+    public string? ColumnForClientDebtorNumber { get; set; }
+
     public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
 
     public virtual ICollection<FileFormatDetail> FileFormatDetails { get; set; } = new List<FileFormatDetail>();

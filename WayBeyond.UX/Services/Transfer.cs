@@ -40,7 +40,7 @@ namespace WayBeyond.UX.Services
                     var location = await _db.GetFileLocationByNameAsync(LocationName.DownloadLocation.ToString());
                     using (Stream fileStream = System.IO.File.OpenWrite($@"{location[0].Path}{file.FileName}"))
                     { 
-                       await client.DownloadAsync(file.FullPath, fileStream);
+                        await client.DownloadAsync(file.FullPath, fileStream);
                         return new FileObject
                         {
                             FileName = file.FileName,
@@ -76,7 +76,7 @@ namespace WayBeyond.UX.Services
                     List<FileObject> files = new List<FileObject>();
                     foreach (var file in await client.ListDirectoryAsync(location.Path))
                     {
-                        if (!file.IsDirectory)
+                        if (!file.IsDirectory && file.LastWriteTime > DateTime.Now.AddDays(-31))
                         {
                             files.Add(new FileObject
                             {

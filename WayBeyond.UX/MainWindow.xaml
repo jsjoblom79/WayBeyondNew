@@ -13,7 +13,7 @@
         xmlns:proc="clr-namespace:WayBeyond.UX.Processing.LocalLoads"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>

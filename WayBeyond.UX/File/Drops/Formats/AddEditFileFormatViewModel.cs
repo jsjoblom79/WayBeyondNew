@@ -107,6 +107,8 @@ namespace WayBeyond.UX.File.Drops.Formats
                 editableAddEditFileFormat.UpdatedDate = editingFileFormat.UpdateDate;
                 editableAddEditFileFormat.UpdatedBy = editingFileFormat.UpdatedBy;
                 editableAddEditFileFormat.FileFormatDetails = await _db.GetAllFileFormatDetailsByFileFormatIdAsync(editingFileFormat.Id);
+                editableAddEditFileFormat.FileStartLine = editingFileFormat.FileStartLine;
+                editableAddEditFileFormat.ColumnForClientDebtorNumber = editingFileFormat.ColumnForClientDebtorNumber;
             }
         }
 
@@ -137,6 +139,7 @@ namespace WayBeyond.UX.File.Drops.Formats
             editingFileFormatDetail.FileColumn = editableFileFormatDetail.FileColumn;
             editingFileFormatDetail.SpecialCase = editableFileFormatDetail.SpecialCase;
             editingFileFormatDetail.FileFormatId = editableFileFormatDetail.FileFormatId;
+           
 
             await _db.AddFileFormatDetailAsync(editingFileFormatDetail);
         }
@@ -146,6 +149,8 @@ namespace WayBeyond.UX.File.Drops.Formats
         private async void UpdateFileFormat(EditableFileFormat editableAddEditFileFormat, FileFormat editingFileFormat)
         {
             editingFileFormat.FileFormatName = editableAddEditFileFormat.FileFormatName;
+            editingFileFormat.FileStartLine = editableAddEditFileFormat.FileStartLine;
+            editingFileFormat.ColumnForClientDebtorNumber = editableAddEditFileFormat.ColumnForClientDebtorNumber;
             editingFileFormat.UpdateDate = editableAddEditFileFormat.UpdatedDate;
             editingFileFormat.UpdatedBy = editableAddEditFileFormat.UpdatedBy;
             if (EditMode)
@@ -157,6 +162,7 @@ namespace WayBeyond.UX.File.Drops.Formats
                 {
                     Completed($"File Format: {editingFileFormat.FileFormatName} has been updated.");
                 }
+                
             } 
             else
             {

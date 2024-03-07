@@ -96,7 +96,7 @@ namespace WayBeyond.UX.Processing.LocalLoads
 
         public async void OnViewLoaded()
         {
-            foreach (var location in await _db.GetFileLocationByNameAsync("Placements"))
+            foreach (var location in await _db.GetFileLocationByNameAsync(LocationName.Placements.ToString()))
             {
                 _fileObjects.AddRange(await _transfer.GetFileObjectsAsync(location));
             }

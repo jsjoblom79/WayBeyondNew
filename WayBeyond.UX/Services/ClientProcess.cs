@@ -26,6 +26,14 @@ namespace WayBeyond.UX.Services
             ExcelService excelService = new ExcelService();
             excelService.ReadClientFile(client, downloadedFile);
 
+
+            //TODO: Write drop file
+
+            //TODO: Archive local file and Remote file.
+
+            
+
+
             return true;
         }
     }
