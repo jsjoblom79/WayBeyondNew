@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace WayBeyond.UX.Services
         public Task<int> AddRemoteConnectionAsync(RemoteConnection connection)
         {
             _db.RemoteConnections.Add(connection);
+            Log.Information($"[ADD] RemoteConnection: {connection.Name}");
             return _db.SaveChangesAsync();
         }
 
@@ -36,6 +38,7 @@ namespace WayBeyond.UX.Services
         public Task<int> AddSettingsAsync(Setting setting)
         {
             _db.Settings.Add(setting);
+            Log.Information($"[ADD] Setting: {setting.Key} Value: {setting.Value}");
             return _db.SaveChangesAsync();
         }
 
@@ -43,7 +46,10 @@ namespace WayBeyond.UX.Services
         {
             return _db.Settings.ToListAsync();
         }
-
+        public ValueTask<Setting> GetSettingByKeyAsync(string key)
+        {
+            return _db.Settings.FindAsync(key);
+        }
         #endregion
         #region Clients
         public async Task<List<Client>> GetAllClientsAsync()
@@ -62,14 +68,15 @@ namespace WayBeyond.UX.Services
             try
             {
                 _db.Clients.Add(client);
+                Log.Information($"[ADD] Client:{client.ClientName}");
                 return _db.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-
-                throw;
+                Log.Error($"{ex.StackTrace}", ex);
+                return Task.FromResult(0);
             }
-            
+
         }
 
         public Task<List<Client>> GetClientByDropFormatIdAsync(long id)
@@ -86,6 +93,7 @@ namespace WayBeyond.UX.Services
         public Task<int> AddFileLocationsAsync(FileLocation location)
         {
             _db.FileLocations.Add(location);
+            Log.Information($"[ADD] FileLocation:{location.FileLocationName}");
             return _db.SaveChangesAsync();
         }
 
@@ -94,7 +102,7 @@ namespace WayBeyond.UX.Services
             var locations = _db.FileLocations.Where(l => l.FileLocationName == name);
             foreach (var location in locations)
             {
-                if(location.FileType == FileType.REMOTE)
+                if (location.FileType == FileType.REMOTE)
                 {
                     location.RemoteConnection = _db.RemoteConnections.Find(location.RemoteConnectionId);
                 }
@@ -111,6 +119,7 @@ namespace WayBeyond.UX.Services
         public Task<int> AddDropFormatAsync(DropFormat dropFormat)
         {
             _db.DropFormats.Add(dropFormat);
+            Log.Information($"[ADD] DropFormat: {dropFormat.DropName}");
             return _db.SaveChangesAsync();
         }
 
@@ -130,6 +139,7 @@ namespace WayBeyond.UX.Services
         public Task<int> AddDropFormatDetailAsync(DropFormatDetail detail)
         {
             _db.DropFormatDetails.Add(detail);
+            Log.Information($"[ADD] DropFormatDetail: {detail.Field} DropFormatId: {detail.DropFormatId}");
             return _db.SaveChangesAsync();
         }
 
@@ -139,12 +149,15 @@ namespace WayBeyond.UX.Services
         {
             var entity = _db.Entry(obj);
             entity.State = EntityState.Deleted;
+
+            Log.Information($"[DEL] record: {obj.GetType().Name}");
             return _db.SaveChangesAsync();
         }
         public Task<int> UpdateObjectAsync(object obj)
         {
             var entity = _db.Entry(obj);
             entity.State = EntityState.Modified;
+            Log.Information($"[UPD] record: {obj.GetType().Name}");
             return _db.SaveChangesAsync();
         }
         #endregion
@@ -157,6 +170,7 @@ namespace WayBeyond.UX.Services
         public Task<int> AddFileFormatAsync(FileFormat format)
         {
             _db.FileFormats.Add(format);
+            Log.Information($"[ADD] FileFormat: {format.FileFormatName}");
             return _db.SaveChangesAsync();
         }
         public async Task<FileFormat> GetFileFormatByIdAsync(long? id)
@@ -175,21 +189,9 @@ namespace WayBeyond.UX.Services
         public Task<int> AddFileFormatDetailAsync(FileFormatDetail detail)
         {
             _db.FileFormatDetails.Add(detail);
+            Log.Information($"[ADD] FileFormatDetail: {detail.Field} FormatId: {detail.FileFormatId}");
             return _db.SaveChangesAsync();
         }
-        #endregion
-
-        #region Settings
-
-        public ValueTask<Setting> GetSettingByKeyAsync(string key)
-        {
-            return _db.Settings.FindAsync(key);
-        }
-
-
-
-
-
         #endregion
     }
 }

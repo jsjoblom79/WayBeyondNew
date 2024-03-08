@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WayBeyond.UX.File.Drops.Formats"
+             xmlns:model="clr-namespace:WayBeyond.Data.Models;assembly=WayBeyond.Data"
+             xmlns:e="clr-namespace:WayBeyond.UX.Services"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="white">
     <Grid>
@@ -42,8 +44,8 @@
                 <Label Content="File Start Line:" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
                 <Label HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0">
                     <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="Column Client" HorizontalAlignment="Center"/>
-                        <TextBlock Text="DebtorNumber:" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Client Debtor" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Number Column:" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Label>
                 <Label Content="Create Date:" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="0"/>
@@ -121,7 +123,7 @@
                 <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Fields}" SelectedItem="{Binding EditableFileFormatDetail.Field}" Width="150" HorizontalAlignment="Left"/>
                 <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding EditableFileFormatDetail.FileColumn}" Width="120" HorizontalAlignment="Left" VerticalContentAlignment="Center"/>
                 <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding ColumnTypes}" SelectedItem="{Binding EditableFileFormatDetail.ColumnType}" Width="150" HorizontalAlignment="Left"/>
-                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding EditableFileFormatDetail.SpecialCase}" Width="120" HorizontalAlignment="Left"/>
+                <ComboBox ItemsSource="{e:EnumCollection EnumType=model:SpecialCase}" Grid.Column="1" Grid.Row="4" SelectedItem="{Binding EditableFileFormatDetail.SpecialCase}" Width="120" HorizontalAlignment="Left"/>
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                 <Button Content="Add File Format Detail" Padding="10,0,10,0" Margin="3" Width="Auto" Command="{Binding AddDetailCommand}" Height="23"/>

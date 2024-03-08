@@ -15,6 +15,7 @@ namespace WayBeyond.UX.Services
     public class Transfer : ITransfer
     {
         private IBeyondRepository _db = new BeyondRepository();
+
         public Task<List<FileObject>> GetFileObjectsAsync(FileLocation location)
         {
 
@@ -55,6 +56,10 @@ namespace WayBeyond.UX.Services
             }
 
             
+        }
+        public Task<bool> ArchiveFileAsync(FileObject path)
+        {
+            throw new NotImplementedException();
         }
 
         #region PrivateMethods
@@ -117,6 +122,8 @@ namespace WayBeyond.UX.Services
         private ConnectionInfo GetConnectionInfo(RemoteConnection remote)
             => new ConnectionInfo(remote.Host,(int)remote.Port,remote.UserName,
                 new PasswordAuthenticationMethod(remote.UserName,remote.Password));
+
+
 
 
         #endregion
