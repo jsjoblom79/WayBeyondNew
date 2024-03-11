@@ -23,6 +23,7 @@ namespace WayBeyond.UX.Processing.LocalLoads
             _clientProcess = cp;
             ClearSelections = new RelayCommand(OnClearSelections);
             ProcessSelections = new RelayCommand(OnProcessSelections);
+            ((ClientProcess)_clientProcess).ProcessUpdates += Completed;
         }
 
         #region Properties
@@ -94,6 +95,7 @@ namespace WayBeyond.UX.Processing.LocalLoads
         public RelayCommand ClearSelections { get; private set; }
         public RelayCommand ProcessSelections { get; private set; }
 
+        public event Action<string> Completed = delegate { };
         public async void OnViewLoaded()
         {
             foreach (var location in await _db.GetFileLocationByNameAsync(LocationName.Placements.ToString()))
@@ -103,9 +105,11 @@ namespace WayBeyond.UX.Processing.LocalLoads
             Clients = new ObservableCollection<Client>(await _db.GetAllClientsAsync());
             PlacementFiles = new ObservableCollection<FileObject>(_fileObjects);
         }
+
         private async void OnProcessSelections()
         {
-            _clientProcess.ProcessClientFile(SelectedFile, SelectedClient);
+            await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient);
+            Completed("Process Completed.");
         }
         private async void OnClearSelections()
         {

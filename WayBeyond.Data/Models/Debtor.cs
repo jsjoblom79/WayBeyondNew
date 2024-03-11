@@ -19,10 +19,10 @@ namespace WayBeyond.Data.Models
         public string? PatientsLastName { get; set; }
         public DateTime? PatientsDOB { get; set; }
         private string? _patientsSSN;
-        public string? PatientsSSN { get => _patientsSSN.Replace("-", ""); set => _patientsSSN = value; }
+        public string? PatientsSSN { get { if (!string.IsNullOrWhiteSpace(_patientsSSN)) { return _patientsSSN.Replace("-", ""); } else { return null; } } set => _patientsSSN = value; }
         public string? PatientsEmployer { get; set; }
         private string? _patientsPhone;
-        public string? PatientsPhone { get => _patientsPhone.Replace("-", ""); set => _patientsPhone = value; }
+        public string? PatientsPhone { get { if (!string.IsNullOrWhiteSpace(_patientsPhone)) { return _patientsPhone.Replace("-", ""); } else { return null; } } set => _patientsPhone = value; }
         public string? PatientsRelationship { get; set; }
         public string? PatientMiscData1 { get; set; }
         public string? PatientMiscData2 { get; set; }
@@ -36,7 +36,7 @@ namespace WayBeyond.Data.Models
         public string? InsuranceStateZip { get; set; }
         public string? InsuranceContact { get; set; }
         private string? _insurancePhone;
-        public string? InsurancePhone { get => _insurancePhone.Replace("-", ""); set => _insurancePhone = value; }
+        public string? InsurancePhone { get { if (!string.IsNullOrWhiteSpace(_insurancePhone)) { return _insurancePhone.Replace("-", ""); } else { return null; } } set => _insurancePhone = value; }
         public string? InsurancePolicyNumber { get; set; }
         public string? DebtorLastName { get; set; }
         public string? DebtorFirstMiddleName { get; set; }
@@ -54,7 +54,7 @@ namespace WayBeyond.Data.Models
         public string? DebtorSSN { get => _debtorSSN.Replace("-",""); set => _debtorSSN = value; }
         public string? DebtorEmployerName { get; set; }
         private string? _debtorEmpPhone;
-        public string? DebtorEmpPhone { get => _debtorEmpPhone.Replace("-",""); set => _debtorEmpPhone = value; }
+        public string? DebtorEmpPhone { get { if (!string.IsNullOrWhiteSpace(_debtorEmpPhone)) { return _debtorEmpPhone.Replace("-", ""); } else { return null; } } set => _debtorEmpPhone = value; }
         public string? DebtorEmpAddress { get; set; }
         public string? DebtorEmpCityState { get; set; }
         public string? SpouseEmployerName { get; set; }

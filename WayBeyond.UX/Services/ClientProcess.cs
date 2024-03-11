@@ -18,8 +18,31 @@ namespace WayBeyond.UX.Services
             _transfer = transfer;   
             _db = db;
         }
+
+        public event Action<string> ProcessUpdates = delegate { };
+
         public async Task<bool> ProcessClientFile(FileObject file, Client client)
         {
+
+
+            //TODO: Add functionality to create or capture new processedFiles Batch
+            var batch = await _db.GetProcessedFilesBatchByDateAsync(DateTime.Now);
+
+            if(batch == null)
+            {
+                batch = new ProcessedFileBatch
+                {
+                    BatchName = $"Load Files - {DateTime.Now.Date}",
+                    CreateDate = DateTime.Now.Date,
+                    CreatedBy = Environment.UserName
+
+                };
+                if(await _db.AddProcessedFilesBatch(batch) > 0)
+                {
+                    ProcessUpdates($"Batch: {batch.BatchName} has been created.");
+                }
+            }
+
             FileObject downloadedFile = file;
             if (file.FileType == FileType.REMOTE)
             {
@@ -27,12 +50,23 @@ namespace WayBeyond.UX.Services
             }
             
             ExcelService excelService = new ExcelService();
-
+            excelService.Update += ProcessUpdates;
             WriteDropFile(client, await excelService.ReadClientFile(client, downloadedFile));
+            ProcessUpdates($"Drop File for client: {client.ClientName} has been created.");
 
-            if (file.RemoteConnection != null) _transfer.ArchiveFileAsync(file);
+            //Archive remote or local Files.
+            if (file.RemoteConnection != null)
+            {
+                if( await _transfer.ArchiveFileAsync(file))
+                    ProcessUpdates($"Local file: {file.FileName} has been archived.");
+            }
+            else
+            {
+                if (await _transfer.ArchiveFileAsync(downloadedFile))
+                    ProcessUpdates($"Remote File: {downloadedFile.FileName} has been archived.");
+            }
             
-            _transfer.ArchiveFileAsync(downloadedFile);
+            
 
             return true;
         }
@@ -53,13 +87,27 @@ namespace WayBeyond.UX.Services
             {
                 foreach(var detail in dropDetails)
                 {
-                    stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
+                    switch (detail.FieldType)
+                    {
+                        case "DATE":
+                            if(debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
+                                stringBuilder.Append($"{((DateTime)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):MM/dd/yy}");
+                            break;
+                        case "CURRENCY":
+                            if (debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
+                                stringBuilder.Append($"{((double)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):####.00}");
+                            break;
+                        default:
+                            stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
+                            break;
+                    }
+                    //stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
                     stringBuilder.Append('\t');
                 }
                 stringBuilder.AppendLine();
             }
             var path = _db.GetFileLocationByNameAsync(LocationName.Prepared.ToString());
-            System.IO.File.WriteAllText($@"{path}{client.ClientId}_{DateTime.Now:yyyyMMdd-HHmmss}_{client.DropFileName}", stringBuilder.ToString());
+            System.IO.File.WriteAllText($@"{path.Result[0].Path}{client.ClientId}_{DateTime.Now:yyyyMMdd-HHmmss}_{client.DropFileName}", stringBuilder.ToString());
         }
     }
 }

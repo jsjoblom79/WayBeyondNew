@@ -53,5 +53,12 @@ namespace WayBeyond.UX.Services
         //Generic Delete and Update
         Task<int> DeleteObjectAsync(object obj);
         Task<int> UpdateObjectAsync(object obj);
+
+        //Processed File Batch
+        Task<List<ProcessedFileBatch>> GetAllProcessedFilesBatchAsync();
+        Task<ProcessedFileBatch> GetProcessedFilesBatchByIdAsync(long? id);
+        Task<ProcessedFileBatch?> GetProcessedFilesBatchByDateAsync(DateTime? date);
+        Task<List<DateTime?>> GetProcessedFilesBatchDatesAsync();
+        Task<int> AddProcessedFilesBatch(ProcessedFileBatch batch);
     }
 }

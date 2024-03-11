@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +24,11 @@ namespace WayBeyond.UX.Services
             _xlApp.DisplayAlerts = false;
             _xlApp.Visible = true;
         }
-
+        public event Action<string> Update = delegate { };
+        private void OnUpdate(string message)
+        {
+            Update(message);
+        }
         public Task<List<Debtor>> ReadClientFile(Client client, FileObject file)
         {
             var debtors = new List<Debtor>();
@@ -83,13 +89,16 @@ namespace WayBeyond.UX.Services
                             default:
                                 break;
                         }
+                        
                     } catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
                 }
                 debtors.Add(debtor);
+                OnUpdate($"Debtor: {debtor.ClientDebtorNumber} created.");
             }
+            Close();
             return Task.FromResult(debtors);
         }
 
@@ -124,8 +133,22 @@ namespace WayBeyond.UX.Services
             }
             catch (Exception ex)
             {
-                //TODO: Implement logging.
+                Log.Error(ex.StackTrace, ex);
             }
+        }
+
+        private void Close()
+        {
+            Marshal.FinalReleaseComObject(_xlWrkSht);
+            _xlWrkBk.Close();
+            Marshal.FinalReleaseComObject(_xlWrkBk);
+            _xlWrkBks.Close();
+            Marshal.FinalReleaseComObject(_xlWrkBks);
+            _xlApp.Quit();
+
+            Marshal.FinalReleaseComObject(_xlApp);
+            
+
         }
     }
 }

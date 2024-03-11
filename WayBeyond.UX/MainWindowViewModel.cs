@@ -76,6 +76,9 @@ namespace WayBeyond.UX
             _fileFormatViewModel.AddEditFileFormatRequest += AddEditFileFormatCommand;
             _fileFormatViewModel.Completed += UpdateStatus;
             _addEditFileFormatViewModel.Completed += AddEditFileFormatCompleted;
+
+            //ClientLoads
+            _clientLoadViewModel.Completed += UpdateStatus;
         }
 
         private string _currentStatus;

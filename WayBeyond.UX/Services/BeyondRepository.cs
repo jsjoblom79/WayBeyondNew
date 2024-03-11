@@ -193,5 +193,32 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
         #endregion
+        #region ProcessedFileBatch
+        public Task<List<ProcessedFileBatch>> GetAllProcessedFilesBatchAsync()
+        {
+            return _db.ProcessedFileBatches.ToListAsync();
+        }
+
+        public Task<ProcessedFileBatch> GetProcessedFilesBatchByIdAsync(long? id)
+        {
+            return Task.FromResult(_db.ProcessedFileBatches.Find(id));
+        }
+
+        public Task<ProcessedFileBatch?> GetProcessedFilesBatchByDateAsync(DateTime? date)
+        {
+            return _db.ProcessedFileBatches.Where(b => b.CreateDate.Value.Date == date.Value.Date).FirstOrDefaultAsync();
+        }
+
+        public Task<List<DateTime?>> GetProcessedFilesBatchDatesAsync()
+        {
+            return _db.ProcessedFileBatches.Select(b => b.CreateDate).OrderBy(b => b.Value.Date).ToListAsync();
+        }
+
+        public Task<int> AddProcessedFilesBatch(ProcessedFileBatch batch)
+        {
+            _db.ProcessedFileBatches.Add(batch);
+            return _db.SaveChangesAsync();
+        }
+        #endregion
     }
 }

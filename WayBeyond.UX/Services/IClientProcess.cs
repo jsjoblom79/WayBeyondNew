@@ -10,5 +10,7 @@ namespace WayBeyond.UX.Services
     public interface IClientProcess
     {
         Task<bool> ProcessClientFile(FileObject file, Client client);
+        event Action<string> ProcessUpdates;
+       
     }
 }
