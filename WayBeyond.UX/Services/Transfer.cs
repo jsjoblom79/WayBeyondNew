@@ -19,7 +19,7 @@ namespace WayBeyond.UX.Services
         public Task<List<FileObject>> GetFileObjectsAsync(FileLocation location)
         {
 
-            if(location.FileType == FileType.LOCAL)
+            if (location.FileType == FileType.LOCAL)
             {
                 return Task.FromResult(GetLocalFiles(location));
             }
@@ -35,12 +35,12 @@ namespace WayBeyond.UX.Services
             using (SftpClient client = new SftpClient(GetConnectionInfo(file.RemoteConnection)))
             {
                 client.Connect();
-                if(client.IsConnected)
+                if (client.IsConnected)
                 {
                     //Create a file stream to read the contents of the download file to.
                     var location = await _db.GetFileLocationByNameAsync(LocationName.DownloadLocation.ToString());
                     using (Stream fileStream = System.IO.File.OpenWrite($@"{location[0].Path}{file.FileName}"))
-                    { 
+                    {
                         await client.DownloadAsync(file.FullPath, fileStream);
                         return new FileObject
                         {
@@ -52,16 +52,39 @@ namespace WayBeyond.UX.Services
                     }
                 }
                 else { return null; }
-               
+
             }
 
-            
+
         }
         public Task<bool> ArchiveFileAsync(FileObject path)
         {
-            throw new NotImplementedException();
-        }
+            if (path.FileType == FileType.REMOTE)
+            {
+                var archiveDirectory = $"{Path.GetDirectoryName(path.FullPath)}/Archive/{path.FileName}".Replace("\\", "/");
+                using (SftpClient client = new SftpClient(GetConnectionInfo(path.RemoteConnection)))
+                {
+                    client.Connect();
+                    if (client.IsConnected)
+                    {
+                        var file = client.Get(path.FullPath);
+                        file.MoveTo(archiveDirectory);
+                    }
+                }
+                return Task.FromResult(true);
+            }
+            else
+            {
+                var aDirectory = $"{Path.GetDirectoryName(path.FullPath)}\\Archive\\{path.FileName}";
+                if(!System.IO.File.Exists(aDirectory))
+                    System.IO.File.Move(path.FullPath, aDirectory);
 
+                return Task.FromResult(true);
+            }
+        }
+    
+        
+            
         #region PrivateMethods
         private async Task<List<FileObject>> GetRemoteFiles(FileLocation location)
         {

@@ -60,5 +60,9 @@ namespace WayBeyond.UX.Services
         Task<ProcessedFileBatch?> GetProcessedFilesBatchByDateAsync(DateTime? date);
         Task<List<DateTime?>> GetProcessedFilesBatchDatesAsync();
         Task<int> AddProcessedFilesBatch(ProcessedFileBatch batch);
+
+        //ClientLoad
+        Task<int> AddClientLoadAsync(ClientLoad clientLoad);
+        Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id);
     }
 }

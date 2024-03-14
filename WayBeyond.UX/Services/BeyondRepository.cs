@@ -220,5 +220,14 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
         #endregion
+        #region ClientLoads
+        public Task<int> AddClientLoadAsync(ClientLoad clientLoad)
+        {
+            _db.ClientLoads.Add(clientLoad);
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id) => _db.ClientLoads.Where(l => l.ProcessedFileBatchId == id).ToListAsync();
+        #endregion
     }
 }

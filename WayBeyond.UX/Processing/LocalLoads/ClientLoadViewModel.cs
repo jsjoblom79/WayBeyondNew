@@ -98,6 +98,12 @@ namespace WayBeyond.UX.Processing.LocalLoads
         public event Action<string> Completed = delegate { };
         public async void OnViewLoaded()
         {
+            if (PlacementFiles != null)
+            {
+                _fileObjects.Clear();
+                PlacementFiles.Clear();
+            }
+
             foreach (var location in await _db.GetFileLocationByNameAsync(LocationName.Placements.ToString()))
             {
                 _fileObjects.AddRange(await _transfer.GetFileObjectsAsync(location));
@@ -108,8 +114,14 @@ namespace WayBeyond.UX.Processing.LocalLoads
 
         private async void OnProcessSelections()
         {
-            await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient);
-            Completed("Process Completed.");
+            await Task.Run(() => Completed($"Processing File: {SelectedFile.FileName} for Client: {SelectedClient.ClientName}"));
+            if(await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient))
+            {
+                OnClearSelections();
+                OnViewLoaded();
+                await Task.Run(() => Completed("Process Completed."));
+            }
+            
         }
         private async void OnClearSelections()
         {

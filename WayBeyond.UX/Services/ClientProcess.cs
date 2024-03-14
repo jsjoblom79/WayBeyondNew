@@ -23,25 +23,7 @@ namespace WayBeyond.UX.Services
 
         public async Task<bool> ProcessClientFile(FileObject file, Client client)
         {
-
-
-            //TODO: Add functionality to create or capture new processedFiles Batch
-            var batch = await _db.GetProcessedFilesBatchByDateAsync(DateTime.Now);
-
-            if(batch == null)
-            {
-                batch = new ProcessedFileBatch
-                {
-                    BatchName = $"Load Files - {DateTime.Now.Date}",
-                    CreateDate = DateTime.Now.Date,
-                    CreatedBy = Environment.UserName
-
-                };
-                if(await _db.AddProcessedFilesBatch(batch) > 0)
-                {
-                    ProcessUpdates($"Batch: {batch.BatchName} has been created.");
-                }
-            }
+            var batch = await GetBatchFile();
 
             FileObject downloadedFile = file;
             if (file.FileType == FileType.REMOTE)
@@ -51,19 +33,30 @@ namespace WayBeyond.UX.Services
             
             ExcelService excelService = new ExcelService();
             excelService.Update += ProcessUpdates;
-            WriteDropFile(client, await excelService.ReadClientFile(client, downloadedFile));
-            ProcessUpdates($"Drop File for client: {client.ClientName} has been created.");
+            //Read debtor File create list of debtors.
+            var debtors = await excelService.ReadClientFile(client, downloadedFile);
+
+            //WriteDrop file
+            if(await WriteDropFile(client, debtors , batch))
+            {
+                //if drop file created then write Client Loads
+                await CreateClientLoad(client, debtors, batch, downloadedFile);
+            }
+
+            await Task.Run(()=>ProcessUpdates($"Drop File for client: {client.ClientName} has been created."));
 
             //Archive remote or local Files.
             if (file.RemoteConnection != null)
             {
                 if( await _transfer.ArchiveFileAsync(file))
-                    ProcessUpdates($"Local file: {file.FileName} has been archived.");
+                    await Task.Run(()=>ProcessUpdates($"Remote file: {file.FileName} has been archived."));
+                if (await _transfer.ArchiveFileAsync(downloadedFile))
+                    await Task.Run(()=>ProcessUpdates($"Local File: {downloadedFile.FileName} has been archived."));
             }
             else
             {
                 if (await _transfer.ArchiveFileAsync(downloadedFile))
-                    ProcessUpdates($"Remote File: {downloadedFile.FileName} has been archived.");
+                    await Task.Run(()=>ProcessUpdates($"Local File: {downloadedFile.FileName} has been archived."));
             }
             
             
@@ -71,7 +64,7 @@ namespace WayBeyond.UX.Services
             return true;
         }
 
-        private void WriteDropFile(Client client, List<Debtor> debtors)
+        private async Task<bool> WriteDropFile(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
             var drop = client.DropFormat;
             var dropDetails = drop.DropFormatDetails;
@@ -108,6 +101,61 @@ namespace WayBeyond.UX.Services
             }
             var path = _db.GetFileLocationByNameAsync(LocationName.Prepared.ToString());
             System.IO.File.WriteAllText($@"{path.Result[0].Path}{client.ClientId}_{DateTime.Now:yyyyMMdd-HHmmss}_{client.DropFileName}", stringBuilder.ToString());
+            if (System.IO.File.Exists($@"{path.Result[0].Path}{client.ClientId}_{DateTime.Now:yyyyMMdd-HHmmss}_{client.DropFileName}"))
+            {
+                return true;
+            }
+            return false;
+            
         }
+
+        private async Task<bool> CreateClientLoad(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
+        {
+            var load = new ClientLoad
+            {
+                ClientId = client.Id,
+                ClientName = client.ClientName,
+                Balance = debtors.Sum(d => d.AmountReferred),
+                DebtorCount = debtors.Count(),
+                CreateDate = DateTime.Now,
+                FileName = file.FileName,
+                DateOnLoadFile = file.CreateDate,
+                DropNumber = client.DropNumber,
+                ProcessedFileBatchId = batch.Id
+            };
+
+            if(await _db.AddClientLoadAsync(load) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
+        private async Task<ProcessedFileBatch> GetBatchFile()
+        {
+            var batch = await _db.GetProcessedFilesBatchByDateAsync(DateTime.Now);
+
+            if (batch == null)
+            {
+                batch = new ProcessedFileBatch
+                {
+                    BatchName = $"Load Files - {DateTime.Now.Date}",
+                    CreateDate = DateTime.Now.Date,
+                    CreatedBy = Environment.UserName
+
+                };
+                if (await _db.AddProcessedFilesBatch(batch) > 0)
+                {
+                    await Task.Run(()=>ProcessUpdates($"Batch: {batch.BatchName} has been created."));
+                }
+            }
+
+            return batch;
+        }
+        
     }
 }
