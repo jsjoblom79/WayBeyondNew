@@ -97,9 +97,9 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<List<FileLocation>> GetFileLocationByNameAsync(string name)
+        public Task<List<FileLocation>> GetFileLocationByNameAsync(LocationName name)
         {
-            var locations = _db.FileLocations.Where(l => l.FileLocationName == name);
+            var locations = _db.FileLocations.Where(l => l.FileLocationName == name.ToString());
             foreach (var location in locations)
             {
                 if (location.FileType == FileType.REMOTE)
@@ -228,6 +228,8 @@ namespace WayBeyond.UX.Services
         }
 
         public Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id) => _db.ClientLoads.Where(l => l.ProcessedFileBatchId == id).ToListAsync();
+
+        public Task<List<ClientLoad>> GetClientLoadsByDateAsync(DateTime date) => _db.ClientLoads.Where(l => l.CreateDate.Value.Date == date.Date).ToListAsync();
         #endregion
     }
 }

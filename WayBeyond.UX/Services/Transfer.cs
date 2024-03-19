@@ -38,7 +38,7 @@ namespace WayBeyond.UX.Services
                 if (client.IsConnected)
                 {
                     //Create a file stream to read the contents of the download file to.
-                    var location = await _db.GetFileLocationByNameAsync(LocationName.DownloadLocation.ToString());
+                    var location = await _db.GetFileLocationByNameAsync(LocationName.DownloadLocation);
                     using (Stream fileStream = System.IO.File.OpenWrite($@"{location[0].Path}{file.FileName}"))
                     {
                         await client.DownloadAsync(file.FullPath, fileStream);

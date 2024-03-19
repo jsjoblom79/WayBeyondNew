@@ -27,7 +27,7 @@ namespace WayBeyond.UX.Services
         //FileLocations
         Task<List<FileLocation>> GetAllFileLocationsAsync();
         Task<int> AddFileLocationsAsync(FileLocation location);
-        Task<List<FileLocation>> GetFileLocationByNameAsync(string name);
+        Task<List<FileLocation>> GetFileLocationByNameAsync(LocationName name);
 
         //DropFormats
         Task<List<DropFormat>> GetAllDropFormatsAsync();
@@ -64,5 +64,6 @@ namespace WayBeyond.UX.Services
         //ClientLoad
         Task<int> AddClientLoadAsync(ClientLoad clientLoad);
         Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id);
+        Task<List<ClientLoad>> GetClientLoadsByDateAsync(DateTime date);
     }
 }

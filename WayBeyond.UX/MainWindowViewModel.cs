@@ -13,6 +13,7 @@ using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
 using WayBeyond.UX.File.Settings;
 using WayBeyond.UX.Processing.LocalLoads;
+using WayBeyond.UX.Reporting;
 
 namespace WayBeyond.UX
 {
@@ -31,6 +32,7 @@ namespace WayBeyond.UX
         private FileFormatViewModel _fileFormatViewModel;
         private AddEditFileFormatViewModel _addEditFileFormatViewModel;
         private ClientLoadViewModel _clientLoadViewModel;
+        private ProcessedFilesViewModel _processedFilesViewModel;
 
         public MainWindowViewModel()
         {
@@ -48,6 +50,7 @@ namespace WayBeyond.UX
             _fileFormatViewModel = ContainerHelper.Container.Resolve<FileFormatViewModel>();
             _addEditFileFormatViewModel = ContainerHelper.Container.Resolve<AddEditFileFormatViewModel>();
             _clientLoadViewModel = ContainerHelper.Container.Resolve<ClientLoadViewModel>();
+            _processedFilesViewModel = ContainerHelper.Container.Resolve<ProcessedFilesViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -79,6 +82,9 @@ namespace WayBeyond.UX
 
             //ClientLoads
             _clientLoadViewModel.Completed += UpdateStatus;
+
+            //ProcessedFiles
+            _processedFilesViewModel.StatusUpdate += UpdateStatus;
         }
 
         private string _currentStatus;
@@ -128,6 +134,9 @@ namespace WayBeyond.UX
                     break;
                 case "load":
                     CurrentViewModel = _clientLoadViewModel;
+                    break;
+                case "upload":
+                    CurrentViewModel = _processedFilesViewModel;
                     break;
                 default:
                     break;

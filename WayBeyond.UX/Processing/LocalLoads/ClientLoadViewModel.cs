@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WayBeyond.Data.Models;
 using WayBeyond.UX.Services;
 
@@ -96,6 +97,7 @@ namespace WayBeyond.UX.Processing.LocalLoads
         public RelayCommand ProcessSelections { get; private set; }
 
         public event Action<string> Completed = delegate { };
+
         public async void OnViewLoaded()
         {
             if (PlacementFiles != null)
@@ -104,7 +106,7 @@ namespace WayBeyond.UX.Processing.LocalLoads
                 PlacementFiles.Clear();
             }
 
-            foreach (var location in await _db.GetFileLocationByNameAsync(LocationName.Placements.ToString()))
+            foreach (var location in await _db.GetFileLocationByNameAsync(LocationName.Placements))
             {
                 _fileObjects.AddRange(await _transfer.GetFileObjectsAsync(location));
             }
@@ -114,13 +116,24 @@ namespace WayBeyond.UX.Processing.LocalLoads
 
         private async void OnProcessSelections()
         {
-            await Task.Run(() => Completed($"Processing File: {SelectedFile.FileName} for Client: {SelectedClient.ClientName}"));
-            if(await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient))
+            var result = MessageBox.Show($"You are about to process a load\n file:{SelectedFile.FileName} for Client: {SelectedClient.ClientName}\n" +
+                $" Click OK to Continue or Cancel to quit.","Process File",MessageBoxButton.OKCancel,MessageBoxImage.Information);
+            if (result == MessageBoxResult.OK)
+            {
+                await Task.Run(() => Completed($"Processing File: {SelectedFile.FileName} for Client: {SelectedClient.ClientName}"));
+                if (await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient))
+                {
+                    OnClearSelections();
+                    OnViewLoaded();
+                    await Task.Run(() => Completed("Process Completed."));
+                }
+            } 
+            else
             {
                 OnClearSelections();
-                OnViewLoaded();
-                await Task.Run(() => Completed("Process Completed."));
+                await Task.Run(() => Completed("Process Cancelled."));
             }
+           
             
         }
         private async void OnClearSelections()
