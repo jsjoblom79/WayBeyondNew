@@ -13,6 +13,7 @@ namespace WayBeyond.Data.Models
         EpicPlacements,
         Prepared,
         Archive,
-        RemoteArchive
+        RemoteArchive,
+        Drop
     }
 }

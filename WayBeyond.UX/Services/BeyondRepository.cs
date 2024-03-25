@@ -32,6 +32,10 @@ namespace WayBeyond.UX.Services
         {
             return Task.FromResult(_db.RemoteConnections.Find(id));
         }
+        public Task<RemoteConnection> GetRemoteConnectionByNameAsync(string name)
+        {
+            return _db.RemoteConnections.Where(c => c.Name == name).FirstOrDefaultAsync();
+        }
 
         #endregion
         #region Settings
@@ -57,8 +61,10 @@ namespace WayBeyond.UX.Services
             var clients = _db.Clients;
             foreach (var client in clients)
             {
-                client.DropFormat = await GetDropFormatByIdAsync(client.DropFormatId);
-                client.FileFormat = await GetFileFormatByIdAsync(client.FileFormatId);
+                if(client.DropFormatId != null)
+                    client.DropFormat = await GetDropFormatByIdAsync(client.DropFormatId);
+                if(client.FileFormatId != null)
+                    client.FileFormat = await GetFileFormatByIdAsync(client.FileFormatId);
             }
             return clients.ToList();
         }
@@ -196,6 +202,7 @@ namespace WayBeyond.UX.Services
         #region ProcessedFileBatch
         public Task<List<ProcessedFileBatch>> GetAllProcessedFilesBatchAsync()
         {
+
             return _db.ProcessedFileBatches.ToListAsync();
         }
 
@@ -230,6 +237,8 @@ namespace WayBeyond.UX.Services
         public Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id) => _db.ClientLoads.Where(l => l.ProcessedFileBatchId == id).ToListAsync();
 
         public Task<List<ClientLoad>> GetClientLoadsByDateAsync(DateTime date) => _db.ClientLoads.Where(l => l.CreateDate.Value.Date == date.Date).ToListAsync();
+
+
         #endregion
     }
 }

@@ -24,7 +24,8 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Margin="3" Grid.Column="0">
                 <Label Content="Load Dates"/>
-                <ComboBox ItemsSource="{Binding Batches}" SelectedItem="{Binding SelectedBatch, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="CreateDate" Width="120" Height="23"/>
+                <ComboBox ItemsSource="{Binding Batches}" SelectedItem="{Binding SelectedBatch, UpdateSourceTrigger=PropertyChanged}"
+                          DisplayMemberPath="CreateDate" ItemStringFormat="{}{0:MM/dd/yyyy}" Width="120" Height="23"/>
                 <Button Content="xmark" FontFamily="{StaticResource FontAwesome}" FontSize="14" Background="Transparent" BorderThickness="0"
                         Command="{Binding ClearClientLoads}" Margin="5,0,0,0"/>
             </StackPanel>
@@ -56,7 +57,8 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="trash" FontFamily="{StaticResource FontAwesome}" Background="Transparent" BorderThickness="0" 
-                                        Command="{Binding DeleteClientLoadCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                                        Command="{Binding DataContext.DeleteClientLoadCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -71,7 +73,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="upload" FontFamily="{StaticResource FontAwesome}" Background="Transparent" BorderThickness="0"
-                                        Command="{Binding UploadDropFile, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        Command="{Binding DataContext.UploadDropFile, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -80,7 +82,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="trash" FontFamily="{StaticResource FontAwesome}" Background="Transparent" BorderThickness="0"
-                                        Command="{Binding DeleteBadDropFile, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                        Command="{Binding DataContext.DeleteBadDropFile, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                         CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

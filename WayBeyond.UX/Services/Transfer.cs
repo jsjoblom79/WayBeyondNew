@@ -82,9 +82,56 @@ namespace WayBeyond.UX.Services
                 return Task.FromResult(true);
             }
         }
-    
-        
+
+        public async Task<bool> UploadFile(FileObject path)
+        {
+            try
+            {
+                FileLocation location = _db.GetFileLocationByNameAsync(LocationName.Drop).Result.First();
+                
+                string[] fileNames = path.FileName.Split('_');
+                var connectInfo = GetConnectionInfo(location.RemoteConnection);
+                using (SftpClient client = new SftpClient(connectInfo))
+                {
+                    client.Connect();
+                    if(client.IsConnected)
+                    {
+                        using (FileStream stream = System.IO.File.OpenRead(path.FullPath))
+                        {
+                            await client.UploadAsync(stream, $"{location.Path}{fileNames[2]}");
+                        }
+                        client.Disconnect();
+                        return true;
+                    }
+                    else
+                    {
+                        Log.Information($"Client Connection not made to {connectInfo.Host}");
+                        return false;
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                
+                Log.Error(ex.StackTrace);
+                return false;
+            }
+        }
+        public Task<bool> DeleteFileAsync(FileObject path)
+        {
+            try
+            {
+                System.IO.File.Delete(path.FullPath);
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.StackTrace);
+                return Task.FromResult(false);
+            }
             
+        }
         #region PrivateMethods
         private async Task<List<FileObject>> GetRemoteFiles(FileLocation location)
         {
@@ -145,6 +192,10 @@ namespace WayBeyond.UX.Services
         private ConnectionInfo GetConnectionInfo(RemoteConnection remote)
             => new ConnectionInfo(remote.Host,(int)remote.Port,remote.UserName,
                 new PasswordAuthenticationMethod(remote.UserName,remote.Password));
+
+        
+
+
 
 
 

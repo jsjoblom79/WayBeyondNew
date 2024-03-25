@@ -17,9 +17,15 @@ namespace WayBeyond.UX.Reporting
         {
             _db = db;
             _transfer = transfer;
+            UploadDropFile = new RelayCommand<FileObject>(OnUploadDropFile);
+            DeleteBadDropFile = new RelayCommand<FileObject>(OnDeleteBadDropFile);
+            DeleteClientLoadCommand = new RelayCommand<ClientLoad>(OnDeleteClientLoadCommand);
+            ClearClientLoads = new RelayCommand(OnClearClientLoads);
+            CreateClientLoad = new RelayCommand(OnCreateClientLoad);
         }
         #region Properties
 
+        private List<ClientLoad> _currentClientLoads;
         private ObservableCollection<ClientLoad> _clientLoads;
 
         public ObservableCollection<ClientLoad> ClientLoads
@@ -52,9 +58,10 @@ namespace WayBeyond.UX.Reporting
         public ProcessedFileBatch? SelectedBatch
         {
             get { return _selectedBatch; }
-            set { SetProperty(ref _selectedBatch, value); }
+            set { SetProperty(ref _selectedBatch, value);
+                GetClientLoads(value);
+            }
         }
-
 
         #endregion
 
@@ -73,11 +80,14 @@ namespace WayBeyond.UX.Reporting
         {
             
             _allBatches = await _db.GetAllProcessedFilesBatchAsync();
+            Batches = new ObservableCollection<ProcessedFileBatch?>(_allBatches);
 
             SelectedBatch = _allBatches.Where(b => b.CreateDate.Value.Date == DateTime.Now.Date).FirstOrDefault();
-            SelectedBatch.ClientLoads = await _db.GetAllClientLoadsByBatchIdAsync(SelectedBatch.Id);
-
+            
+            _currentClientLoads = await _db.GetClientLoadsByDateAsync(DateTime.Now.Date);
+            ClientLoads = new ObservableCollection<ClientLoad>(_currentClientLoads);
             var locations = await _db.GetFileLocationByNameAsync(LocationName.Prepared);
+            
             foreach (var location in locations)
             {
                 _allPreparedFiles.AddRange(await _transfer.GetFileObjectsAsync(location));
@@ -85,8 +95,62 @@ namespace WayBeyond.UX.Reporting
 
             PreparedFiles = new ObservableCollection<FileObject>(_allPreparedFiles);
 
-            ClientLoads = new ObservableCollection<ClientLoad>(SelectedBatch.ClientLoads);
+        }
 
+        private async void GetClientLoads(ProcessedFileBatch? value)
+        {
+            if(value != null)
+            {
+                ClientLoads = new ObservableCollection<ClientLoad?>(await _db.GetAllClientLoadsByBatchIdAsync(value.Id));
+            }
+            else
+            {
+                if(_currentClientLoads != null)
+                {
+                    ClientLoads = new ObservableCollection<ClientLoad?>(_currentClientLoads);
+                }
+                
+            }
+        }
+
+        private async void OnUploadDropFile(FileObject file)
+        {
+            if (await _transfer.UploadFile(file))
+            {
+                await _transfer.DeleteFileAsync(file);
+                StatusUpdate($"File: {file.FileName} has been uploaded.");
+                _allPreparedFiles.Clear();
+                OnViewLoaded();
+            }
+        }
+
+        private async void OnDeleteBadDropFile(FileObject file)
+        {
+            if(await _transfer.DeleteFileAsync(file))
+            {
+                StatusUpdate($"File: {file.FileName} has been deleted.");
+                _allPreparedFiles.Clear();
+                OnViewLoaded();
+            }
+        }
+
+        private async void OnDeleteClientLoadCommand(ClientLoad load)
+        {
+            if(await _db.DeleteObjectAsync(load) > 0)
+            {
+                StatusUpdate($"Client Load: {load.ClientName} was removed from Batch.");
+                OnViewLoaded();
+            }
+        }
+
+        private async void OnCreateClientLoad()
+        {
+
+        }
+
+        private async void OnClearClientLoads()
+        {
+            SelectedBatch = null;
         }
         #endregion
     }

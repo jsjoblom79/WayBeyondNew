@@ -12,5 +12,7 @@ namespace WayBeyond.UX.Services
         Task<List<FileObject>> GetFileObjectsAsync(FileLocation location);
         Task<FileObject> DownloadFileAsync(FileObject path);
         Task<bool> ArchiveFileAsync(FileObject path);
+        Task<bool> UploadFile(FileObject path);
+        Task<bool> DeleteFileAsync(FileObject path);
     }
 }

@@ -18,6 +18,7 @@ namespace WayBeyond.UX.Services
         Task<List<RemoteConnection>> GetAllRemoteConnectionsAsync();
         Task<int> AddRemoteConnectionAsync(RemoteConnection connection);
         Task<RemoteConnection> GetRemoteConnectionByIdAsync(long? id);
+        Task<RemoteConnection> GetRemoteConnectionByNameAsync(string name);
 
         //Client
         Task<List<Client>> GetAllClientsAsync();
