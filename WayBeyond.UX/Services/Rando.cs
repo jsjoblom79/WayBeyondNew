@@ -28,11 +28,23 @@ namespace WayBeyond.UX.Services
             List<string> fields = new List<string>();
             foreach (var field in typeof(Debtor).GetProperties())
             {
-                fields.Add(field.Name);
+                if(field.GetMethod != null)
+                    fields.Add(field.Name);
             }
 
             return Task.FromResult(fields);
         }
 
+        public Task<List<string>> SetDebtorPropertiesAsync()
+        {
+            List<string> fields = new List<string>();
+            foreach (var field in typeof(Debtor).GetProperties())
+            {
+                if (field.SetMethod != null)
+                    fields.Add(field.Name);
+            }
+
+            return Task.FromResult(fields);
+        }
     }
 }

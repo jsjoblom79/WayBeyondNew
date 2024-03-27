@@ -100,20 +100,45 @@ namespace WayBeyond.UX.Processing.LocalLoads
 
         public async void OnViewLoaded()
         {
+            var locations = _db.GetFileLocationByNameAsync(LocationName.Placements);
+            var clients = _db.GetAllClientsAsync();
+            var placement = RemovePlacementFiles();
+
+            var onViewLoadedTasks = new List<Task> { locations, clients };
+
+            while (onViewLoadedTasks.Count > 0)
+            {
+                Task loadedTasks = await Task.WhenAny(onViewLoadedTasks);
+
+                if(loadedTasks == locations)
+                {
+                    await placement;
+                    foreach (var location in locations.Result)
+                    {
+                        _fileObjects.AddRange(await _transfer.GetFileObjectsAsync(location));
+                    }
+                    PlacementFiles = new ObservableCollection<FileObject>(_fileObjects);
+                    
+                }
+                else if (loadedTasks == clients)
+                {
+                    Clients = new ObservableCollection<Client>(clients.Result);
+                }
+
+                await loadedTasks;
+                onViewLoadedTasks.Remove(loadedTasks);
+            }
+ 
+        }
+        private Task RemovePlacementFiles()
+        {
             if (PlacementFiles != null)
             {
                 _fileObjects.Clear();
                 PlacementFiles.Clear();
             }
-
-            foreach (var location in await _db.GetFileLocationByNameAsync(LocationName.Placements))
-            {
-                _fileObjects.AddRange(await _transfer.GetFileObjectsAsync(location));
-            }
-            Clients = new ObservableCollection<Client>(await _db.GetAllClientsAsync());
-            PlacementFiles = new ObservableCollection<FileObject>(_fileObjects);
+            return Task.CompletedTask;
         }
-
         private async void OnProcessSelections()
         {
             var result = MessageBox.Show($"You are about to process a load\n file:{SelectedFile.FileName} for Client: {SelectedClient.ClientName}\n" +

@@ -78,23 +78,39 @@ namespace WayBeyond.UX.Reporting
 
         public async void OnViewLoaded()
         {
-            
-            _allBatches = await _db.GetAllProcessedFilesBatchAsync();
-            Batches = new ObservableCollection<ProcessedFileBatch?>(_allBatches);
+            var allBatches = _db.GetAllProcessedFilesBatchAsync();
+            var clientLoads = _db.GetClientLoadsByDateAsync(DateTime.Now.Date);
+            var fileLocations = _db.GetFileLocationByNameAsync(LocationName.Prepared);
 
-            SelectedBatch = _allBatches.Where(b => b.CreateDate.Value.Date == DateTime.Now.Date).FirstOrDefault();
-            
-            _currentClientLoads = await _db.GetClientLoadsByDateAsync(DateTime.Now.Date);
-            ClientLoads = new ObservableCollection<ClientLoad>(_currentClientLoads);
-            var locations = await _db.GetFileLocationByNameAsync(LocationName.Prepared);
-            
-            foreach (var location in locations)
+            var onLoadTasks = new List<Task> { allBatches, clientLoads, fileLocations };
+
+            while (onLoadTasks.Count > 0)
             {
-                _allPreparedFiles.AddRange(await _transfer.GetFileObjectsAsync(location));
-            }
+                Task finishedTasks = await Task.WhenAny(onLoadTasks);
 
-            PreparedFiles = new ObservableCollection<FileObject>(_allPreparedFiles);
+                if(finishedTasks == allBatches)
+                {
+                    _allBatches = allBatches.Result;
+                    Batches = new ObservableCollection<ProcessedFileBatch?>(_allBatches);
+                    SelectedBatch = _allBatches.Where(b => b.CreateDate.Value.Date == DateTime.Now.Date).FirstOrDefault();
+                }
+                else if(finishedTasks == clientLoads)
+                {
+                    _currentClientLoads = clientLoads.Result;
+                    ClientLoads = new ObservableCollection<ClientLoad>(_currentClientLoads);
+                }
+                else if (finishedTasks == fileLocations)
+                {
+                    foreach (var location in fileLocations.Result)
+                    {
+                        _allPreparedFiles.AddRange(await _transfer.GetFileObjectsAsync(location));
+                    }
+                    PreparedFiles = new ObservableCollection<FileObject>(_allPreparedFiles);
+                }
 
+                await finishedTasks;
+                onLoadTasks.Remove(finishedTasks);
+            } 
         }
 
         private async void GetClientLoads(ProcessedFileBatch? value)

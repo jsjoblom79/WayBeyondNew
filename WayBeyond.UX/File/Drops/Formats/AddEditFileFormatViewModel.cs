@@ -179,7 +179,7 @@ namespace WayBeyond.UX.File.Drops.Formats
 
         public async void GetFieldsAndColumns()
         {
-            Fields = new ObservableCollection<string>(await _rando.GetDebtorPropertiesAsync());
+            Fields = new ObservableCollection<string>(await _rando.SetDebtorPropertiesAsync());
             ColumnTypes = new ObservableCollection<string>(await _rando.GetColumnTypesAsync());
         }
         

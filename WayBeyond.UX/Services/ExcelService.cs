@@ -92,7 +92,8 @@ namespace WayBeyond.UX.Services
                         
                     } catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        Log.Error(ex.StackTrace);
+                        MessageBox.Show(ex.StackTrace);
                     }
                 }
                 debtors.Add(debtor);

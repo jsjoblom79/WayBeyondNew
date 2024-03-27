@@ -112,8 +112,9 @@ namespace WayBeyond.UX.Services
                     stringBuilder.AppendLine();
                 }
                 var path = _db.GetFileLocationByNameAsync(LocationName.Prepared);
-                System.IO.File.WriteAllText($@"{path.Result[0].Path}{client.ClientId}_{DateTime.Now:yyyyMMdd-HHmmss}_{client.DropFileName}", stringBuilder.ToString());
-                if (System.IO.File.Exists($@"{path.Result[0].Path}{client.ClientId}_{DateTime.Now:yyyyMMdd-HHmmss}_{client.DropFileName}"))
+                var fileDateTime = $"{DateTime.Now:yyyyMMdd-HHmmss}";
+                System.IO.File.WriteAllText($@"{path.Result[0].Path}{client.ClientId}_{fileDateTime}_{client.DropFileName}", stringBuilder.ToString());
+                if (System.IO.File.Exists($@"{path.Result[0].Path}{client.ClientId}_{fileDateTime}_{client.DropFileName}"))
                 {
                     return Task.FromResult(true);
                 }else

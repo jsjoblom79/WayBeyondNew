@@ -11,5 +11,6 @@ namespace WayBeyond.UX.Services
     {
         Task<List<string>> GetDebtorPropertiesAsync();
         Task<List<string>> GetColumnTypesAsync();
+        Task<List<string>> SetDebtorPropertiesAsync();
     }
 }
