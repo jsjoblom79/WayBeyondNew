@@ -54,7 +54,7 @@ namespace WayBeyond.Data.Models
         private string? _insurancePhone;
         public string? InsurancePhone { get { if (!string.IsNullOrWhiteSpace(_insurancePhone)) { return _insurancePhone.Replace("-", ""); } else { return null; } } set => _insurancePhone = value; }
         public string? InsurancePolicyNumber { get; set; }
-        public string? DebtorLastName { get; }
+        public string? DebtorLastName { get; set; }
         public string? DebtorFirstMiddleName { get; set; }
         public string? DebtorAddress1 { get; set; }
         public string? DebtorAddress2 { get; set; }
@@ -131,28 +131,10 @@ namespace WayBeyond.Data.Models
         {
             get
             {
-                if(string.IsNullOrWhiteSpace(DebtorPhone) && !string.IsNullOrWhiteSpace(DebtorCell))
-                {
-                    return DebtorCell;
-                }
-                else
-                {
-                    if (!DebtorPhone.Equals(DebtorCell) && !string.IsNullOrWhiteSpace(DebtorCell))
-                    {
-                        return DebtorCell;
-                    }
-                    else
-                    {
-                        if (DebtorPhone.Equals(DebtorCell))
-                        {
-                            return DebtorCell;
-                        }
-                        else
-                        {
-                            return DebtorPhone;
-                        }
-                    }
-                }
+                if(string.IsNullOrWhiteSpace(DebtorPhone) && !string.IsNullOrWhiteSpace(DebtorCell)) { return DebtorCell;  }
+                else if(!DebtorPhone.Equals(DebtorCell) && !string.IsNullOrWhiteSpace(DebtorCell)) { return DebtorCell;   }
+                else if (DebtorPhone.Equals(DebtorCell)) { return DebtorCell; }
+                else { return DebtorPhone;}
             }
         }
         public string? FirstMiddleName
@@ -188,16 +170,5 @@ namespace WayBeyond.Data.Models
             get { return $"{DebtorState} {DebtorZip}"; }
         }
 
-        public string? GetClientDebtorNumber()
-        {
-            if (ClientDebtorNumber == null)
-            {
-                return $"{MedicalRecordNumber}/{InvoiceNumber}";
-            }
-            else
-            {
-                return ClientDebtorNumber;
-            }
-        } 
     }
 }

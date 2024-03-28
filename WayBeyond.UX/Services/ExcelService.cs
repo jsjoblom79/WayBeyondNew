@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Microsoft.Office.Interop.Excel;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace WayBeyond.UX.Services
         {
             Update(message);
         }
+        #region ReadingFiles
         public Task<List<Debtor>> ReadClientFile(Client client, FileObject file)
         {
             var debtors = new List<Debtor>();
@@ -137,18 +139,81 @@ namespace WayBeyond.UX.Services
                 Log.Error(ex.StackTrace, ex);
             }
         }
+        #endregion
+        #region WritingClientLoadFile
+        public Task<bool> WriteClientLoadFile(List<ClientLoad> loads, string filename)
+        {
+            try
+            {
+                _xlWrkBks = _xlApp.Workbooks;
+                _xlWrkBk = _xlApp.Workbooks.Add();
+                _xlWrkSht = _xlWrkBk.Worksheets["Sheet1"];
 
+                var totalBalance = loads.Sum(l => l.Balance);
+                var totalAccounts = loads.Sum(l => l.DebtorCount);
+
+                var adjustedLoads = from load in loads
+                                    select new { ClientId = load.ClientId, ClientName = load.ClientName, Balance = load.Balance, DebtorCount = load.DebtorCount };
+
+                var fields = new[] { "ClientId", "ClientName", "Balance", "DebtorCount" };
+                var row = 1;
+                var col = 1;
+                Excel.Range topRow = _xlWrkSht.Range[_xlWrkSht.Cells[1, 1], _xlWrkSht.Cells[1, fields.Count()]];
+                Excel.Range totalRow = _xlWrkSht.Range[_xlWrkSht.Cells[adjustedLoads.Count() + 2, 1], _xlWrkSht.Cells[adjustedLoads.Count() + 2, fields.Count()]];
+                foreach ( var field in fields )
+                {
+                    _xlWrkSht.Cells[row, col] = System.Text.RegularExpressions.Regex.Replace(field,"(\\B[A-Z])"," $1");
+                    col++;
+                }
+                row = 2;
+                foreach(var load in adjustedLoads)
+                {
+                    col = 1;
+                    //handles the information for the columns
+                    foreach(var field in fields)
+                    {
+                        _xlWrkSht.Cells[row, col] = load.GetType().GetProperty(field).GetValue(load);
+                        col++;
+                    }
+                    row++;
+                }
+                _xlWrkSht.Cells[row, "C"] = totalBalance;
+                _xlWrkSht.Cells[row, "D"] = totalAccounts;
+                _xlWrkSht.Rows[row].Font.Bold = true;
+                topRow.Font.Bold = true;
+                topRow.Borders[XlBordersIndex.xlEdgeBottom].LineStyle = XlLineStyle.xlContinuous;
+
+                totalRow.Font.Bold = true;
+                totalRow.Borders[XlBordersIndex.xlEdgeTop].LineStyle = XlLineStyle.xlContinuous;
+                _xlWrkSht.Columns["C"].NumberFormat = "$ ###,##0.00";
+                _xlWrkSht.Columns.AutoFit();
+                
+                _xlWrkBk.SaveAs($"{filename}.xlsx");
+                Close();
+                return Task.FromResult(true);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.StackTrace);
+                Close();
+                return Task.FromResult(false);
+            }      
+        }
+        #endregion
         private void Close()
         {
             Marshal.FinalReleaseComObject(_xlWrkSht);
+            _xlWrkSht = null;
             _xlWrkBk.Close();
             Marshal.FinalReleaseComObject(_xlWrkBk);
+            _xlWrkBk = null;
             _xlWrkBks.Close();
             Marshal.FinalReleaseComObject(_xlWrkBks);
+            _xlWrkBks = null;
             _xlApp.Quit();
-
             Marshal.FinalReleaseComObject(_xlApp);
-            
+            _xlApp = null;
 
         }
     }

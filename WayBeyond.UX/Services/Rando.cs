@@ -28,7 +28,7 @@ namespace WayBeyond.UX.Services
             List<string> fields = new List<string>();
             foreach (var field in typeof(Debtor).GetProperties())
             {
-                if(field.GetMethod != null)
+                if(field.GetMethod != null && field.GetMethod.IsPublic)
                     fields.Add(field.Name);
             }
 
@@ -40,7 +40,7 @@ namespace WayBeyond.UX.Services
             List<string> fields = new List<string>();
             foreach (var field in typeof(Debtor).GetProperties())
             {
-                if (field.SetMethod != null)
+                if (field.SetMethod != null && field.SetMethod.IsPublic)
                     fields.Add(field.Name);
             }
 

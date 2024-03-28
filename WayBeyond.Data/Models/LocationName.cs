@@ -14,6 +14,7 @@ namespace WayBeyond.Data.Models
         Prepared,
         Archive,
         RemoteArchive,
-        Drop
+        Drop,
+        ClientLoadFile
     }
 }

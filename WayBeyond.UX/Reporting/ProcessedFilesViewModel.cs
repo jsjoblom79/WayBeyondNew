@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,10 +80,10 @@ namespace WayBeyond.UX.Reporting
         public async void OnViewLoaded()
         {
             var allBatches = _db.GetAllProcessedFilesBatchAsync();
-            var clientLoads = _db.GetClientLoadsByDateAsync(DateTime.Now.Date);
+            //var clientLoads = _db.GetClientLoadsByDateAsync(DateTime.Now.Date);
             var fileLocations = _db.GetFileLocationByNameAsync(LocationName.Prepared);
 
-            var onLoadTasks = new List<Task> { allBatches, clientLoads, fileLocations };
+            var onLoadTasks = new List<Task> { allBatches,  fileLocations };
 
             while (onLoadTasks.Count > 0)
             {
@@ -92,13 +93,19 @@ namespace WayBeyond.UX.Reporting
                 {
                     _allBatches = allBatches.Result;
                     Batches = new ObservableCollection<ProcessedFileBatch?>(_allBatches);
-                    SelectedBatch = _allBatches.Where(b => b.CreateDate.Value.Date == DateTime.Now.Date).FirstOrDefault();
+                    SelectedBatch = _allBatches.Where(b => b.UpdateDate == null).FirstOrDefault();
+                    if(SelectedBatch != null)
+                    {
+                        _currentClientLoads = SelectedBatch.ClientLoads.ToList();
+                        ClientLoads = new ObservableCollection<ClientLoad>(_currentClientLoads);
+                    }
+                    
                 }
-                else if(finishedTasks == clientLoads)
-                {
-                    _currentClientLoads = clientLoads.Result;
-                    ClientLoads = new ObservableCollection<ClientLoad>(_currentClientLoads);
-                }
+                //else if(finishedTasks == clientLoads)
+                //{
+                //    _currentClientLoads = clientLoads.Result;
+                //    ClientLoads = new ObservableCollection<ClientLoad>(_currentClientLoads);
+                //}
                 else if (finishedTasks == fileLocations)
                 {
                     foreach (var location in fileLocations.Result)
@@ -155,18 +162,35 @@ namespace WayBeyond.UX.Reporting
             if(await _db.DeleteObjectAsync(load) > 0)
             {
                 StatusUpdate($"Client Load: {load.ClientName} was removed from Batch.");
+               
                 OnViewLoaded();
+
             }
         }
 
         private async void OnCreateClientLoad()
         {
+            var location = await _db.GetFileLocationByNameAsync(LocationName.ClientLoadFile);
+            ExcelService excel = new ExcelService();
+            var filename = $"{location[0].Path}Test_Clients_Loaded_" + DateTime.Now.ToString("MMddyyyy");
+            var excelResult = excel.WriteClientLoadFile(ClientLoads.ToList(),filename);
 
+            if(await excelResult)
+            {
+                SelectedBatch.UpdateDate = DateTime.Now;
+                if(await _db.UpdateObjectAsync(SelectedBatch) > 0)
+                {
+                    StatusUpdate($"Batch: {SelectedBatch.BatchName} has been updated.\n Drop File Created.");
+                }
+            }
+            OnViewLoaded();
         }
 
         private async void OnClearClientLoads()
         {
             SelectedBatch = null;
+            ClientLoads = null;
+            OnViewLoaded();
         }
         #endregion
     }
