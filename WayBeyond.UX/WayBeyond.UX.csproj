@@ -5,12 +5,14 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <PackageIcon>wbd.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Fonts\Font Awesome 6 Free Solid.otf" />
     <None Remove="Resources\WayBeyond.db" />
     <None Remove="Resources\wbd.ico" />
+    <None Remove="Resources\wbd.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +32,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\wbd.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\wbd.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <EmbeddedResource Include="Resources\WayBeyond.db" />

@@ -40,7 +40,7 @@
                 <Label Content="File Location Name:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
                 <Label Content="Path:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
                 <Label Content="File Type:" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"/>
-                <Label Content="Remote Connection Id:" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
+                <Label Content="Remote Connection:" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"/>
                 <ComboBox ItemsSource="{e:EnumCollection EnumType=model:LocationName}" Text="{Binding EditableFileLocation.FileLocationName}" Width="120" VerticalAlignment="Center" HorizontalAlignment="Left"
                          Grid.Row="0" Grid.Column="1" Height="23" VerticalContentAlignment="Center"/>
                 <TextBox Text="{Binding EditableFileLocation.Path}" Width="120" VerticalAlignment="Center" HorizontalAlignment="Left"

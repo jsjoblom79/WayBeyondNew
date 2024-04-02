@@ -14,10 +14,13 @@
         xmlns:report="clr-namespace:WayBeyond.UX.Reporting"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowStartupLocation="CenterOwner">
+        Title="Way Beyond 4" Height="450" Width="800" WindowStartupLocation="CenterOwner"
+        Icon="/Resources/wbd.ico" >
+    
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
+   
     <Window.Resources>
         <DataTemplate DataType="{x:Type setting:SettingsViewModel}">
             <setting:SettingsView/>
@@ -74,35 +77,79 @@
               BorderBrush="black" BorderThickness="0,0,0,1">
             <MenuItem Header="File"  Margin="3">
                 <MenuItem Header="Settings" Command="{Binding NavigateCommand}"
-                          CommandParameter="settings" Margin="3"/>
+                          CommandParameter="settings" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="gear" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Remote Connections" Command="{Binding NavigateCommand}"
-                          CommandParameter="connection" Margin="3"/>
+                          CommandParameter="connection" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="plug" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Client Maintenance" Command="{Binding NavigateCommand}"
-                          CommandParameter="maintenance" Margin="3"/>
+                          CommandParameter="maintenance" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="hammer" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="File Locations" Command="{Binding NavigateCommand}"
-                          CommandParameter="location" Margin="3"/>
+                          CommandParameter="location" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="location" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="Drops" Margin="3">
                     <MenuItem Header="Drop File Format" Command="{Binding NavigateCommand}"
-                              CommandParameter="drop" Margin="3"/>
+                              CommandParameter="drop" Margin="3">
+                        <MenuItem.Icon>
+                            <TextBlock Text="droplet" FontFamily="{StaticResource FontAwesome}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="Client File Format" Command="{Binding NavigateCommand}"
-                              CommandParameter="format" Margin="3"/>
+                              CommandParameter="format" Margin="3">
+                        <MenuItem.Icon>
+                            <TextBlock Text="&#xf15c;" FontFamily="{StaticResource FontAwesome}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Exit" Command="{Binding NavigateCommand}"
-                          CommandParameter="exit" Margin="3"/>
+                          CommandParameter="exit" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf057;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Processing" Margin="3">
                 <MenuItem Header="Load Client Files" Command="{Binding NavigateCommand}"
-                          CommandParameter="load" Margin="3"/>
+                          CommandParameter="load" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf571;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Load Epic/Meditech Files" Command="{Binding NavigateCommand}"
-                          CommandParameter="epic" Margin="3"/>
+                          CommandParameter="epic" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf571;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
-            <MenuItem Header="Reporting" Margin="3">
+            <MenuItem Header="Reporting" Margin="3" VerticalContentAlignment="Center">
                 <MenuItem Header="Upload Processed Files" Command="{Binding NavigateCommand}"
-                          CommandParameter="upload" Margin="3"/>
+                          CommandParameter="upload" Margin="3" VerticalAlignment="Center">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf56f;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Monthly Reporting" Command="{Binding NavigateCommand}"
-                          CommandParameter="monthly" Margin="3"/>
+                          CommandParameter="monthly" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf274;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
         

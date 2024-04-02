@@ -42,8 +42,8 @@
             <Label Content="Drop Number:" Margin="3" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="0"/>
             <Label Content="Drop File Name:" Margin="3" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0"/>
             <Label Content="Assembly Name:" Margin="3" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2"/>
-            <Label Content="Drop Format Id:" Margin="3" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2"/>
-            <Label Content="File Format Id:" Margin="3" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
+            <Label Content="Drop Format:" Margin="3" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2"/>
+            <Label Content="File Format:" Margin="3" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="2"/>
             <TextBox Text="{Binding EditableClient.ClientId}" Margin="3" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
             <TextBox Text="{Binding EditableClient.ClientName}" Margin="3" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
             <TextBox Text="{Binding EditableClient.DropNumber}" Margin="3" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
