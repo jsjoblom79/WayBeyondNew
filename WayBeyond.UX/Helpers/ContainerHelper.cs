@@ -23,6 +23,8 @@ namespace WayBeyond.UX
                 RegisterType<ITransfer, Transfer>(
                 new ContainerControlledLifetimeManager()).
                 RegisterType<IClientProcess, ClientProcess>(
+                new ContainerControlledLifetimeManager()).
+                RegisterType<IEpicClientProcess, NorLeaClientProcess>(
                 new ContainerControlledLifetimeManager());
                 
         }

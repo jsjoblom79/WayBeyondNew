@@ -215,7 +215,7 @@ namespace WayBeyond.UX.Services
         {
             return _db.ProcessedFileBatches.Where(b => b.CreateDate.Value.Date == date.Value.Date).FirstOrDefaultAsync();
         }
-
+        
         public Task<List<DateTime?>> GetProcessedFilesBatchDatesAsync()
         {
             return _db.ProcessedFileBatches.Select(b => b.CreateDate).OrderBy(b => b.Value.Date).ToListAsync();
@@ -225,6 +225,27 @@ namespace WayBeyond.UX.Services
         {
             _db.ProcessedFileBatches.Add(batch);
             return _db.SaveChangesAsync();
+        }
+        public async Task<ProcessedFileBatch> GetCurrentBatch()
+        {
+            var batch = await GetProcessedFilesBatchByDateAsync(DateTime.Now);
+
+            if (batch == null)
+            {
+                batch = new ProcessedFileBatch
+                {
+                    BatchName = $"Load Files - {DateTime.Now.Date}",
+                    CreateDate = DateTime.Now.Date,
+                    CreatedBy = Environment.UserName
+
+                };
+
+                if (await AddProcessedFilesBatch(batch) > 0)
+                {
+                    return batch;
+                }
+            }
+            return batch;
         }
         #endregion
         #region ClientLoads
@@ -237,6 +258,13 @@ namespace WayBeyond.UX.Services
         public Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id) => _db.ClientLoads.Where(l => l.ProcessedFileBatchId == id).ToListAsync();
 
         public Task<List<ClientLoad>> GetClientLoadsByDateAsync(DateTime date) => _db.ClientLoads.Where(l => l.CreateDate.Value.Date == date.Date).ToListAsync();
+
+        public Task<Client> GetClientByClientIdAsync(long id)
+        {
+            return _db.Clients.Where(c => c.ClientId == id).FirstOrDefaultAsync();
+        }
+
+ 
 
 
         #endregion

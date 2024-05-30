@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Unity;
 using WayBeyond.Data.Models;
 using WayBeyond.UX.File.Drops.Drop;
@@ -12,6 +13,7 @@ using WayBeyond.UX.File.Location;
 using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
 using WayBeyond.UX.File.Settings;
+using WayBeyond.UX.Processing.EpicLoads;
 using WayBeyond.UX.Processing.LocalLoads;
 using WayBeyond.UX.Reporting;
 
@@ -33,6 +35,7 @@ namespace WayBeyond.UX
         private AddEditFileFormatViewModel _addEditFileFormatViewModel;
         private ClientLoadViewModel _clientLoadViewModel;
         private ProcessedFilesViewModel _processedFilesViewModel;
+        private EpicClientLoadViewModel _epicClientLoadViewModel;
 
         public MainWindowViewModel()
         {
@@ -51,6 +54,7 @@ namespace WayBeyond.UX
             _addEditFileFormatViewModel = ContainerHelper.Container.Resolve<AddEditFileFormatViewModel>();
             _clientLoadViewModel = ContainerHelper.Container.Resolve<ClientLoadViewModel>();
             _processedFilesViewModel = ContainerHelper.Container.Resolve<ProcessedFilesViewModel>();
+            _epicClientLoadViewModel = ContainerHelper.Container.Resolve<EpicClientLoadViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -85,6 +89,7 @@ namespace WayBeyond.UX
 
             //ProcessedFiles
             _processedFilesViewModel.StatusUpdate += UpdateStatus;
+            _epicClientLoadViewModel.Completed -= UpdateStatus;
         }
 
         private string _currentStatus;
@@ -135,6 +140,9 @@ namespace WayBeyond.UX
                 case "load":
                     CurrentViewModel = _clientLoadViewModel;
                     break;
+                case "epic":
+                    CurrentViewModel = _epicClientLoadViewModel;
+                    break;
                 case "upload":
                     CurrentViewModel = _processedFilesViewModel;
                     break;
@@ -173,9 +181,11 @@ namespace WayBeyond.UX
             CurrentViewModel = _addEditSettingViewModel;
         }
 
-        private void UpdateStatus(string message)
+        private async void UpdateStatus(string message)
         {
-            CurrentStatus = message;
+           await Task.Run(() => {
+               CurrentStatus = message;
+           });
         }
 
 

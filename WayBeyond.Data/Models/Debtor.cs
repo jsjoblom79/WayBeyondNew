@@ -63,7 +63,7 @@ namespace WayBeyond.Data.Models
         public string? DebtorZip { get; set; }
         public string? DebtorSpouse { get; set; }
         private string? _debtorPhone;
-        public string? DebtorPhone { get => _debtorPhone.Replace("-", ""); private set => _debtorPhone = value; }
+        public string? DebtorPhone { get => _debtorPhone.Replace("-", ""); set => _debtorPhone = value; }
         private string? _debtorCell;
         public string? DebtorCell { get => _debtorCell.Replace("-", ""); set => _debtorCell = value; }
         private string? _debtorSSN;
@@ -127,6 +127,7 @@ namespace WayBeyond.Data.Models
         public DateTime? DateLastPay { get; set; }
         public string? Skip { get; set; }
 
+        public ClientId? ClientName { get; set; }
         public string? DebtorHomePhone
         {
             get

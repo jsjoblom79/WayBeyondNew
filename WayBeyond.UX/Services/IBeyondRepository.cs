@@ -24,6 +24,7 @@ namespace WayBeyond.UX.Services
         Task<List<Client>> GetAllClientsAsync();
         Task<int> AddClientAsync(Client client);
         Task<List<Client>> GetClientByDropFormatIdAsync(long id);
+        Task<Client> GetClientByClientIdAsync(long id);
 
         //FileLocations
         Task<List<FileLocation>> GetAllFileLocationsAsync();
@@ -61,7 +62,7 @@ namespace WayBeyond.UX.Services
         Task<ProcessedFileBatch?> GetProcessedFilesBatchByDateAsync(DateTime? date);
         Task<List<DateTime?>> GetProcessedFilesBatchDatesAsync();
         Task<int> AddProcessedFilesBatch(ProcessedFileBatch batch);
-
+        Task<ProcessedFileBatch> GetCurrentBatch();
         //ClientLoad
         Task<int> AddClientLoadAsync(ClientLoad clientLoad);
         Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id);

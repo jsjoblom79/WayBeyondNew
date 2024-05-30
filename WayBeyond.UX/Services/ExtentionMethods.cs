@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
+using WayBeyond.Data.Models;
 
 namespace WayBeyond.UX.Services
 {
@@ -41,6 +43,17 @@ namespace WayBeyond.UX.Services
             else
             {
                 return text.Trim();
+            }
+        }
+
+        public static PayType? ToPayType(this string text)
+        {
+            switch (text.ToLower())
+            {
+                case "medicare":
+                    return PayType.MEDICARE;
+                default:
+                    return PayType.NON_MEDICARE;
             }
         }
     }

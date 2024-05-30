@@ -26,7 +26,7 @@ namespace WayBeyond.UX.Services
         public async Task<bool> ProcessClientFile(FileObject file, Client client)
         {
             //determine if the batch is available or create one if needed.
-            var batch = await GetBatchFile();
+            var batch = await GetBatchFileAsync();
 
 
             FileObject downloadedFile = file;
@@ -43,10 +43,10 @@ namespace WayBeyond.UX.Services
             var debtors = await excelService.ReadClientFile(client, downloadedFile);
 
             //WriteDrop file
-            if(await WriteDropFile(client, debtors , batch))
+            if(await WriteDropFileAsync(client, debtors , batch))
             {
                 //if drop file created then write Client Loads
-                await CreateClientLoad(client, debtors, batch, downloadedFile);
+                await CreateClientLoadAsync(client, debtors, batch, downloadedFile);
             } else
             {
                 MessageBox.Show("An error occured Writing to the drop file. Please see Log file for detailed information","Drop File Error",MessageBoxButton.OK,MessageBoxImage.Error);
@@ -73,108 +73,24 @@ namespace WayBeyond.UX.Services
             return true;
         }
 
-        private Task<bool> WriteDropFile(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
+        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
-            var drop = client.DropFormat;
-            var dropDetails = drop.DropFormatDetails;
-            var stringBuilder = new StringBuilder();
-
-            try
-            {
-                //Writes the header record for the Drop File.
-                foreach (var detail in dropDetails)
-                {
-                    stringBuilder.Append(detail.Field);
-                    stringBuilder.Append('\t');
-                }
-                stringBuilder.AppendLine();
-                foreach (var debtor in debtors)
-                {
-                    foreach (var detail in dropDetails)
-                    {
-                        switch (detail.FieldType)
-                        {
-                            case "DATE":
-                                if (debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
-                                    stringBuilder.Append($"{((DateTime)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):MM/dd/yy}");
-                                break;
-                            case "CURRENCY":
-                                if (debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
-                                    stringBuilder.Append($"{((double)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):####.00}");
-                                break;
-                            default:
-                                stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
-                                break;
-                        }
-                        //stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
-                        stringBuilder.Append('\t');
-                    }
-                    stringBuilder.AppendLine();
-                }
-                var path = _db.GetFileLocationByNameAsync(LocationName.Prepared);
-                var fileDateTime = $"{DateTime.Now:yyyyMMdd-HHmmss}";
-                System.IO.File.WriteAllText($@"{path.Result[0].Path}{client.ClientId}_{fileDateTime}_{client.DropFileName}", stringBuilder.ToString());
-                if (System.IO.File.Exists($@"{path.Result[0].Path}{client.ClientId}_{fileDateTime}_{client.DropFileName}"))
-                {
-                    return Task.FromResult(true);
-                }else
-                {
-                    return Task.FromResult(false);
-                }
-            } catch (Exception ex)
-            {
-                Log.Error(ex.StackTrace, ex);
-                return Task.FromResult(false);
-            }
-            
-            
+           return Task.FromResult(DropFileWrite.WriteDropFile(client, debtors, batch));
         }
 
-        private async Task<bool> CreateClientLoad(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
+        public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
-            var load = new ClientLoad
-            {
-                ClientId = client.Id,
-                ClientName = client.ClientName,
-                Balance = debtors.Sum(d => d.AmountReferred),
-                DebtorCount = debtors.Count(),
-                CreateDate = DateTime.Now,
-                FileName = file.FileName,
-                DateOnLoadFile = file.CreateDate,
-                DropNumber = client.DropNumber,
-                ProcessedFileBatchId = batch.Id
-            };
-
-            if(await _db.AddClientLoadAsync(load) > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            
+            return await DropFileWrite.CreateClientLoad(client, debtors, batch, file);
         }
 
-        private async Task<ProcessedFileBatch> GetBatchFile()
+        public async Task<ProcessedFileBatch> GetBatchFileAsync()
         {
-            var batch = await _db.GetProcessedFilesBatchByDateAsync(DateTime.Now);
-
-            if (batch == null)
+            var batch = await _db.GetCurrentBatch();
+            if (batch != null)
             {
-                batch = new ProcessedFileBatch
-                {
-                    BatchName = $"Load Files - {DateTime.Now.Date}",
-                    CreateDate = DateTime.Now.Date,
-                    CreatedBy = Environment.UserName
-
-                };
-                if (await _db.AddProcessedFilesBatch(batch) > 0)
-                {
-                    await Task.Run(()=>ProcessUpdates($"Batch: {batch.BatchName} has been created."));
-                }
+                await Task.Run(()=>ProcessUpdates($"Batch: {batch.BatchName} has been created."));
             }
-
+            
             return batch;
         }
         

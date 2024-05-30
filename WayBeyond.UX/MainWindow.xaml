@@ -11,6 +11,7 @@
         xmlns:fdrop="clr-namespace:WayBeyond.UX.File.Drops.Drop"
         xmlns:format="clr-namespace:WayBeyond.UX.File.Drops.Formats"
         xmlns:proc="clr-namespace:WayBeyond.UX.Processing.LocalLoads"
+        xmlns:epic="clr-namespace:WayBeyond.UX.Processing.EpicLoads"
         xmlns:report="clr-namespace:WayBeyond.UX.Reporting"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
@@ -65,7 +66,9 @@
         <DataTemplate DataType="{x:Type report:ProcessedFilesViewModel}">
             <report:ProcessedFilesView/>
         </DataTemplate>
-
+        <DataTemplate DataType="{x:Type epic:EpicClientLoadViewModel}">
+            <epic:EpicClientLoadView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
