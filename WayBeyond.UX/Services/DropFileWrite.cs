@@ -17,7 +17,7 @@ namespace WayBeyond.UX.Services
             _db = db;
             _transfer = transfer;   
         }
-        public static bool WriteDropFile(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
+        public bool WriteDropFile(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
             var drop = client.DropFormat;
             var dropDetails = drop.DropFormatDetails;
@@ -75,7 +75,7 @@ namespace WayBeyond.UX.Services
 
         }
 
-        public async static Task<bool> CreateClientLoad(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
+        public async Task<bool> CreateClientLoad(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
             var load = new ClientLoad
             {

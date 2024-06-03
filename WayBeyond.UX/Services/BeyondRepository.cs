@@ -259,9 +259,11 @@ namespace WayBeyond.UX.Services
 
         public Task<List<ClientLoad>> GetClientLoadsByDateAsync(DateTime date) => _db.ClientLoads.Where(l => l.CreateDate.Value.Date == date.Date).ToListAsync();
 
-        public Task<Client> GetClientByClientIdAsync(long id)
+        public async Task<Client> GetClientByClientIdAsync(long id)
         {
-            return _db.Clients.Where(c => c.ClientId == id).FirstOrDefaultAsync();
+            var client = _db.Clients.Where(c => c.ClientId == id).FirstOrDefault();
+            client.DropFormat = await GetDropFormatByIdAsync(client.DropFormatId);
+            return client;
         }
 
  

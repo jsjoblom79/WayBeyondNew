@@ -15,10 +15,12 @@ namespace WayBeyond.UX.Services
     {
         private ITransfer _transfer;
         private IBeyondRepository _db;
+        private DropFileWrite _dropFileWrite;
         public ClientProcess(ITransfer transfer, IBeyondRepository db)
         {
             _transfer = transfer;   
             _db = db;
+            _dropFileWrite = new(db, transfer);
         }
 
         public event Action<string> ProcessUpdates = delegate { };
@@ -75,12 +77,12 @@ namespace WayBeyond.UX.Services
 
         public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
-           return Task.FromResult(DropFileWrite.WriteDropFile(client, debtors, batch));
+           return Task.FromResult(_dropFileWrite.WriteDropFile(client, debtors, batch));
         }
 
         public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
-            return await DropFileWrite.CreateClientLoad(client, debtors, batch, file);
+            return await _dropFileWrite.CreateClientLoad(client, debtors, batch, file);
         }
 
         public async Task<ProcessedFileBatch> GetBatchFileAsync()

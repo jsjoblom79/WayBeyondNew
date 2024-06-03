@@ -22,6 +22,18 @@ namespace WayBeyond.UX.Services
             return result;
         }
 
+        public static DateTime? ToDateTimeMDY(this string text)
+        {
+            if(text.Length > 6)
+            {
+                int.TryParse(text.Substring(0, 2), out var month);
+                int.TryParse(text.Substring(2, 2), out var day);
+                int.TryParse(text.Substring(4, 4), out var year);
+                DateTime.TryParse($"{month}/{day}/{year}", out DateTime result);
+                return result;
+            }
+            return null;
+        }
         public static long? ToLong(this string text)
         {
             long.TryParse(text, out var result);
@@ -55,6 +67,15 @@ namespace WayBeyond.UX.Services
                 default:
                     return PayType.NON_MEDICARE;
             }
+        }
+
+        public static string? ToCleanString(this string text)
+        {
+            var dash = text.Contains("-") ? text.Replace("-", "") : text;
+            var lParen = dash.Contains("(") ? dash.Replace("(", "") : dash;
+            var rParen = dash.Contains(")") ? dash.Replace(")", "") : lParen;
+
+            return rParen;
         }
     }
 }

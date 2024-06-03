@@ -12,18 +12,20 @@ namespace WayBeyond.UX.Services
     {
         private IBeyondRepository _db;
         private ITransfer _transfer;
+        private DropFileWrite _dropFileWrite;
         public NorLeaClientProcess(IBeyondRepository db, ITransfer transfer)
         {
             _db = db;
 
             _transfer = transfer;
+            _dropFileWrite = new(db, transfer);
 
         }
         public event Action<string> ProcessUpdates = delegate { };
 
         public Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
-            return DropFileWrite.CreateClientLoad(client, debtors, batch, file);
+            return _dropFileWrite.CreateClientLoad(client, debtors, batch, file);
         }
 
         public async Task<ProcessedFileBatch> GetBatchFileAsync()
@@ -54,12 +56,12 @@ namespace WayBeyond.UX.Services
                 default:
                     return false;
             }
-            
+            return false;
         }
 
         public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
-            return Task.FromResult(DropFileWrite.WriteDropFile(client,debtors,batch));
+            return Task.FromResult(_dropFileWrite.WriteDropFile(client,debtors,batch));
         }
 
 

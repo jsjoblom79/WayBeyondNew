@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Navigation;
 
 namespace WayBeyond.Data.Models
@@ -22,7 +23,7 @@ namespace WayBeyond.Data.Models
                     }
                     else { return string.Empty; }
                 }
-                else { return string.Empty; }
+                else { return _clientDebtorNumber; }
             }
             set { _clientDebtorNumber = value;}
         }
@@ -30,12 +31,13 @@ namespace WayBeyond.Data.Models
         public double AmountReferred { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public string? BillingNumber { get; set; }
-        public string? PatientsName { get { return $"{PatientsLastName},{PatientsFirstName}"; } }
+        public string? PatientsName { get => !string.IsNullOrWhiteSpace(PatientsFirstName) ? $"{PatientsLastName}, {PatientsFirstName}" : $"{LastName}, {FirstMiddleName}"; }
         public string? PatientsFirstName { get; set; }
         public string? PatientsLastName { get; set; }
-        public DateTime? PatientsDOB { get; set; }
+        private DateTime? _patientsDOB;
+        public DateTime? PatientsDOB { get => _patientsDOB != null ? _patientsDOB : _debtorDOB; set { _patientsDOB = value; } }
         private string? _patientsSSN;
-        public string? PatientsSSN { get { if (!string.IsNullOrWhiteSpace(_patientsSSN)) { return _patientsSSN.Replace("-", ""); } else { return null; } } set => _patientsSSN = value; }
+        public string? PatientsSSN { get => !string.IsNullOrWhiteSpace(_patientsSSN) ? _patientsSSN : _debtorSSN; set => _patientsSSN = value; }
         public string? PatientsEmployer { get; set; }
         private string? _patientsPhone;
         public string? PatientsPhone { get { if (!string.IsNullOrWhiteSpace(_patientsPhone)) { return _patientsPhone.Replace("-", ""); } else { return null; } } set => _patientsPhone = value; }
@@ -63,23 +65,13 @@ namespace WayBeyond.Data.Models
         public string? DebtorZip { get; set; }
         public string? DebtorSpouse { get; set; }
         private string? _debtorPhone;
-        public string? DebtorPhone { get => _debtorPhone.Replace("-", ""); set => _debtorPhone = value; }
+        public string? DebtorPhone { get => _debtorPhone != null ? _debtorPhone.Replace("-", ""): null; set => _debtorPhone = value; }
         private string? _debtorCell;
-        public string? DebtorCell { get => _debtorCell.Replace("-", ""); set => _debtorCell = value; }
+        public string? DebtorCell { get => _debtorCell != null ? _debtorCell.Replace("-","") : null; set => _debtorCell = value; }
         private string? _debtorSSN;
-        public string? DebtorSSN { get 
-            {
-                if (string.IsNullOrWhiteSpace(_debtorSSN))
-                {
-                    if (!string.IsNullOrWhiteSpace(PatientsSSN))
-                    {
-                        return PatientsSSN.Replace("-","");
-                    }
-                    else { return string.Empty; }
-                }
-                else { return _debtorSSN.Replace("-", ""); }
-                 
-            } set => _debtorSSN = value; }
+        public string? DebtorSSN { get =>
+                !string.IsNullOrWhiteSpace(_debtorSSN) ? _debtorSSN : PatientsSSN;
+                 set => _debtorSSN = value; }
         public string? DebtorEmployerName { get; set; }
         private string? _debtorEmpPhone;
         public string? DebtorEmpPhone { get { if (!string.IsNullOrWhiteSpace(_debtorEmpPhone)) { return _debtorEmpPhone.Replace("-", ""); } else { return null; } } set => _debtorEmpPhone = value; }
@@ -87,22 +79,23 @@ namespace WayBeyond.Data.Models
         public string? DebtorEmpCityState { get; set; }
         public string? SpouseEmployerName { get; set; }
         private string? _spouseEmpPhone;
-        public string? SpouseEmpPhone { get => _spouseEmpPhone.Replace("-", ""); set => _spouseEmpPhone = value; }
+        public string? SpouseEmpPhone { get => _spouseEmpPhone != null ? _spouseEmpPhone.Replace("-", "") : null; set => _spouseEmpPhone = value; }
         public string? SpouseSSN { get; set; }
         public DateTime? SpouseDOB { get; set; }
+        private DateTime? _debtorDOB;
         public DateTime? DebtorDOB
         {
             get
             {
-                if(DebtorDOB == null)
+                if(_debtorDOB == null)
                 {
-                    if(PatientsDOB != null)
+                    if(_patientsDOB != null)
                     {
-                        return PatientsDOB;
+                        return _patientsDOB;
                     } else { return null; }
-                } else { return DebtorDOB; }
+                } else { return _debtorDOB; }
             }
-            set { DebtorDOB = value; }
+            set { _debtorDOB = value; }
         }
         public string? DebtorEmail { get; set; }
         public string? DebtorLicenseNumber { get; set; }
@@ -116,10 +109,10 @@ namespace WayBeyond.Data.Models
         public string? ComakerCity { get; set; }
         public string? ComakerStZip { get; set; }
         private string? _comakerPhone;
-        public string? ComakerPhone { get => _comakerPhone.Replace("-", ""); set => _comakerPhone = value; }
+        public string? ComakerPhone { get => _comakerPhone != null ? _comakerPhone.Replace("-", "") : null; set => _comakerPhone = value; }
         public string? ComakerEmployer { get; set; }
         private string? _comakerSSN;
-        public string? ComakerSSN { get => _comakerSSN.Replace("-", ""); set => _comakerSSN = value; }
+        public string? ComakerSSN { get => _comakerSSN != null ? _comakerSSN.Replace("-", "") : null; set => _comakerSSN = value; }
         public DateTime? ComakerDOB { get; set; }
         public string? Notes { get; set; }
         public double PatientPaid { get; set; }
@@ -130,13 +123,7 @@ namespace WayBeyond.Data.Models
         public ClientId? ClientName { get; set; }
         public string? DebtorHomePhone
         {
-            get
-            {
-                if(string.IsNullOrWhiteSpace(DebtorPhone) && !string.IsNullOrWhiteSpace(DebtorCell)) { return DebtorCell;  }
-                else if(!DebtorPhone.Equals(DebtorCell) && !string.IsNullOrWhiteSpace(DebtorCell)) { return DebtorCell;   }
-                else if (DebtorPhone.Equals(DebtorCell)) { return DebtorCell; }
-                else { return DebtorPhone;}
-            }
+            get => !string.IsNullOrWhiteSpace(_debtorCell) ? _debtorPhone : _debtorPhone;
         }
         public string? FirstMiddleName
         {
