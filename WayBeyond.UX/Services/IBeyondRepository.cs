@@ -25,12 +25,14 @@ namespace WayBeyond.UX.Services
         Task<int> AddClientAsync(Client client);
         Task<List<Client>> GetClientByDropFormatIdAsync(long id);
         Task<Client> GetClientByClientIdAsync(long id);
+        Client GetClientByClientId(long id);
 
         //FileLocations
         Task<List<FileLocation>> GetAllFileLocationsAsync();
         Task<int> AddFileLocationsAsync(FileLocation location);
-        Task<List<FileLocation>> GetFileLocationByNameAsync(LocationName name);
+        Task<List<FileLocation>> GetFileLocationsByNameAsync(LocationName name);
 
+        Task<FileLocation> GetSingleFileLocationByNameAsync(LocationName name);
         //DropFormats
         Task<List<DropFormat>> GetAllDropFormatsAsync();
         Task<int> AddDropFormatAsync(DropFormat dropFormat);

@@ -26,6 +26,7 @@ namespace WayBeyond.UX
                 new ContainerControlledLifetimeManager()).
                 RegisterType<IEpicClientProcess, NorLeaClientProcess>(
                 new ContainerControlledLifetimeManager());
+            
                 
         }
 

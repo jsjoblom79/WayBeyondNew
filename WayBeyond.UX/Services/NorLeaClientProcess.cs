@@ -18,7 +18,7 @@ namespace WayBeyond.UX.Services
             _db = db;
 
             _transfer = transfer;
-            _dropFileWrite = new(db, transfer);
+            _dropFileWrite = new(db);//, transfer);
 
         }
         public event Action<string> ProcessUpdates = delegate { };
@@ -43,6 +43,7 @@ namespace WayBeyond.UX.Services
             switch (parts[5].ToLower())
             {
                 case "inventory":
+
                     break;
                 case "update":
                     break;

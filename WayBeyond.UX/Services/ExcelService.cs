@@ -3,11 +3,13 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using WayBeyond.Data.Models;
+using WayBeyond.UX.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace WayBeyond.UX.Services
@@ -43,6 +45,11 @@ namespace WayBeyond.UX.Services
                 {
                     list.Add(item.Name);
                 }
+                var ShtFrm = new WorksheetsFrm(list);
+                if(ShtFrm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    _xlWrkSht = _xlWrkBk.Sheets.Item[ShtFrm.WorkSheetName];
+                }
             }
             else
             {
@@ -50,75 +57,128 @@ namespace WayBeyond.UX.Services
             }
 
             _xlWrkSht.Columns.AutoFit();
-            CleanUpEmptyRows(client.FileFormat.ColumnForClientDebtorNumber);
+            //CleanUpEmptyRows(client.FileFormat.ColumnForClientDebtorNumber);
             var rows = _xlWrkSht.UsedRange.Rows.Count;
 
             for (int? row = client.FileFormat.FileStartLine; row < rows + 1; row++)
             {
-                var debtor = new Debtor();
-                foreach (var detail in client.FileFormat.FileFormatDetails)
+                if (!IsRowEmpty(_xlWrkSht, row, client.FileFormat.ColumnForClientDebtorNumber))
                 {
-                    try
+                    var debtor = new Debtor();
+                    foreach (var detail in client.FileFormat.FileFormatDetails)
                     {
-                        
-                        switch (detail.ColumnType)
+                        try
                         {
-                            case "string":
-                                if (detail.SpecialCase != null)
-                                {
-                                    debtor.GetType().GetProperty(detail.Field).SetValue(debtor, GetSpecialCase(detail, row));
-                                }
-                                else
-                                {
-                                    debtor.GetType().GetProperty(detail.Field).SetValue(debtor, _xlWrkSht.Cells[row, detail.FileColumn].Text);
-                                }
-                                break;
-                            case "double":
-                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDouble());
-                                break;
-                            case "DateTime":
-                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDateTime());
-                                break;
-                            case "long":
-                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToLong());
-                                break;
-                            case "int":
-                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToInt());
-                                break;
-                            case "Zip":
-                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToZip());
-                                break;
-                            default:
-                                break;
+
+                            switch (detail.ColumnType)
+                            {
+                                case "string":
+                                    if (detail.SpecialCase != null)
+                                    {
+
+                                        debtor.GetType().GetProperty(detail.Field).SetValue(debtor, GetSpecialCase(detail, row));
+                                    }
+                                    else
+                                    {
+                                        if (detail.FileColumn.Contains(","))
+                                        {
+                                            var columns = detail.FileColumn.Split(',');
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, $"{((string)_xlWrkSht.Cells[row, columns[0]].Text).ToCleanString()} " +
+                                                $"{((string)_xlWrkSht.Cells[row, columns[1].Trim()].Text).ToCleanString()}");
+                                        }
+                                        else
+                                        {
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToCleanString());
+                                        }
+
+                                    }
+                                    break;
+                                case "double":
+                                    debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDouble());
+                                    break;
+                                case "DateTime":
+                                    if (detail.SpecialCase != null && detail.SpecialCase == SpecialCase.MultiDate)
+                                    {
+                                        if (detail.FileColumn.Contains(","))
+                                        {
+                                            var columns = detail.FileColumn.Split(',');
+                                            List<string> dates = new List<string>();
+                                            foreach (var item in columns)
+                                            {
+                                                dates.Add(_xlWrkSht.Cells[row, item].Text);
+                                            }
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, dates.ToMaxDateFromList());
+                                        }
+                                        else
+                                        {
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToSingleDateFromMulti());
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDateTime());
+                                    }
+                                    break;
+                                case "long":
+                                    debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToLong());
+                                    break;
+                                case "int":
+                                    debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToInt());
+                                    break;
+                                case "Zip":
+                                    debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToZip());
+                                    break;
+                                default:
+                                    break;
+                            }
+
                         }
-                        
-                    } catch (Exception ex)
-                    {
-                        Log.Error(ex.StackTrace);
-                        MessageBox.Show(ex.StackTrace);
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex.StackTrace);
+                            MessageBox.Show(ex.StackTrace);
+                        }
                     }
+                    debtors.Add(debtor);
+                    OnUpdate($"Debtor: {debtor.ClientDebtorNumber} created.");
                 }
-                debtors.Add(debtor);
-                OnUpdate($"Debtor: {debtor.ClientDebtorNumber} created.");
             }
-            Close();
+                Close();
             return Task.FromResult(debtors);
         }
 
-        private object GetSpecialCase(FileFormatDetail detail, int? row)
+        private bool IsRowEmpty(Worksheet xlwrksht, int? row, string col)
+        {
+            Excel.Range cell = xlwrksht.Cells[row,col] as Excel.Range;
+
+            bool isEmpty = cell.Value2 == null || string.IsNullOrEmpty(cell.Text);
+            Marshal.ReleaseComObject(cell);
+            return isEmpty;
+            
+        }
+
+        private object? GetSpecialCase(FileFormatDetail detail, int? row)
         {
             switch (detail.SpecialCase)
             {
-                case "Split,2":
+                case SpecialCase.Split2Comma:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
-                    
+
                     var split2 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(',');
                     return split2[1];
-                case "Split,1":
+                case SpecialCase.Split1Comma:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var split1 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(',');
                     return split1[0];
-               
+                case SpecialCase.Split1:
+                    if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
+                    var sp1 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(" ");
+                    return sp1[0].ToCleanString();
+                case SpecialCase.Split2:
+                    if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
+                    var sp2 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(" ");
+                    return sp2[1].ToCleanString();
                 default:
                     return null;
             }
@@ -129,10 +189,14 @@ namespace WayBeyond.UX.Services
             {
                 var rows = _xlWrkSht.UsedRange.Rows.Count;
 
-                if (((string)_xlWrkSht.Cells[rows, columnIndex].Text).Equals(""))
-                {
-                    _xlWrkSht.Columns[columnIndex].SpecialCells(Excel.XlCellType.xlCellTypeBlanks).EntireRow.Delete();
-                }
+               
+                    if (((string)_xlWrkSht.Cells[rows, columnIndex].Text).Equals(""))
+                    {
+                        _xlWrkSht.Columns[columnIndex].SpecialCells(Excel.XlCellType.xlCellTypeBlanks).EntireRow.Delete();
+                    }
+               
+
+                
             }
             catch (Exception ex)
             {
@@ -201,9 +265,52 @@ namespace WayBeyond.UX.Services
             }      
         }
         #endregion
+
+        public async Task WriteExcelFiles(IEnumerable<object> records, string filename)
+        {
+            try
+            {
+                _xlWrkBks = _xlApp.Workbooks;
+                _xlWrkBk = _xlApp.Workbooks.Add();
+                _xlWrkSht = _xlWrkBk.Worksheets["Sheet1"];
+
+                var fields = records.GetType().GetProperties();
+                var info = fields[2].PropertyType.FullName;
+                var objs = info.GetType().GetProperties();
+                var row = 1;
+                var col = 1;
+                foreach ( var field in objs )
+                {
+                    _xlWrkSht.Cells[row, col] = field.Name;
+                    col++;
+                }
+                row++;
+                col = 1;
+                foreach( var record in records)
+                {
+                    var props = record.GetType().GetProperties();
+                    foreach(var field in fields)
+                    {
+                        _xlWrkSht.Cells[row, col] = record.GetType().GetProperty(field.Name).GetValue(record);
+                        col++;
+                    }
+                    row++;
+                }
+                _xlWrkBk.SaveAs($"{filename}.xlsx");
+                Close();
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.StackTrace);
+                Close();
+                
+            }
+            return;
+        }
         private void Close()
         {
-            Marshal.FinalReleaseComObject(_xlWrkSht);
+            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(_xlWrkSht);
             _xlWrkSht = null;
             _xlWrkBk.Close();
             Marshal.FinalReleaseComObject(_xlWrkBk);

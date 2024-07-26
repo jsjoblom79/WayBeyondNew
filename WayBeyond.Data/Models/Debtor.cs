@@ -31,6 +31,7 @@ namespace WayBeyond.Data.Models
         public double AmountReferred { get; set; }
         public string? MedicalRecordNumber { get; set; }
         public string? BillingNumber { get; set; }
+        public string? TransactionNumber { get; set; }  
         public string? PatientsName { get => !string.IsNullOrWhiteSpace(PatientsFirstName) ? $"{PatientsLastName}, {PatientsFirstName}" : $"{LastName}, {FirstMiddleName}"; }
         public string? PatientsFirstName { get; set; }
         public string? PatientsLastName { get; set; }
@@ -40,7 +41,7 @@ namespace WayBeyond.Data.Models
         public string? PatientsSSN { get => !string.IsNullOrWhiteSpace(_patientsSSN) ? _patientsSSN : _debtorSSN; set => _patientsSSN = value; }
         public string? PatientsEmployer { get; set; }
         private string? _patientsPhone;
-        public string? PatientsPhone { get { if (!string.IsNullOrWhiteSpace(_patientsPhone)) { return _patientsPhone.Replace("-", ""); } else { return null; } } set => _patientsPhone = value; }
+        public string? PatientsPhone { get { if (!string.IsNullOrWhiteSpace(_patientsPhone)) { return _patientsPhone.Replace(" ", ""); } else { return null; } } set => _patientsPhone = value; }
         public string? PatientsRelationship { get; set; }
         public string? PatientMiscData1 { get; set; }
         public string? PatientMiscData2 { get; set; }
@@ -54,10 +55,42 @@ namespace WayBeyond.Data.Models
         public string? InsuranceStateZip { get; set; }
         public string? InsuranceContact { get; set; }
         private string? _insurancePhone;
-        public string? InsurancePhone { get { if (!string.IsNullOrWhiteSpace(_insurancePhone)) { return _insurancePhone.Replace("-", ""); } else { return null; } } set => _insurancePhone = value; }
+        public string? InsurancePhone { get { if (!string.IsNullOrWhiteSpace(_insurancePhone)) { return _insurancePhone.Replace(" ", ""); } else { return null; } } set => _insurancePhone = value; }
         public string? InsurancePolicyNumber { get; set; }
-        public string? DebtorLastName { get; set; }
-        public string? DebtorFirstMiddleName { get; set; }
+        private string? _debtorLastName;
+        public string? DebtorLastName
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(_debtorLastName) && !string.IsNullOrEmpty(PatientsLastName))
+                {
+                    return PatientsLastName;
+                }
+                else
+                {
+                    return _debtorLastName;
+                }
+            }
+            set
+            {
+                _debtorLastName = value;
+            }
+        }
+        private string? _debtorFirstMiddleName;
+        public string? DebtorFirstMiddleName
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(_debtorFirstMiddleName) && !string.IsNullOrEmpty(PatientsFirstName))
+                {
+                    return PatientsFirstName;
+                } else { return _debtorFirstMiddleName; }
+            }
+            set
+            {
+                _debtorFirstMiddleName = value;
+            }
+        }
         public string? DebtorAddress1 { get; set; }
         public string? DebtorAddress2 { get; set; }
         public string? DebtorCity { get; set; }
@@ -65,21 +98,21 @@ namespace WayBeyond.Data.Models
         public string? DebtorZip { get; set; }
         public string? DebtorSpouse { get; set; }
         private string? _debtorPhone;
-        public string? DebtorPhone { get => _debtorPhone != null ? _debtorPhone.Replace("-", ""): null; set => _debtorPhone = value; }
+        public string? DebtorPhone { get => _debtorPhone != null ? _debtorPhone.Replace(" ","") : null; set => _debtorPhone = value; }
         private string? _debtorCell;
-        public string? DebtorCell { get => _debtorCell != null ? _debtorCell.Replace("-","") : null; set => _debtorCell = value; }
+        public string? DebtorCell { get => _debtorCell != null ? _debtorCell.Replace(" ","") : null; set => _debtorCell = value; }
         private string? _debtorSSN;
         public string? DebtorSSN { get =>
                 !string.IsNullOrWhiteSpace(_debtorSSN) ? _debtorSSN : PatientsSSN;
                  set => _debtorSSN = value; }
         public string? DebtorEmployerName { get; set; }
         private string? _debtorEmpPhone;
-        public string? DebtorEmpPhone { get { if (!string.IsNullOrWhiteSpace(_debtorEmpPhone)) { return _debtorEmpPhone.Replace("-", ""); } else { return null; } } set => _debtorEmpPhone = value; }
+        public string? DebtorEmpPhone { get { if (!string.IsNullOrWhiteSpace(_debtorEmpPhone)) { return _debtorEmpPhone.Replace(" ", ""); } else { return null; } } set => _debtorEmpPhone = value; }
         public string? DebtorEmpAddress { get; set; }
         public string? DebtorEmpCityState { get; set; }
         public string? SpouseEmployerName { get; set; }
         private string? _spouseEmpPhone;
-        public string? SpouseEmpPhone { get => _spouseEmpPhone != null ? _spouseEmpPhone.Replace("-", "") : null; set => _spouseEmpPhone = value; }
+        public string? SpouseEmpPhone { get => _spouseEmpPhone != null ? _spouseEmpPhone.Replace(" ", "") : null; set => _spouseEmpPhone = value; }
         public string? SpouseSSN { get; set; }
         public DateTime? SpouseDOB { get; set; }
         private DateTime? _debtorDOB;
@@ -100,7 +133,9 @@ namespace WayBeyond.Data.Models
         public string? DebtorEmail { get; set; }
         public string? DebtorLicenseNumber { get; set; }
         public string? PatientAddress { get; set; }
-        public string? PatientCityState { get; set; }
+        public string? PatientCity { get; set; }
+        public string? PatientState { get; set; }
+        public string? PatientCityState { get => $"{PatientCity} {PatientState}"; }
         public string? AccountFor { get; set; }
         public string? ComakerLastName { get; set; }
         public string? ComakerFirstName { get; set; }
@@ -109,7 +144,7 @@ namespace WayBeyond.Data.Models
         public string? ComakerCity { get; set; }
         public string? ComakerStZip { get; set; }
         private string? _comakerPhone;
-        public string? ComakerPhone { get => _comakerPhone != null ? _comakerPhone.Replace("-", "") : null; set => _comakerPhone = value; }
+        public string? ComakerPhone { get => _comakerPhone != null ? _comakerPhone.Replace(" ", "") : null; set => _comakerPhone = value; }
         public string? ComakerEmployer { get; set; }
         private string? _comakerSSN;
         public string? ComakerSSN { get => _comakerSSN != null ? _comakerSSN.Replace("-", "") : null; set => _comakerSSN = value; }
@@ -155,8 +190,11 @@ namespace WayBeyond.Data.Models
         }
         public string? DebtorStateZip
         {
-            get { return $"{DebtorState} {DebtorZip}"; }
+            get { return $"{DebtorState} {DebtorZip.Substring(0,5)}"; }
         }
-
+        public string? Location { get; set; }
+        public string? PatientEmpPhone { get; set; }
+        public string? RGHRecordStatus { get; set; }
+        public bool? IsMedicare { get; set; } = false;
     }
 }

@@ -100,7 +100,7 @@ namespace WayBeyond.UX.Processing.LocalLoads
 
         public async void OnViewLoaded()
         {
-            var locations = _db.GetFileLocationByNameAsync(LocationName.Placements);
+            var locations = _db.GetFileLocationsByNameAsync(LocationName.Placements);
             var clients = _db.GetAllClientsAsync();
             var placement = RemovePlacementFiles();
 

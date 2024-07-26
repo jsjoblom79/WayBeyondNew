@@ -42,7 +42,8 @@ namespace WayBeyond.UX.Processing.EpicLoads
 
         public async void OnViewLoaded()
         {
-            var locations = await _db.GetFileLocationByNameAsync(LocationName.EpicPlacements);
+            _allEpicFiles.Clear();
+            var locations = await _db.GetFileLocationsByNameAsync(LocationName.EpicPlacements);
             foreach (var location in locations)
             {
                 _allEpicFiles.AddRange(await _transfer.GetFileObjectsAsync(location));
@@ -53,15 +54,23 @@ namespace WayBeyond.UX.Processing.EpicLoads
 
         private async void OnProcessCommand()
         {
+            var isNorLeaComplete = false;
+            var isRghComplete = false;
+            var isLovingtonComplete = false;
+            var isAANMComplete = false;
+            var isFaithComplete = false;
             foreach (var file in _epicFiles)
             {
-                if (file.FullPath.ToLower().Contains("norlea"))
-                {
-                    IEpicClientProcess Proc = new NorLeaClientProcess(_db,_transfer);
-                    Proc.ProcessEpicClientAsync(file,await _db.GetClientByClientIdAsync(10));
-                }
+                
+                //if (file.FullPath.ToLower().Contains("norlea"))
+                //{
+                //    IEpicClientProcess Proc = new NorLeaClientProcess(_db,_transfer);
+                //    //isNorLeaComplete = await Proc.ProcessEpicClientAsync(file,new[] { await _db.GetClientByClientIdAsync(10) });
+                //}
                 if (file.FullPath.ToLower().Contains("rghosp"))
                 {
+                    IEpicClientProcess proc = new RghClientProcess(_db, _transfer);
+                    isRghComplete = await proc.ProcessEpicClientAsync(file, null);
                     Completed($"Processing File: {file.FileName}");
                 }
                 if (file.FullPath.ToLower().Contains("anesphesia"))
@@ -75,7 +84,7 @@ namespace WayBeyond.UX.Processing.EpicLoads
                 if (file.FullPath.ToLower().Contains("lovingtonfire"))
                 {
                     IEpicClientProcess love = new FarmingtonFireClientProcess(_db,_transfer);
-                    love.ProcessEpicClientAsync(file, await _db.GetClientByClientIdAsync(1338));
+                    isLovingtonComplete = await love.ProcessEpicClientAsync(file, await _db.GetClientByClientIdAsync(1338));
                     Completed($"Processing File: {file.FileName}");
                 }
             }

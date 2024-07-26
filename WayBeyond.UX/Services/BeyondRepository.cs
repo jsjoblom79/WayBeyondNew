@@ -103,7 +103,7 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
-        public Task<List<FileLocation>> GetFileLocationByNameAsync(LocationName name)
+        public Task<List<FileLocation>> GetFileLocationsByNameAsync(LocationName name)
         {
             var locations = _db.FileLocations.Where(l => l.FileLocationName == name.ToString());
             foreach (var location in locations)
@@ -266,7 +266,23 @@ namespace WayBeyond.UX.Services
             return client;
         }
 
- 
+        public Client? GetClientByClientId(long id)
+        {
+            return _db.Clients.Find(id);
+        }
+
+        public async Task<FileLocation> GetSingleFileLocationByNameAsync(LocationName name)
+        {
+            var location = await _db.FileLocations.Where(l => l.FileLocationName == name.ToString()).FirstOrDefaultAsync();
+            if (location != null)
+            {
+                return location;
+            }
+            else return null;
+
+        }
+
+
 
 
         #endregion

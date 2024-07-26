@@ -15,6 +15,7 @@ namespace WayBeyond.Data.Models
         Archive,
         RemoteArchive,
         Drop,
-        ClientLoadFile
+        ClientLoadFile,
+        EpicPlacementOutput
     }
 }

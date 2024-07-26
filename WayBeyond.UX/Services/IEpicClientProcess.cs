@@ -9,7 +9,7 @@ namespace WayBeyond.UX.Services
 {
     public interface IEpicClientProcess
     {
-        Task<bool> ProcessEpicClientAsync(FileObject file, Client client);
+        Task<bool> ProcessEpicClientAsync(FileObject file, Client? client);
         Task<ProcessedFileBatch> GetBatchFileAsync();
         Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch);
         Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file);

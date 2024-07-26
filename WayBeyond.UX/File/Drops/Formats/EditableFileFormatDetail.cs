@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WayBeyond.Data.Models;
 
 namespace WayBeyond.UX.File.Drops.Drop
 {
@@ -34,9 +35,9 @@ namespace WayBeyond.UX.File.Drops.Drop
             set { SetProperty(ref _columnType, value); }
         }
 
-        private string? _specialCase;
+        private SpecialCase? _specialCase;
 
-        public string? SpecialCase
+        public SpecialCase? SpecialCase
         {
             get { return _specialCase; }
             set { SetProperty(ref _specialCase, value); }

@@ -13,7 +13,7 @@ public partial class FileFormatDetail
 
     public string? ColumnType { get; set; }
 
-    public string? SpecialCase { get; set; }
+    public SpecialCase? SpecialCase { get; set; }
 
     public long? FileFormatId { get; set; }
 

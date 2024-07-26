@@ -11,11 +11,11 @@ namespace WayBeyond.UX.Services
     public class DropFileWrite
     {
         private static IBeyondRepository _db;
-        private static ITransfer _transfer;
-        public DropFileWrite(IBeyondRepository db, ITransfer transfer)
+        //private static ITransfer _transfer;
+        public DropFileWrite(IBeyondRepository db)//, ITransfer transfer)
         {
             _db = db;
-            _transfer = transfer;   
+            //_transfer = transfer;   
         }
         public bool WriteDropFile(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
@@ -55,7 +55,7 @@ namespace WayBeyond.UX.Services
                     }
                     stringBuilder.AppendLine();
                 }
-                var path = _db.GetFileLocationByNameAsync(LocationName.Prepared);
+                var path = _db.GetFileLocationsByNameAsync(LocationName.Prepared);
                 var fileDateTime = $"{DateTime.Now:yyyyMMdd-HHmmss}";
                 System.IO.File.WriteAllText($@"{path.Result[0].Path}{client.ClientId}_{fileDateTime}_{client.DropFileName}", stringBuilder.ToString());
                 if (System.IO.File.Exists($@"{path.Result[0].Path}{client.ClientId}_{fileDateTime}_{client.DropFileName}"))
@@ -79,7 +79,7 @@ namespace WayBeyond.UX.Services
         {
             var load = new ClientLoad
             {
-                ClientId = client.Id,
+                ClientId = client.ClientId,
                 ClientName = client.ClientName,
                 Balance = debtors.Sum(d => d.AmountReferred),
                 DebtorCount = debtors.Count(),

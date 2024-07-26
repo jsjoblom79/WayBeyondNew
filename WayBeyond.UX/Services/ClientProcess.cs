@@ -20,7 +20,7 @@ namespace WayBeyond.UX.Services
         {
             _transfer = transfer;   
             _db = db;
-            _dropFileWrite = new(db, transfer);
+            _dropFileWrite = new(db); //, transfer);
         }
 
         public event Action<string> ProcessUpdates = delegate { };

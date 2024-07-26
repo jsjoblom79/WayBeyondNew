@@ -81,7 +81,7 @@ namespace WayBeyond.UX.Reporting
         {
             var allBatches = _db.GetAllProcessedFilesBatchAsync();
             //var clientLoads = _db.GetClientLoadsByDateAsync(DateTime.Now.Date);
-            var fileLocations = _db.GetFileLocationByNameAsync(LocationName.Prepared);
+            var fileLocations = _db.GetFileLocationsByNameAsync(LocationName.Prepared);
 
             var onLoadTasks = new List<Task> { allBatches,  fileLocations };
 
@@ -108,6 +108,7 @@ namespace WayBeyond.UX.Reporting
                 //}
                 else if (finishedTasks == fileLocations)
                 {
+                    _allPreparedFiles.Clear();
                     foreach (var location in fileLocations.Result)
                     {
                         _allPreparedFiles.AddRange(await _transfer.GetFileObjectsAsync(location));
@@ -170,7 +171,7 @@ namespace WayBeyond.UX.Reporting
 
         private async void OnCreateClientLoad()
         {
-            var location = await _db.GetFileLocationByNameAsync(LocationName.ClientLoadFile);
+            var location = await _db.GetFileLocationsByNameAsync(LocationName.ClientLoadFile);
             ExcelService excel = new ExcelService();
             var filename = $"{location[0].Path}Test_Clients_Loaded_" + DateTime.Now.ToString("MMddyyyy");
             var excelResult = excel.WriteClientLoadFile(ClientLoads.ToList(),filename);
