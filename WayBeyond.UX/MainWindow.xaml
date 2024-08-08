@@ -13,6 +13,7 @@
         xmlns:proc="clr-namespace:WayBeyond.UX.Processing.LocalLoads"
         xmlns:epic="clr-namespace:WayBeyond.UX.Processing.EpicLoads"
         xmlns:report="clr-namespace:WayBeyond.UX.Reporting"
+        xmlns:texas="clr-namespace:WayBeyond.UX.Reporting.TexasTech"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Way Beyond 4" Height="650" Width="1000" WindowStartupLocation="CenterScreen"
@@ -68,6 +69,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type epic:EpicClientLoadViewModel}">
             <epic:EpicClientLoadView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type texas:TexasTechViewModel}">
+            <texas:TexasTechView/>
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -148,7 +152,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Monthly Reporting" Command="{Binding NavigateCommand}"
-                          CommandParameter="monthly" Margin="3">
+                          CommandParameter="texas" Margin="3">
                     <MenuItem.Icon>
                         <TextBlock Text="&#xf274;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>

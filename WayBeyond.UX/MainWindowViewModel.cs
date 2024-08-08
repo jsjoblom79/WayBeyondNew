@@ -16,6 +16,7 @@ using WayBeyond.UX.File.Settings;
 using WayBeyond.UX.Processing.EpicLoads;
 using WayBeyond.UX.Processing.LocalLoads;
 using WayBeyond.UX.Reporting;
+using WayBeyond.UX.Reporting.TexasTech;
 
 namespace WayBeyond.UX
 {
@@ -36,6 +37,7 @@ namespace WayBeyond.UX
         private ClientLoadViewModel _clientLoadViewModel;
         private ProcessedFilesViewModel _processedFilesViewModel;
         private EpicClientLoadViewModel _epicClientLoadViewModel;
+        private TexasTechViewModel _texasTechViewModel;
 
         public MainWindowViewModel()
         {
@@ -55,6 +57,7 @@ namespace WayBeyond.UX
             _clientLoadViewModel = ContainerHelper.Container.Resolve<ClientLoadViewModel>();
             _processedFilesViewModel = ContainerHelper.Container.Resolve<ProcessedFilesViewModel>();
             _epicClientLoadViewModel = ContainerHelper.Container.Resolve<EpicClientLoadViewModel>();
+            _texasTechViewModel = ContainerHelper.Container.Resolve<TexasTechViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -145,6 +148,9 @@ namespace WayBeyond.UX
                     break;
                 case "upload":
                     CurrentViewModel = _processedFilesViewModel;
+                    break;
+                case "texas":
+                    CurrentViewModel = _texasTechViewModel;
                     break;
                 default:
                     break;

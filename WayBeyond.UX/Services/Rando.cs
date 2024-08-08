@@ -10,16 +10,14 @@ namespace WayBeyond.UX.Services
 {
     public class Rando : IRando
     {
+        
         public Task<List<string>> GetColumnTypesAsync()
         {
             return Task.FromResult(new List<string>
             {
                 "double",
                 "string",
-                "DateTime",
-                "long",
-                "int",
-                "StateZip"
+                "DateTime"
             });
         }
 

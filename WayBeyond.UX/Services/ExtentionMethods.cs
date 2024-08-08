@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,8 +23,15 @@ namespace WayBeyond.UX.Services
         
         public static DateTime? ToDateTime(this string text)
         {
-            DateTime.TryParse(text, out var result);
-            return result;
+            if (string.IsNullOrEmpty(text))
+            {
+                return null;
+            } else
+            {
+                DateTime.TryParse(text, out var result);
+                return result;
+            }
+            
         }
         public static DateTime? ToDateTimeYMD(this string text)
         {
@@ -140,11 +148,78 @@ namespace WayBeyond.UX.Services
 
         public static string? ToCleanString(this string text)
         {
-            var dash = text.Contains('-') ? text.Replace("-", "") : text;
-            var lParen = dash.Contains('(') ? dash.Replace("(", "") : dash;
-            var rParen = lParen.Contains(')') ? lParen.Replace(")", "") : lParen;
-
-            return rParen.Replace("\t","");
+            var dash = text.Contains('-') ? text.Replace("-", "").Trim() : text.Trim();
+            var lParen = dash.Contains('(') ? dash.Replace("(", "").Trim() : dash.Trim();
+            var rParen = lParen.Contains(')') ? lParen.Replace(")", "").Trim()   : lParen.Trim();
+            var tabs= rParen.Replace("\t", "").Trim();
+            var result = tabs.Replace(" ", "").Trim();
+            return result;
         }
+
+        #region TexasTech Methods
+        public static DateTime? ToDate(this string? date)
+        {
+            if (date == null || date.Equals(string.Empty))
+            {
+                return null;
+            }
+            else
+            {
+                DateTime.TryParse(date, out DateTime result);
+                return result;
+            }
+        }
+
+        public static string? ToFirstName(this string? name)
+        {
+            string[] names = name.Split(",");
+            return names[1];
+        }
+
+        public static string? ToLastName(this string? name)
+        {
+            string[] names = name.Split(",");
+            return names[0];
+        }
+
+        public static string ToMrn(this string MrnInv)
+        {
+            string[] ids;
+            if (MrnInv.Contains("\\"))
+            {
+                ids = MrnInv.Split("\\");
+            }
+            else
+            {
+                ids = MrnInv.Split("/");
+            }
+            return ids[0];
+        }
+
+        public static string ToInv(this string MrnInv)
+        {
+            string[] ids;
+            if (MrnInv.Contains("\\"))
+            {
+                ids = MrnInv.Split("\\");
+            }
+            else
+            {
+                ids = MrnInv.Split("/");
+            }
+
+            return ids[1];
+        }
+        public static IQueryable<ToPIF> FromSqlRawPif<ToPIF>(this DbContext db, string sql) where ToPIF : class
+        {
+            var item = db.Set<ToPIF>().FromSqlRaw(sql);
+            return item;
+        }
+        public static IQueryable<ToTransunion> FromSqlRaw<ToTransunion>(this DbContext db, string sql) where ToTransunion : class
+        {
+            var item = db.Set<ToTransunion>().FromSqlRaw(sql);
+            return item;
+        }
+        #endregion
     }
 }

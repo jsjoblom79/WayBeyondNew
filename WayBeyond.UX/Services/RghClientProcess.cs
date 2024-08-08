@@ -134,13 +134,13 @@ namespace WayBeyond.UX.Services
 
             var batch = await GetBatchFileAsync();
 
-            if (await WriteDropFileAsync(_medicare, medicareAccounts, batch))
+            if (await WriteDropFileAsync(_medicare, medicareAccounts, batch, null))
             {
                 filesProcessed = true;
             }
 
 
-            if (await WriteDropFileAsync(_nonMedicare, nonMedicareAccounts, batch))
+            if (await WriteDropFileAsync(_nonMedicare, nonMedicareAccounts, batch, null))
             {
                 filesProcessed = true;
             }
@@ -156,7 +156,7 @@ namespace WayBeyond.UX.Services
             return filesProcessed;
         }
 
-        public async Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
+        public async Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
             if (_drop.WriteDropFile(client, debtors, batch))
             {
@@ -356,6 +356,11 @@ namespace WayBeyond.UX.Services
             Marshal.FinalReleaseComObject(xlApp);
             xlApp = null;
 
+        }
+
+        public Task<bool> ProcessEpicClientAsync(FileObject file, Client[]? client)
+        {
+            throw new NotImplementedException();
         }
     }
 

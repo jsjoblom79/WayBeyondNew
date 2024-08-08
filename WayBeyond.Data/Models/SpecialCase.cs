@@ -14,7 +14,9 @@ namespace WayBeyond.Data.Models
         Split2,
         Split3,
         Split4,
-        MultiDate
+        MultiDate,
+        ToMDY,
+        ToYMD
 
     }
 }

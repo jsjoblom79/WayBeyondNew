@@ -115,6 +115,17 @@ namespace WayBeyond.UX.Services
             }
             return locations.ToListAsync();
         }
+        public async Task<FileLocation> GetFileLocationByNameAsync(LocationName name)
+        {
+            var location = _db.FileLocations.Where(l => l.FileLocationName == name.ToString()).FirstOrDefault();
+
+            if (location != null && location.FileType == FileType.REMOTE)
+            {
+                location.RemoteConnection = _db.RemoteConnections.Find(location.RemoteConnectionId);
+            }
+            
+            return location;
+        }
         #endregion
         #region DropFormats
         public Task<List<DropFormat>> GetAllDropFormatsAsync()
@@ -268,7 +279,7 @@ namespace WayBeyond.UX.Services
 
         public Client? GetClientByClientId(long id)
         {
-            return _db.Clients.Find(id);
+            return _db.Clients.Where(c => c.ClientId == id).FirstOrDefault();
         }
 
         public async Task<FileLocation> GetSingleFileLocationByNameAsync(LocationName name)
@@ -280,6 +291,12 @@ namespace WayBeyond.UX.Services
             }
             else return null;
 
+        }
+
+        public Client? GetClientByClientName(string name)
+        {
+           Client? client = _db.Clients.Where(c => c.ClientName == name).FirstOrDefault();
+            return client;
         }
 
 

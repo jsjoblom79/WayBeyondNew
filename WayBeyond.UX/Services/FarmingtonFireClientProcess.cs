@@ -110,7 +110,7 @@ namespace WayBeyond.UX.Services
                 }
             }
 
-            await WriteDropFileAsync(client, debtorList, batch);
+            await WriteDropFileAsync(client, debtorList, batch,null);
             
             var results = await CreateClientLoadAsync(client, debtorList, batch, localFile);
             //Archive Local and remote files
@@ -120,9 +120,14 @@ namespace WayBeyond.UX.Services
             return results;
         }
 
-        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
+        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
             return Task.FromResult(_dropFileWrite.WriteDropFile(client, debtors, batch));
+        }
+
+        public Task<bool> ProcessEpicClientAsync(FileObject file, Client[]? client)
+        {
+            throw new NotImplementedException();
         }
     }
 }

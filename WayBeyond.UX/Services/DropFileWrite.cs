@@ -87,7 +87,8 @@ namespace WayBeyond.UX.Services
                 FileName = file.FileName,
                 DateOnLoadFile = file.CreateDate,
                 DropNumber = client.DropNumber,
-                ProcessedFileBatchId = batch.Id
+                ProcessedFileBatchId = batch.Id,
+                EmailCount = debtors.Where(d => d.DebtorEmail !=null).Count()
             };
 
             if (await _db.AddClientLoadAsync(load) > 0)

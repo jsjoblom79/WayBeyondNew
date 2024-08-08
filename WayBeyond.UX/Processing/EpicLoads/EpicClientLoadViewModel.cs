@@ -61,16 +61,16 @@ namespace WayBeyond.UX.Processing.EpicLoads
             var isFaithComplete = false;
             foreach (var file in _epicFiles)
             {
-                
-                //if (file.FullPath.ToLower().Contains("norlea"))
-                //{
-                //    IEpicClientProcess Proc = new NorLeaClientProcess(_db,_transfer);
-                //    //isNorLeaComplete = await Proc.ProcessEpicClientAsync(file,new[] { await _db.GetClientByClientIdAsync(10) });
-                //}
+
+                if (file.FullPath.ToLower().Contains("norlea"))
+                {
+                    IEpicClientProcess Proc = new NorLeaClientProcess(_db, _transfer);
+                    isNorLeaComplete = await Proc.ProcessEpicClientAsync(file,new[] { new Client() });
+                }
                 if (file.FullPath.ToLower().Contains("rghosp"))
                 {
                     IEpicClientProcess proc = new RghClientProcess(_db, _transfer);
-                    isRghComplete = await proc.ProcessEpicClientAsync(file, null);
+                    isRghComplete = await proc.ProcessEpicClientAsync(file, new[] {new Client() });
                     Completed($"Processing File: {file.FileName}");
                 }
                 if (file.FullPath.ToLower().Contains("anesphesia"))

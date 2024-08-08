@@ -45,11 +45,11 @@
                 <TextBlock Text="{Binding EditableDropFormat.UpdateDate}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="4" Grid.Column="1"/>
                 <TextBlock Text="{Binding EditableDropFormat.UpdatedBy}" HorizontalAlignment="Right" Width="Auto" Height="23" Grid.Row="5" Grid.Column="1"/>
                 <TextBlock Text="{Binding EditableDropFormat.Id}" Width="Auto" HorizontalAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,5,0,0"/>
-                <DataGrid ItemsSource="{Binding EditableDropFormat.DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto" Height="150"
+                <DataGrid ItemsSource="{Binding EditableDropFormat.DropFormatDetails}" Grid.Row="6" Grid.Column="1" Width="Auto" Height="300"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           ScrollViewer.CanContentScroll="True"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                          ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
                         <DataGridTextColumn Header="Field" Binding="{Binding Field}"/>

@@ -97,27 +97,33 @@ namespace WayBeyond.UX.Services
                                     debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDouble());
                                     break;
                                 case "DateTime":
-                                    if (detail.SpecialCase != null && detail.SpecialCase == SpecialCase.MultiDate)
+                                    switch (detail.SpecialCase)
                                     {
-                                        if (detail.FileColumn.Contains(","))
-                                        {
-                                            var columns = detail.FileColumn.Split(',');
-                                            List<string> dates = new List<string>();
-                                            foreach (var item in columns)
+                                        case SpecialCase.MultiDate:
+                                            if (detail.FileColumn.Contains(","))
                                             {
-                                                dates.Add(_xlWrkSht.Cells[row, item].Text);
+                                                var columns = detail.FileColumn.Split(',');
+                                                List<string> dates = new List<string>();
+                                                foreach (var item in columns)
+                                                {
+                                                    dates.Add(_xlWrkSht.Cells[row, item].Text);
+                                                }
+                                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, dates.ToMaxDateFromList());
                                             }
-                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, dates.ToMaxDateFromList());
-                                        }
-                                        else
-                                        {
-                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToSingleDateFromMulti());
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDateTime());
+                                            else
+                                            {
+                                                debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToSingleDateFromMulti());
+                                            }
+                                            break;
+                                        case SpecialCase.ToMDY:
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDateTimeMDY());
+                                            break;
+                                        case SpecialCase.ToYMD:
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDateTimeYMD());
+                                            break;
+                                        default:
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToDateTime());
+                                            break;
                                     }
                                     break;
                                 case "long":
@@ -137,7 +143,7 @@ namespace WayBeyond.UX.Services
                         catch (Exception ex)
                         {
                             Log.Error(ex.StackTrace);
-                            MessageBox.Show(ex.StackTrace);
+                            //MessageBox.Show(ex.StackTrace);
                         }
                     }
                     debtors.Add(debtor);
@@ -217,9 +223,9 @@ namespace WayBeyond.UX.Services
                 var totalAccounts = loads.Sum(l => l.DebtorCount);
 
                 var adjustedLoads = from load in loads
-                                    select new { ClientId = load.ClientId, ClientName = load.ClientName, Balance = load.Balance, DebtorCount = load.DebtorCount };
+                                    select new { ClientId = load.ClientId, ClientName = load.ClientName, Balance = load.Balance, DebtorCount = load.DebtorCount, EmailCount = load.EmailCount };
 
-                var fields = new[] { "ClientId", "ClientName", "Balance", "DebtorCount" };
+                var fields = new[] { "ClientId", "ClientName", "Balance", "DebtorCount", "EmailCount" };
                 var row = 1;
                 var col = 1;
                 Excel.Range topRow = _xlWrkSht.Range[_xlWrkSht.Cells[1, 1], _xlWrkSht.Cells[1, fields.Count()]];

@@ -193,7 +193,40 @@ namespace WayBeyond.UX.Services
             => new ConnectionInfo(remote.Host,(int)remote.Port,remote.UserName,
                 new PasswordAuthenticationMethod(remote.UserName,remote.Password));
 
-        
+        public async Task<string[]> GetNewFiles(string writeFolder)
+        {
+            string[] files = new string[2];
+            var folderPath = await _db.GetFileLocationsByNameAsync(LocationName.TexasTechMonthlyInput);
+            string activeWC = $"TT_ACTIVE_INV_new_{DateTime.Now.Year}-{DateTime.Now:MM}-01";
+            string inactiveWC = $"TT_CANCELLED_PIF_{DateTime.Now.Year}-{DateTime.Now:MM}-01";
+
+            foreach (var file in folderPath)
+            {
+                using (SftpClient client = new SftpClient(GetConnectionInfo(file.RemoteConnection)))
+                {
+                    client.Connect();
+                    int i = 0;
+                    var fileList = client.ListDirectory(file.Path).Where(f => f.LastWriteTime.Month == DateTime.Now.Month && f.LastWriteTime.Year == DateTime.Now.Year && f.Name.StartsWith("TT")).ToList();
+                    foreach (var item in fileList)
+                    {
+                        if (item.Name.Contains(activeWC) || item.Name.Contains(inactiveWC))
+                        {
+                            var pathLocation = $"{writeFolder}{Path.GetFileName(item.FullName).Replace(":", "")}";
+                            using (Stream stream = System.IO.File.OpenWrite(pathLocation))
+                            {
+                                client.DownloadFile(item.FullName, stream);
+                                files[i] = Path.GetFileName(item.FullName).Replace(":", "");
+                                i++;
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            return files;
+        }
+
+
 
 
 

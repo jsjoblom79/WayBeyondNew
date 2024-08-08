@@ -19,7 +19,7 @@ namespace WayBeyond.Data.Models
                 {
                     if (MedicalRecordNumber != null && InvoiceNumber != null)
                     {
-                        return $"{MedicalRecordNumber}\\{InvoiceNumber}";
+                        return $"{MedicalRecordNumber}/{InvoiceNumber}";
                     }
                     else { return string.Empty; }
                 }
@@ -135,7 +135,8 @@ namespace WayBeyond.Data.Models
         public string? PatientAddress { get; set; }
         public string? PatientCity { get; set; }
         public string? PatientState { get; set; }
-        public string? PatientCityState { get => $"{PatientCity} {PatientState}"; }
+        private string? _patientCityState;
+        public string? PatientCityState { get => $"{PatientCity} {PatientState}"; set =>  _patientCityState = value;  }
         public string? AccountFor { get; set; }
         public string? ComakerLastName { get; set; }
         public string? ComakerFirstName { get; set; }
@@ -190,11 +191,26 @@ namespace WayBeyond.Data.Models
         }
         public string? DebtorStateZip
         {
-            get { return $"{DebtorState} {DebtorZip.Substring(0,5)}"; }
+            get
+            {
+                var result = string.Empty;
+                if (!string.IsNullOrEmpty(DebtorState) || !string.IsNullOrEmpty(DebtorZip) && DebtorZip.Length >= 5)
+                {
+                    result = $"{DebtorState} {DebtorZip.Substring(0, 5)}";
+                }
+                else
+                {
+                    result = $"{DebtorState} {DebtorZip}";
+                }
+
+                return result;
+            }
         }
         public string? Location { get; set; }
         public string? PatientEmpPhone { get; set; }
         public string? RGHRecordStatus { get; set; }
         public bool? IsMedicare { get; set; } = false;
+
+        public Client? Client { get; set; }// This is used for Epic Meditech Clients.
     }
 }

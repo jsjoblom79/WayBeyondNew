@@ -16,6 +16,8 @@ namespace WayBeyond.Data.Models
         RemoteArchive,
         Drop,
         ClientLoadFile,
-        EpicPlacementOutput
+        EpicPlacementOutput,
+        TexasTechMonthlyInput,
+        TexasTechMonthlyOutput
     }
 }

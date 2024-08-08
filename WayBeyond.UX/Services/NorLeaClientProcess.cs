@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using WayBeyond.Data.Models;
+using Excel = Microsoft.Office.Interop.Excel;
 
 
 namespace WayBeyond.UX.Services
@@ -13,13 +15,24 @@ namespace WayBeyond.UX.Services
         private IBeyondRepository _db;
         private ITransfer _transfer;
         private DropFileWrite _dropFileWrite;
+        private const string UpdateFileName = "UPDATE_NOR_LEA_";
+        private const string DeleteFileName = "DELETE_NOR_LEA_";
+        private DropFormat _dropFormat;
+        private Excel.Application _xlApp;
+        private Excel.Workbook _xlWrkBk;
+        private Excel.Workbooks _xlWrkBks;
+        private Excel.Worksheet _xlWrkSht;
+
         public NorLeaClientProcess(IBeyondRepository db, ITransfer transfer)
         {
             _db = db;
 
             _transfer = transfer;
             _dropFileWrite = new(db);//, transfer);
-
+            _dropFormat = _db.GetDropFormatByIdAsync(26).Result;
+            _xlApp = new Excel.Application();
+            _xlApp.DisplayAlerts = false;
+            _xlApp.Visible = true;
         }
         public event Action<string> ProcessUpdates = delegate { };
 
@@ -33,7 +46,7 @@ namespace WayBeyond.UX.Services
             return await _db.GetCurrentBatch();
         }
 
-        public async Task<bool> ProcessEpicClientAsync(FileObject file, Client client)
+        public async Task<bool> ProcessEpicClientAsync(FileObject file, Client[] client)
         {
             //Download the file to process.
             var dlFile = await _transfer.DownloadFileAsync(file);
@@ -43,26 +56,90 @@ namespace WayBeyond.UX.Services
             switch (parts[5].ToLower())
             {
                 case "inventory":
-
-                    break;
+                    await _transfer.ArchiveFileAsync(dlFile);
+                    return await _transfer.ArchiveFileAsync(file);
                 case "update":
-                    break;
-                case "withdrawl":
-                    break;
+                    var updateDbtr = ProcessAssignmentFile(dlFile);
+                    WriteAdditionalFile(updateDbtr, UpdateFileName);
+                    CloseExcel();
+                    await _transfer.ArchiveFileAsync(dlFile);
+                    return await _transfer.ArchiveFileAsync(file);
+
+                case "withdrawal":
+                    var withdrawDbtr = ProcessAssignmentFile(dlFile);
+                    WriteAdditionalFile(withdrawDbtr, DeleteFileName);
+                    CloseExcel();
+                    await _transfer.ArchiveFileAsync(dlFile);
+                    return await _transfer.ArchiveFileAsync(file);
                 case "assignement":
                     var debtors = ProcessAssignmentFile(dlFile);
                     var batch = await _db.GetCurrentBatch();
-                    await WriteDropFileAsync(client,debtors,batch);
-                    return await CreateClientLoadAsync(client,debtors,batch, dlFile);
+                    // This step writes the drop files and adds the loads to the db.
+                    await WriteDropFileAsync(null,debtors,batch,dlFile);
+                    //Archive Files
+                    await _transfer.ArchiveFileAsync(dlFile);
+                    return await _transfer.ArchiveFileAsync(file);
                 default:
                     return false;
             }
-            return false;
+            
+        }
+        private void CloseExcel()
+        {
+            _xlWrkSht = null;
+            _xlWrkBk.Close();
+            Marshal.FinalReleaseComObject(_xlWrkBk);
+            _xlWrkBk = null;
+            _xlWrkBks.Close();
+            Marshal.FinalReleaseComObject(_xlWrkBks);
+            _xlWrkBks = null;
+            _xlApp.Quit();
+            Marshal.FinalReleaseComObject(_xlApp);
+            _xlApp = null;
+        }
+        private async void WriteAdditionalFile(List<Debtor> updateDbtr, string updateFileName)
+        {
+            _xlWrkBks = _xlApp.Workbooks;
+            _xlWrkBk = _xlApp.Workbooks.Add();
+            _xlWrkSht = _xlWrkBk.Worksheets["Sheet1"];
+
+            var row = 1;
+            var col = 1;
+            foreach (var detail in _dropFormat.DropFormatDetails) 
+            {
+                _xlWrkSht.Cells[row, col] = detail.Field;
+                col++;
+            }
+            row = 2;
+            foreach(var record in updateDbtr)
+            {
+                col = 1;
+                foreach(var detail in _dropFormat.DropFormatDetails)
+                {
+                    _xlWrkSht.Cells[row, col] = record.GetType().GetProperty(detail.Field).GetValue(record);
+                    col++;
+                }
+                row++;
+            }
+
+            var output = await _db.GetSingleFileLocationByNameAsync(LocationName.EpicPlacementOutput);
+            var filename = $"{output.Path}{updateFileName}{DateTime.Now:yyyyMMdd-HHmmss}.xlsx";
+            _xlWrkBk.SaveAs(filename);
         }
 
-        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
+        public async Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
-            return Task.FromResult(_dropFileWrite.WriteDropFile(client,debtors,batch));
+            //group debtors by client
+            var groupedByClients = debtors.GroupBy(d => d.Client).ToDictionary(c => c.Key, c => c.ToList());
+            var result = false;
+            foreach (var group in groupedByClients)
+            {
+                if (_dropFileWrite.WriteDropFile(group.Key, group.Value, batch))
+                {
+                    result = await _dropFileWrite.CreateClientLoad(group.Key, group.Value, batch, file);
+                }
+            }
+            return result;
         }
 
 
@@ -93,7 +170,7 @@ namespace WayBeyond.UX.Services
                 PatientsSSN = fields[7],
                 PatientsDOB = fields[8].ToDateTime(),
                 DateOfService = fields[14].ToDateTime(),
-                ClientName = DetermineClient(fields[16], fields[69].ToPayType()),
+                Client = _db.GetClientByClientId((long)DetermineClient(fields[16], fields[69].ToPayType())),
                 PatientsPhone = fields[23],
                 DebtorEmail = fields[25],
                 PatientMiscData1 = fields[33],
@@ -149,9 +226,15 @@ namespace WayBeyond.UX.Services
                 _ => ClientId.UNIDENTIFIED,
             };
         }
+
+        public Task<bool> ProcessEpicClientAsync(FileObject file, Client? client)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
 
     }
    
+
 }

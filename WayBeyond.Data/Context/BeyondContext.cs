@@ -38,6 +38,20 @@ public partial class BeyondContext : DbContext
 
     public virtual DbSet<Setting> Settings { get; set; }
 
+    public virtual DbSet<Account> Accounts { get; set; }
+
+    public virtual DbSet<TexasDebtor> TexasDebtors { get; set; }
+
+    public virtual DbSet<Patient> Patients { get; set; }
+
+    public virtual DbSet<TUResult> TUResults { get; set; }
+
+    public virtual DbSet<ToTransunion> ToTransunions { get; set; }
+
+    public virtual DbSet<ToBadDebt> ToBadDebts { get; set; }
+    public virtual DbSet<ToCharity> ToCharities { get; set; }
+    public virtual DbSet<ToInventory> ToInventories { get; set; }
+    public virtual DbSet<ToCancel> ToCancels { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(@"DataSource=\\nmeaf.org\files\Shares\Justin\BACKUP 04222024\Databases\WayBeyond.db;Password=CPAEe9EJ8NMQCKho");
@@ -123,6 +137,59 @@ public partial class BeyondContext : DbContext
         {
             entity.HasIndex(e => e.Id, "IX_Settings_Id").IsUnique();
         });
+
+        modelBuilder.Entity<TUResult>(entity =>
+        {
+            entity.HasKey(e => e.MRN);
+            entity.ToTable("TUResult");
+        });
+
+
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.HasKey(e => e.ClientDebtorNumber);
+
+            entity.ToTable("Account");
+
+            entity.Property(e => e.Inv).HasColumnName("INV");
+        });
+
+        modelBuilder.Entity<TexasDebtor>(entity =>
+        {
+            entity.HasKey(e => e.Mrn);
+
+            entity.ToTable("TexasDebtor");
+
+            entity.Property(e => e.Dob).HasColumnName("DOB");
+            entity.Property(e => e.Ssn).HasColumnName("SSN");
+        });
+
+        modelBuilder.Entity<Patient>(entity =>
+        {
+            entity.HasKey(e => e.Mrn);
+
+            entity.ToTable("Patient");
+
+            entity.Property(e => e.Dob).HasColumnName("DOB");
+            entity.Property(e => e.Ssn).HasColumnName("SSN");
+            entity.Property(e => e.State).HasColumnName("STATE");
+        });
+
+        //Table not in db
+        modelBuilder.Entity<ToTransunion>(entity =>
+        {
+            entity.HasNoKey();
+        });
+
+        modelBuilder.Entity<ToPIF>(entity =>
+        {
+            entity.HasNoKey();
+        });
+
+        modelBuilder.Entity<ToBadDebt>(entity => { entity.HasNoKey(); });
+        modelBuilder.Entity<ToCharity>(entity => { entity.HasNoKey(); });
+        modelBuilder.Entity<ToInventory>(entity => { entity.HasNoKey(); });
+        modelBuilder.Entity<ToCancel>(entity => { entity.HasNoKey(); });
 
         OnModelCreatingPartial(modelBuilder);
     }

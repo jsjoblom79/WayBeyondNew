@@ -26,6 +26,7 @@ public partial class ClientLoad
     public long? DropNumber { get; set; }
 
     public long? ProcessedFileBatchId { get; set; }
+    public long? EmailCount { get; set; }
 
     public virtual ProcessedFileBatch? ProcessedFileBatch { get; set; }
 }

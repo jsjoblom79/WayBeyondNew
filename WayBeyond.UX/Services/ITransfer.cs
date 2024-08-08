@@ -14,5 +14,8 @@ namespace WayBeyond.UX.Services
         Task<bool> ArchiveFileAsync(FileObject path);
         Task<bool> UploadFile(FileObject path);
         Task<bool> DeleteFileAsync(FileObject path);
+
+        // TexasTech Reporting Specific Tasks
+        Task<string[]> GetNewFiles(string writeFolder);
     }
 }
