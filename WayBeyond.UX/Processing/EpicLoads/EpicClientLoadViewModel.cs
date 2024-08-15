@@ -70,11 +70,13 @@ namespace WayBeyond.UX.Processing.EpicLoads
                 if (file.FullPath.ToLower().Contains("rghosp"))
                 {
                     IEpicClientProcess proc = new RghClientProcess(_db, _transfer);
-                    isRghComplete = await proc.ProcessEpicClientAsync(file, new[] {new Client() });
+                    isRghComplete = await proc.ProcessEpicClientAsync(file, new Client() );
                     Completed($"Processing File: {file.FileName}");
                 }
                 if (file.FullPath.ToLower().Contains("anesphesia"))
                 {
+                    IEpicClientProcess proc = new AanmaClientProcess(_db, _transfer);
+                    isAANMComplete = await proc.ProcessEpicClientAsync(file, new Client());
                     Completed($"Processing File: {file.FileName}");
                 }
                 if (file.FullPath.ToLower().Contains("faithcommunity"))

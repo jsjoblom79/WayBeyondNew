@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,11 @@ namespace WayBeyond.UX.Services
             double.TryParse(text, out var result);
             return result;
         }
-        
+        public static double ToDoubleNoDecimal(this string text)
+        {
+            double.TryParse(text, out double number);
+            return number / 100;
+        }
         public static DateTime? ToDateTime(this string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -35,13 +40,31 @@ namespace WayBeyond.UX.Services
         }
         public static DateTime? ToDateTimeYMD(this string text)
         {
+            var result = 0;
             if (!string.IsNullOrEmpty(text))
-            {
-                int.TryParse(text.Substring(0, 4), out int year);
-                int.TryParse(text.Substring(4, 2), out int month);
-                int.TryParse(text.Substring(6, 2), out int day);
-                return new DateTime(year, month, day);
-            }
+                if(text.Length>6)
+                {
+                    int.TryParse(text.Substring(0, 4), out int year);
+                    int.TryParse(text.Substring(4, 2), out int month);
+                    int.TryParse(text.Substring(6, 2), out int day);
+                    return new DateTime(year, month, day);
+                } else if (text.Length < 7)
+                {
+                    int.TryParse(text.Substring(0, 2), out int month);
+                    int.TryParse(text.Substring(2, 2), out int day);
+                    int.TryParse(text.Substring(4, 2), out int year);
+
+                    var currentyear = DateTime.Now.AddYears(-2000).Year;
+                    if(year >= 0 && year <= currentyear)
+                    {
+                        result = 2000 + year;
+                    }
+                    else
+                    {
+                        result = 1900 + year;
+                    }
+                    return new DateTime(result, month, day);
+                }
             return null;
            
 
@@ -49,6 +72,9 @@ namespace WayBeyond.UX.Services
         }
         public static DateTime? ToDateTimeMDY(this string text)
         {
+            if(string.IsNullOrEmpty(text)) 
+                return null;
+
             if(text.Length > 6)
             {
                 int.TryParse(text.Substring(0, 2), out var month);
@@ -56,6 +82,22 @@ namespace WayBeyond.UX.Services
                 int.TryParse(text.Substring(4, 4), out var year);
                 DateTime.TryParse($"{month}/{day}/{year}", out DateTime result);
                 return result;
+            }
+            else if (text.Length < 7)
+            {
+                int.TryParse(text.Substring(0, 2), out var month);
+                int.TryParse(text.Substring(2, 2), out var day);
+                int.TryParse(text.Substring(4, 2), out var year);
+
+                if(year >=0 && year <= DateTime.Now.Year - 2000)
+                {
+                    year += 2000;
+                }
+                else
+                {
+                    year += 1900;
+                }
+                return new DateTime(year, month, day);
             }
             return null;
         }
@@ -124,15 +166,36 @@ namespace WayBeyond.UX.Services
 
         public static string? ToFirstMiddleLast(this string text)
         {
+            
             if (text.Contains(','))
             {
                 var data = text.Split(',');
-                return data[1];
+                switch (data.Count())
+                {
+                    case 1:
+                    case 2:
+                        return data[1];
+                    case 3:
+                        return $"{data[1]} {data[2]}";
+                    default:
+                        break;
+                }
+                return null;
             }
             else
             {
                 var data = text.Split(' ');
-                return data[1];
+                switch (data.Count())
+                {
+                    case 1:
+                    case 2:
+                        return data[1];
+                    case 3:
+                        return $"{data[1]} {data[2]}";
+                    default:
+                        break;
+                }
+                return null;
             }
         }
         public static PayType? ToPayType(this string text)

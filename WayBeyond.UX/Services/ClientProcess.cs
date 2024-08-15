@@ -95,6 +95,20 @@ namespace WayBeyond.UX.Services
             
             return batch;
         }
-        
+
+        public Task<bool> ProcessEpicClientAsync(FileObject file, Client[]? client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ProcessEpicClientAsync(FileObject file, Client? client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

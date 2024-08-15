@@ -88,7 +88,7 @@ namespace WayBeyond.UX.Services
                                         }
                                         else
                                         {
-                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).ToCleanString());
+                                            debtor.GetType().GetProperty(detail.Field).SetValue(debtor, ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text));
                                         }
 
                                     }

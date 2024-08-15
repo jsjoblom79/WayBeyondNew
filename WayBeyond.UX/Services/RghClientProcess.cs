@@ -362,6 +362,16 @@ namespace WayBeyond.UX.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<bool> ProcessClientFile(FileObject file, Client client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class RghDeleteRec

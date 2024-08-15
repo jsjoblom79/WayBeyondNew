@@ -212,5 +212,12 @@ namespace WayBeyond.Data.Models
         public bool? IsMedicare { get; set; } = false;
 
         public Client? Client { get; set; }// This is used for Epic Meditech Clients.
+
+        public virtual double GetAmountReferred() => AmountReferred;
+
+        public virtual DateTime? GetDateOfService() => DateOfService;
+        public virtual string? GetPatientMiscData1() => PatientMiscData1;
+        public virtual string? GetPatientMiscData2() => PatientMiscData2;
+        public virtual string? GetInsuranceName() => InsuranceName;
     }
 }

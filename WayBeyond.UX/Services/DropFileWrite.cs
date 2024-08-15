@@ -39,15 +39,50 @@ namespace WayBeyond.UX.Services
                         switch (detail.FieldType)
                         {
                             case "DATE":
-                                if (debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
-                                    stringBuilder.Append($"{((DateTime)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):MM/dd/yy}");
+                                if (debtor.GetDateOfService() != null)
+                                {
+                                    if (detail.Field.Equals("DateOfService"))
+                                    {
+                                        stringBuilder.Append($"{(debtor.GetDateOfService()):MM/dd/yy}");
+                                    }
+                                    else
+                                    {
+                                        stringBuilder.Append($"{((DateTime)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):MM/dd/yy}");
+                                    }
+                                    
+                                }
+                                    
                                 break;
                             case "CURRENCY":
                                 if (debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
-                                    stringBuilder.Append($"{((double)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):####.00}");
+                                {
+                                    if (detail.Field.Equals("AmountReferred"))
+                                    {
+                                        stringBuilder.Append($"{(debtor.GetAmountReferred()):####.00}");
+                                    }
+                                    else
+                                    {
+                                        stringBuilder.Append($"{((double)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):####.00}");
+                                    }
+                                }
+                                    
                                 break;
                             default:
-                                stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
+                                switch (detail.Field)
+                                {
+                                    case "PatientMiscData1":
+                                        stringBuilder.Append(debtor.GetPatientMiscData1());
+                                        break;
+                                    case "PatientMiscData2":
+                                        stringBuilder.Append(debtor.GetPatientMiscData2());
+                                        break;
+                                    case "InsuranceName":
+                                        stringBuilder.Append(debtor.GetInsuranceName());
+                                        break;
+                                    default:
+                                        stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor)); 
+                                        break;
+                                }
                                 break;
                         }
                         //stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
@@ -88,7 +123,7 @@ namespace WayBeyond.UX.Services
                 DateOnLoadFile = file.CreateDate,
                 DropNumber = client.DropNumber,
                 ProcessedFileBatchId = batch.Id,
-                EmailCount = debtors.Where(d => d.DebtorEmail !=null).Count()
+                EmailCount = debtors.Select(d=>d.DebtorEmail).Where(d => d.Length > 0).Count()
             };
 
             if (await _db.AddClientLoadAsync(load) > 0)

@@ -165,30 +165,30 @@ namespace WayBeyond.UX.Services
             return new Debtor
             {
                 ClientDebtorNumber = fields[1],
-                PatientsFirstName = fields[6],
-                PatientsLastName = fields[6],
+                PatientsFirstName = fields[6].ToFirstMiddleLast(),
+                PatientsLastName = fields[6].ToLastNameFirst(),
                 PatientsSSN = fields[7],
-                PatientsDOB = fields[8].ToDateTime(),
-                DateOfService = fields[14].ToDateTime(),
+                PatientsDOB = fields[8].ToDateTimeYMD(),
+                DateOfService = fields[14].ToDateTimeYMD(),
                 Client = _db.GetClientByClientId((long)DetermineClient(fields[16], fields[69].ToPayType())),
                 PatientsPhone = fields[23],
                 DebtorEmail = fields[25],
-                PatientMiscData1 = fields[33],
+                PatientMiscData1 = fields[33].ToCleanString(),
                 AmountReferred = fields[72].ToDouble(),
                 InsuranceName = fields[76],
                 InsurancePolicyNumber = fields[89],
-                InsurancePhone = fields[99],
-                DebtorFirstMiddleName = fields[151],
-                DebtorLastName = fields[151],
-                DebtorSSN = fields[152],
-                DebtorDOB = fields[153].ToDateTime(),
+                InsurancePhone = fields[99].ToCleanString(),
+                DebtorFirstMiddleName = fields[151].ToFirstMiddleLast(),
+                DebtorLastName = fields[151].ToLastNameFirst(),
+                DebtorSSN = fields[152].ToCleanString(),
+                DebtorDOB = fields[153].ToDateTimeYMD(),
                 DebtorAddress1 = fields[155],
                 DebtorAddress2 = fields[156],
                 DebtorCity = fields[157],
                 DebtorState = fields[158],
                 DebtorZip = fields[159],
-                DebtorPhone = fields[161],
-                DebtorEmpPhone = fields[162],
+                DebtorPhone = fields[161].ToCleanString(),
+                DebtorEmpPhone = fields[162].ToCleanString(),
                 DebtorEmployerName = fields[164]
             };
         }
@@ -228,6 +228,16 @@ namespace WayBeyond.UX.Services
         }
 
         public Task<bool> ProcessEpicClientAsync(FileObject file, Client? client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ProcessClientFile(FileObject file, Client client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
             throw new NotImplementedException();
         }

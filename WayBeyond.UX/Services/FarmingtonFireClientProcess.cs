@@ -21,9 +21,9 @@ namespace WayBeyond.UX.Services
             _transfer = transfer;
             _dropFileWrite = new DropFileWrite(db);//, transfer);
         }
-        public Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
+        public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
-            return _dropFileWrite.CreateClientLoad(client, debtors, batch, file);
+            return await _dropFileWrite.CreateClientLoad(client, debtors, batch, file);
         }
 
         public Task<ProcessedFileBatch> GetBatchFileAsync()
@@ -120,12 +120,22 @@ namespace WayBeyond.UX.Services
             return results;
         }
 
-        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
+        public async Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
-            return Task.FromResult(_dropFileWrite.WriteDropFile(client, debtors, batch));
+            return await Task.FromResult(_dropFileWrite.WriteDropFile(client, debtors, batch));
         }
 
         public Task<bool> ProcessEpicClientAsync(FileObject file, Client[]? client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ProcessClientFile(FileObject file, Client client)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> WriteDropFileAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
             throw new NotImplementedException();
         }
