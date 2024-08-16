@@ -47,7 +47,9 @@ namespace WayBeyond.UX.Services
                                     }
                                     else
                                     {
-                                        stringBuilder.Append($"{((DateTime)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):MM/dd/yy}");
+                                        if(debtor.GetType().GetProperty(detail.Field).GetValue(debtor) != null)
+                                            stringBuilder.Append($"{((DateTime)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)):MM/dd/yy}");
+                                        stringBuilder.Append("");
                                     }
                                     
                                 }
@@ -79,8 +81,22 @@ namespace WayBeyond.UX.Services
                                     case "InsuranceName":
                                         stringBuilder.Append(debtor.GetInsuranceName());
                                         break;
+                                    case "DebtorEmpPhone":
+                                    case "PatientsSSN":
+                                    case "PatientsPhone":
+                                    case "InsurancePhone":
+                                    case "DebtorPhone":
+                                    case "DebtorSSN":
+                                    case "SpouseEmpPhone":
+                                    case "SpouseSSN":
+                                    case "ComakerPhone":
+                                    case "DebtorHomePhone":
+                                    case "PatientEmpPhone":
+                                    case "DebtorCell":
+                                        stringBuilder.Append($"{((string)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)).ToCleanString()}");
+                                        break;
                                     default:
-                                        stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor)); 
+                                        stringBuilder.Append(((string)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)).RemoveTabs()); 
                                         break;
                                 }
                                 break;
@@ -123,7 +139,7 @@ namespace WayBeyond.UX.Services
                 DateOnLoadFile = file.CreateDate,
                 DropNumber = client.DropNumber,
                 ProcessedFileBatchId = batch.Id,
-                EmailCount = debtors.Select(d=>d.DebtorEmail).Where(d => d.Length > 0).Count()
+                EmailCount = debtors.Where(d => !string.IsNullOrEmpty(d.DebtorEmail)).Count()
             };
 
             if (await _db.AddClientLoadAsync(load) > 0)

@@ -173,7 +173,7 @@ namespace WayBeyond.UX.Reporting
         {
             var location = await _db.GetFileLocationsByNameAsync(LocationName.ClientLoadFile);
             ExcelService excel = new ExcelService();
-            var filename = $"{location[0].Path}Test_Clients_Loaded_" + DateTime.Now.ToString("MMddyyyy");
+            var filename = $"{location[0].Path}Clients_Loaded_" + DateTime.Now.ToString("MMddyyyy");
             var excelResult = excel.WriteClientLoadFile(ClientLoads.ToList(),filename);
 
             if(await excelResult)

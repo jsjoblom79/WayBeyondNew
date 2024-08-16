@@ -209,14 +209,27 @@ namespace WayBeyond.UX.Services
             }
         }
 
+        public static string? RemoveTabs(this string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                return text.Replace("\t", "");
+            }
+            return null;
+        }
         public static string? ToCleanString(this string text)
         {
-            var dash = text.Contains('-') ? text.Replace("-", "").Trim() : text.Trim();
-            var lParen = dash.Contains('(') ? dash.Replace("(", "").Trim() : dash.Trim();
-            var rParen = lParen.Contains(')') ? lParen.Replace(")", "").Trim()   : lParen.Trim();
-            var tabs= rParen.Replace("\t", "").Trim();
-            var result = tabs.Replace(" ", "").Trim();
-            return result;
+            if (!string.IsNullOrEmpty(text))
+            {
+                var dash = text.Contains('-') ? text.Replace("-", "").Trim() : text.Trim();
+                var lParen = dash.Contains('(') ? dash.Replace("(", "").Trim() : dash.Trim();
+                var rParen = lParen.Contains(')') ? lParen.Replace(")", "").Trim() : lParen.Trim();
+                var tabs = rParen.Replace("\t", "").Trim();
+                var result = tabs.Replace(" ", "").Trim();
+                return result;
+            }
+
+            return null;
         }
 
         #region TexasTech Methods
