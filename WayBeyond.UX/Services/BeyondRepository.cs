@@ -13,7 +13,7 @@ namespace WayBeyond.UX.Services
 
     public class BeyondRepository : IBeyondRepository
     {
-        private BeyondContext _db = new BeyondContext();
+        private BeyondContext _db = new BeyondContext(ConfigurationHandler.GetConfigurationData("WayBeyond"));
 
         #region RemoteConnections
         public Task<int> AddRemoteConnectionAsync(RemoteConnection connection)

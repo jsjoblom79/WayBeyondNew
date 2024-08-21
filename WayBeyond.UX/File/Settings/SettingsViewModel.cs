@@ -20,12 +20,18 @@ namespace WayBeyond.UX.File.Settings
             AddCommand = new RelayCommand(OnAddCommand);
             EditCommand = new RelayCommand<Setting>(OnEditCommand);
             DeleteCommand = new RelayCommand<Setting>(OnDeleteCommand);
-
-
-
+            UpdateConfigStringCommand = new RelayCommand(OnUpdateConfigString);
         }
 
         #region Properties
+
+        private string _connectString;
+
+        public string ConnectString
+        {
+            get { return _connectString; }
+            set { SetProperty(ref _connectString, value); }
+        }
 
         private string _searchTerm;
 
@@ -55,6 +61,7 @@ namespace WayBeyond.UX.File.Settings
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand<Setting> EditCommand { get; private set; }
         public RelayCommand<Setting> DeleteCommand { get; private set; }
+        public RelayCommand UpdateConfigStringCommand { get; private set; }
 
         public event Action<Setting, bool> AddEditSettingRequest;
         public event Action<string> Completed;
@@ -63,8 +70,15 @@ namespace WayBeyond.UX.File.Settings
         {
             _allSettings = await _db.GetAllSettingsAsync();
             Settings = new ObservableCollection<Setting>(_allSettings);
+            //ConfigurationHandler config = new ConfigurationHandler();
+            ConnectString = ConfigurationHandler.GetConfigurationData("WayBeyond");
         }
 
+        private async void OnUpdateConfigString()
+        {
+            var config = new ConfigurationHandler();
+            config.AddConfigurationData("WayBeyond",ConnectString);
+        }
         private async void FilterSettings(string searchTerm)
         {
             if (string.IsNullOrWhiteSpace(searchTerm))

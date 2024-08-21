@@ -13,6 +13,13 @@
         </b:EventTrigger>
     </b:Interaction.Triggers>
     <Grid>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Content="Connection String:"/>
+            <TextBox Text="{Binding ConnectString}" Width="300" Height="22" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
+            <Button Content="Update" Command="{Binding UpdateConfigStringCommand}" Width="75"/>
+        </StackPanel>
+    </Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -66,5 +73,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-    </Grid>
+    </Grid>-->
 </UserControl>

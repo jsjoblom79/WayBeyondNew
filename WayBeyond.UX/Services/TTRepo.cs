@@ -14,7 +14,7 @@ namespace WayBeyond.UX.Services
         private BeyondContext _context;
         public TTRepo()
         {
-            _context = new BeyondContext();
+            _context = new BeyondContext(ConfigurationHandler.GetConfigurationData("WayBeyond"));
         }
         public void CreateAccount(Account account)
         {
