@@ -59,7 +59,15 @@ namespace WayBeyond.UX.Services
             _xlWrkSht.Columns.AutoFit();
             //CleanUpEmptyRows(client.FileFormat.ColumnForClientDebtorNumber);
             var rows = _xlWrkSht.UsedRange.Rows.Count;
-
+            try
+            {
+                if(client.FileFormat == null) throw new NullReferenceException("File Format is Missing");
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show(ex.Message, "File Format Not Set", MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
+            }
             for (int? row = client.FileFormat.FileStartLine; row < rows + 1; row++)
             {
                 if (!IsRowEmpty(_xlWrkSht, row, client.FileFormat.ColumnForClientDebtorNumber))
@@ -170,13 +178,16 @@ namespace WayBeyond.UX.Services
             {
                 case SpecialCase.Split2Comma:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
-
                     var split2 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(',');
-                    return split2[1];
+                    return split2[1].Trim();
                 case SpecialCase.Split1Comma:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var split1 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(',');
-                    return split1[0];
+                    return split1[0].Trim();
+                case SpecialCase.Split3Comma:
+                    if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
+                    var split3 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(',');
+                    return split3[2].Trim();
                 case SpecialCase.Split1:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var sp1 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(" ");
@@ -185,6 +196,10 @@ namespace WayBeyond.UX.Services
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var sp2 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(" ");
                     return sp2[1].ToCleanString();
+                    case SpecialCase.Split3:
+                    if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
+                    var sp3 = ((string)_xlWrkSht.Cells[row,detail.FileColumn].Text).Split(",");
+                    return sp3[2].ToCleanString();
                 default:
                     return null;
             }

@@ -10,8 +10,8 @@
              d:DesignHeight="450" d:DesignWidth="800" Background="white">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="50*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
@@ -125,6 +125,11 @@
                 <ComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding ColumnTypes}" SelectedItem="{Binding EditableFileFormatDetail.ColumnType}" Width="150" HorizontalAlignment="Left" Margin="3"/>
                 <ComboBox ItemsSource="{e:EnumCollection EnumType=model:SpecialCase}" Grid.Column="1" Grid.Row="4" SelectedItem="{Binding EditableFileFormatDetail.SpecialCase}" Width="120" HorizontalAlignment="Left" Margin="3"/>
             </Grid>
+            <StackPanel Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                <Label Content="**Note on special cases." FontWeight="Bold" HorizontalAlignment="Center"/>
+                <TextBlock Text="Split# vs. Split#Comma - These are splits but one splits the data by spaces and the other splits the data by comma." Width="Auto" TextWrapping="Wrap" Height="50"/>
+                
+            </StackPanel>
             <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
                 <Button Content="Add File Format Detail" Padding="10,0,10,0" Margin="3" Width="Auto" Command="{Binding AddDetailCommand}" Height="23"/>
                 <Button Content="Clear Detail" Padding="3,0,3,0" Margin="3" Width="75" Height="23" Command="{Binding ClearDetailCommand}"/>

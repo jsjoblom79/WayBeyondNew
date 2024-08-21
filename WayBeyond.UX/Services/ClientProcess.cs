@@ -7,6 +7,7 @@ using WayBeyond.Data.Models;
 using System.IO;
 using System.Windows;
 using Serilog;
+using SQLitePCL;
 
 
 namespace WayBeyond.UX.Services
@@ -41,8 +42,17 @@ namespace WayBeyond.UX.Services
             ExcelService excelService = new ExcelService();
             excelService.Update += ProcessUpdates;
 
-            //Read debtor File create list of debtors.
-            var debtors = await excelService.ReadClientFile(client, downloadedFile);
+            List<Debtor> debtors;
+            //Read debtor File create list of debtors
+            try
+            {
+                debtors = await excelService.ReadClientFile(client, downloadedFile);
+            }
+            catch (NullReferenceException ex)
+            {
+                return false;
+            }
+            
 
             //WriteDrop file
             if(await WriteDropFileAsync(client, debtors , batch))

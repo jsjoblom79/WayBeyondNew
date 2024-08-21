@@ -16,9 +16,10 @@ namespace WayBeyond.UX.Services
         {
             if (text.Contains("$"))
             {
-                text = text.Replace("$", "");
+                text = text.Replace("$", "").Replace("(","").Replace(")","");
             }
             double.TryParse(text, out var result);
+            if(result<0) { result = result * -1; }
             return result;
         }
         public static double ToDoubleNoDecimal(this string text)

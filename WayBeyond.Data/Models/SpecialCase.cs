@@ -10,7 +10,8 @@ namespace WayBeyond.Data.Models
     {
         Split1,
         Split1Comma,
-        Split2Comma, 
+        Split2Comma,
+        Split3Comma,
         Split2,
         Split3,
         Split4,

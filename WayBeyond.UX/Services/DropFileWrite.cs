@@ -104,6 +104,7 @@ namespace WayBeyond.UX.Services
                         //stringBuilder.Append(debtor.GetType().GetProperty(detail.Field).GetValue(debtor));
                         stringBuilder.Append('\t');
                     }
+                    stringBuilder.Length--;
                     stringBuilder.AppendLine();
                 }
                 var path = _db.GetFileLocationsByNameAsync(LocationName.Prepared);

@@ -196,11 +196,18 @@ namespace WayBeyond.Data.Models
                 var result = string.Empty;
                 if (!string.IsNullOrEmpty(DebtorState) || !string.IsNullOrEmpty(DebtorZip) && DebtorZip.Length >= 5)
                 {
-                    result = $"{DebtorState} {DebtorZip.Substring(0, 5)}";
+                    result = $"{DebtorState.Replace(" ","").Trim()} {DebtorZip.Substring(0, 5).Replace(" ","").Trim()}";
                 }
                 else
                 {
-                    result = $"{DebtorState} {DebtorZip}";
+                    if(!string.IsNullOrEmpty(DebtorZip) || !string.IsNullOrEmpty(DebtorState))
+                    {
+                        result = $"{DebtorState.Trim()} {DebtorZip.Trim()}";
+                    }
+                    else
+                    {
+                        result = $"{DebtorState} {DebtorZip}";
+                    }
                 }
 
                 return result;

@@ -8,6 +8,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WayBeyond.Data.Models;
 
 namespace WayBeyond.UX.Services
@@ -75,11 +76,20 @@ namespace WayBeyond.UX.Services
             }
             else
             {
-                var aDirectory = $"{Path.GetDirectoryName(path.FullPath)}\\Archive\\{path.FileName}";
-                if(!System.IO.File.Exists(aDirectory))
-                    System.IO.File.Move(path.FullPath, aDirectory);
+                try
+                {
+                    var aDirectory = $"{Path.GetDirectoryName(path.FullPath)}\\Archive\\{path.FileName}";
+                    if (!System.IO.File.Exists(aDirectory))
+                        System.IO.File.Move(path.FullPath, aDirectory);
 
-                return Task.FromResult(true);
+                    return Task.FromResult(true);
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show(ex.Message,"IO Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return Task.FromResult(false);
+                }
+                
             }
         }
 
