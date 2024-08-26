@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WayBeyond.Data.Models;
 using WayBeyond.UX.Services;
+using Unity;
 using static System.Net.WebRequestMethods;
 
 namespace WayBeyond.UX.Reporting.TexasTech
@@ -15,13 +16,13 @@ namespace WayBeyond.UX.Reporting.TexasTech
         private IBeyondRepository _repo;
         private ITransfer _transfer;
         private TexasTechService _service;
-        public TexasTechViewModel(ITTRepo db, IBeyondRepository repo, ITransfer transfer)
+        public TexasTechViewModel(IBeyondRepository repo, ITransfer transfer)
         {
             _repo = repo;
             _transfer = transfer;
             Upload = new RelayCommand(OnUpload);
             Download = new RelayCommand(OnDownload);
-            _service = new TexasTechService(db);
+            _service = ContainerHelper.Container.Resolve<TexasTechService>();
             _transfer = transfer;
         }
 

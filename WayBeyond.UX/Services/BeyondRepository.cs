@@ -2,6 +2,7 @@
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,11 +14,12 @@ namespace WayBeyond.UX.Services
 
     public class BeyondRepository : IBeyondRepository
     {
-        private BeyondContext _db = new BeyondContext(ConfigurationHandler.GetConfigurationData("WayBeyond"));
+        private BeyondContext _db = new BeyondContext(ConfigurationManager.ConnectionStrings["WayBeyond"].ConnectionString);
 
         #region RemoteConnections
         public Task<int> AddRemoteConnectionAsync(RemoteConnection connection)
         {
+            
             _db.RemoteConnections.Add(connection);
             Log.Information($"[ADD] RemoteConnection: {connection.Name}");
             return _db.SaveChangesAsync();

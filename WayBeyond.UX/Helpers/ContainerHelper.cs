@@ -28,8 +28,8 @@ namespace WayBeyond.UX
                 new ContainerControlledLifetimeManager()).
                 RegisterType<ITTRepo, TTRepo>(
                 new ContainerControlledLifetimeManager());
-            
-                
+
+
         }
 
         public static IUnityContainer Container { get { return _container; } }

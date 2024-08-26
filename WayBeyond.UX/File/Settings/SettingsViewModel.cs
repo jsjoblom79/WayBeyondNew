@@ -71,13 +71,13 @@ namespace WayBeyond.UX.File.Settings
             _allSettings = await _db.GetAllSettingsAsync();
             Settings = new ObservableCollection<Setting>(_allSettings);
             //ConfigurationHandler config = new ConfigurationHandler();
-            ConnectString = ConfigurationHandler.GetConfigurationData("WayBeyond");
+            //ConnectString = ConfigurationHandler.GetConfigurationData("WayBeyond");
         }
 
         private async void OnUpdateConfigString()
         {
-            var config = new ConfigurationHandler();
-            config.AddConfigurationData("WayBeyond",ConnectString);
+            //var config = new ConfigurationHandler();
+            //config.AddConfigurationData("WayBeyond",ConnectString);
         }
         private async void FilterSettings(string searchTerm)
         {

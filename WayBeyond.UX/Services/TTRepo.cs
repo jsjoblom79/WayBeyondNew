@@ -6,16 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using WayBeyond.Data.Models;
 using WayBeyond.Data.Context;
+using System.Configuration;
 
 namespace WayBeyond.UX.Services
 {
     public class TTRepo : ITTRepo
     {
-        private BeyondContext _context;
-        public TTRepo()
-        {
-            _context = new BeyondContext(ConfigurationHandler.GetConfigurationData("WayBeyond"));
-        }
+        private BeyondContext _context = new BeyondContext(ConfigurationManager.ConnectionStrings["WayBeyond"].ConnectionString);
+
         public void CreateAccount(Account account)
         {
             _context.Accounts.Add(account);

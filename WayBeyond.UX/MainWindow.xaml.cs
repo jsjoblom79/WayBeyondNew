@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WayBeyond.UX.Services;
 
 namespace WayBeyond.UX
 {
@@ -31,7 +32,9 @@ namespace WayBeyond.UX
                 .CreateLogger();
             InitializeComponent();
 
-            MainWindowViewModel.Exit += OnExit; 
+            MainWindowViewModel.Exit += OnExit;
+
+            ConfigurationEncryptionService.EncryptConfiguration();
         }
 
         private async void OnExit()

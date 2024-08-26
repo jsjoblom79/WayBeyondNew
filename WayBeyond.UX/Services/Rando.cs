@@ -10,7 +10,11 @@ namespace WayBeyond.UX.Services
 {
     public class Rando : IRando
     {
-        
+
+        public Rando()
+        {
+            
+        }
         public Task<List<string>> GetColumnTypesAsync()
         {
             return Task.FromResult(new List<string>

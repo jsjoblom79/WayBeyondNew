@@ -8,11 +8,11 @@ namespace WayBeyond.Data.Context;
 public partial class BeyondContext : DbContext
 {
     private string _connectString;
-    public BeyondContext(string connectString)
-    {
-        _connectString = connectString;
-    }
 
+    public BeyondContext(string connectionString)
+    {
+        _connectString = connectionString;
+    }
     public BeyondContext(DbContextOptions<BeyondContext> options)
         : base(options)
     {
@@ -57,7 +57,7 @@ public partial class BeyondContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(_connectString);
-        //optionsBuilder.UseSqlite(@"DataSource=\\nmeaf.org\files\Shares\Justin\BACKUP 04222024\Databases\WayBeyond.db;Password=CPAEe9EJ8NMQCKho");
+      //optionsBuilder.UseSqlite(@"DataSource=\\nmeaf.org\files\Shares\Justin\BACKUP 04222024\Databases\WayBeyond.db;Password=CPAEe9EJ8NMQCKho");
        //optionsBuilder.UseSqlite(@"DataSource=D:\Databases\WayBeyond.db;Password=CPAEe9EJ8NMQCKho");
 
     }
