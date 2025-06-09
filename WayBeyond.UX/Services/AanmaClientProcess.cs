@@ -187,7 +187,7 @@ namespace WayBeyond.UX.Services
         public List<Transaction>  Transactions { get; set; }
         //public new override double AmountReferred  = Math.Round(Transactions.Sum(t => t.Amount), 2);//{ get { Math.Round(Transactions.Sum(t => t.Amount), 2); } protected set; }
         public override double GetAmountReferred() => AmountReferred = Math.Round(Transactions.Sum(t => t.Amount),2);
-        public override DateTime? GetDateOfService() => DateOfService = Transactions.Select(t => t.ServiceDate).Max();
+        public override DateTime? GetDateOfService() => DateOfService = Transactions.Select(t => t.ServiceDate).Min();
         public override string? GetPatientMiscData1() => PatientMiscData1 = Transactions.GroupBy(t => t.FacilityDescription)
             .Select(t => t.First()).FirstOrDefault().FacilityDescription;
         public override string? GetPatientMiscData2() => PatientMiscData2 = Transactions.GroupBy(t => t.FacilityNumber)

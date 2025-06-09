@@ -57,8 +57,7 @@ public partial class BeyondContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(_connectString);
-      //optionsBuilder.UseSqlite(@"DataSource=\\nmeaf.org\files\Shares\Justin\BACKUP 04222024\Databases\WayBeyond.db;Password=CPAEe9EJ8NMQCKho");
-       //optionsBuilder.UseSqlite(@"DataSource=D:\Databases\WayBeyond.db;Password=CPAEe9EJ8NMQCKho");
+
 
     }
 
