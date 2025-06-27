@@ -61,7 +61,6 @@ namespace WayBeyond.UX.Processing.EpicLoads
             var isFaithComplete = false;
             foreach (var file in _epicFiles)
             {
-
                 if (file.FullPath.ToLower().Contains("norlea"))
                 {
                     IEpicClientProcess Proc = new NorLeaClientProcess(_db, _transfer);
@@ -83,12 +82,12 @@ namespace WayBeyond.UX.Processing.EpicLoads
                 {
                     Completed($"Processing File: {file.FileName}");
                 }
-                if (file.FullPath.ToLower().Contains("lovingtonfire"))
-                {
-                    IEpicClientProcess love = new FarmingtonFireClientProcess(_db,_transfer);
-                    isLovingtonComplete = await love.ProcessEpicClientAsync(file, await _db.GetClientByClientIdAsync(1338));
-                    Completed($"Processing File: {file.FileName}");
-                }
+                //if (file.FullPath.ToLower().Contains("lovingtonfire"))
+                //{
+                //    IEpicClientProcess love = new FarmingtonFireClientProcess(_db,_transfer);
+                //    isLovingtonComplete = await love.ProcessEpicClientAsync(file, await _db.GetClientByClientIdAsync(1338));
+                //    Completed($"Processing File: {file.FileName}");
+                //}
             }
         }
         #endregion

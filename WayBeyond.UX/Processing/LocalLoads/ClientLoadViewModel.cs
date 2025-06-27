@@ -146,12 +146,23 @@ namespace WayBeyond.UX.Processing.LocalLoads
             if (result == MessageBoxResult.OK)
             {
                 await Task.Run(() => Completed($"Processing File: {SelectedFile.FileName} for Client: {SelectedClient.ClientName}"));
-                if (await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient))
+                if (SelectedClient.UseAssembly == true)
                 {
+                    await ClientProcessLocator.LocateProcess(SelectedFile, SelectedClient);
                     OnClearSelections();
                     OnViewLoaded();
-                    await Task.Run(() => Completed("Process Completed."));
+                    await Task.Run(() => Completed("Processing Complete."));
                 }
+                else
+                {
+                    if (await _clientProcess.ProcessClientFile(SelectedFile, SelectedClient))
+                    {
+                        OnClearSelections();
+                        OnViewLoaded();
+                        await Task.Run(() => Completed("Process Completed."));
+                    }
+                }
+                
             } 
             else
             {

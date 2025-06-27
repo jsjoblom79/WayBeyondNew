@@ -16,6 +16,25 @@ namespace WayBeyond.Data.Models
         public RemoteConnection? RemoteConnection { get; set; }
 
         public int CompareTo(FileObject? other) => other.CreateDate.CompareTo(this.CreateDate);
+
+        private string? _altFileName = null;
+
+        public string AltFileName
+        {
+            get
+            {
+                if (_altFileName == null)
+                    return FileName;
+                else
+                {
+                    return _altFileName;
+                }
+            }
+            set
+            {
+                _altFileName = value;
+            }
+        }
     }
 
     public enum FileType

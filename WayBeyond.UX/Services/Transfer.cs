@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using WayBeyond.Data.Models;
@@ -30,7 +31,7 @@ namespace WayBeyond.UX.Services
             }
         }
 
-        public async Task<FileObject> DownloadFileAsync(FileObject file)
+        public async Task<FileObject> DownloadFileAsync(FileObject file, LocationName downloadLocation = LocationName.DownloadLocation)
         {
 
             using (SftpClient client = new SftpClient(GetConnectionInfo(file.RemoteConnection)))
@@ -39,13 +40,13 @@ namespace WayBeyond.UX.Services
                 if (client.IsConnected)
                 {
                     //Create a file stream to read the contents of the download file to.
-                    var location = await _db.GetFileLocationsByNameAsync(LocationName.DownloadLocation);
-                    using (Stream fileStream = System.IO.File.OpenWrite($@"{location[0].Path}{file.FileName}"))
+                    var location = await _db.GetFileLocationsByNameAsync(downloadLocation);
+                    using (Stream fileStream = System.IO.File.OpenWrite($@"{location[0].Path}{file.AltFileName}"))
                     {
                         await client.DownloadAsync(file.FullPath, fileStream);
                         return new FileObject
                         {
-                            FileName = file.FileName,
+                            FileName = file.AltFileName,
                             FullPath = $"{location[0].Path}{file.FileName}",
                             FileType = FileType.LOCAL,
                             CreateDate = file.CreateDate
@@ -234,6 +235,31 @@ namespace WayBeyond.UX.Services
                 }
             }
             return files;
+        }
+
+        public async Task GetExceptionFiles()
+        {
+            // This process will gather all the Exception Files for the day.
+            // Set the local file path for the files.
+            var local_path = await _db.GetFileLocationByNameAsync(LocationName.ExceptionFiles);
+            // Set the remote file path.;
+            var remote_path = await _db.GetFileLocationByNameAsync(LocationName.Drop);
+            // Get a list of the remote files 
+            var remote_files = await GetRemoteFiles(remote_path);
+            // Set the pattern for matching file names.
+            var file_name_pattern = @"^\d{1,4}\.dupbak$";
+            // Get only the files we want to download
+            var dl_files = remote_files.Where(f => Regex.IsMatch(f.FileName, file_name_pattern) & f.CreateDate >= DateTime.Now.Date).ToList();
+            // Download the files.
+            foreach(var file in dl_files)
+            {
+                // Create the alternate file name from the drop information.
+                long.TryParse(file.FileName.Substring(0, 4),out long dropId);
+                var drop = await _db.GetDropByDropIdAsync(dropId);
+                file.AltFileName = $"{Path.GetFileNameWithoutExtension(drop.DropName)}_dupbak_{DateTime.Now.ToString("yyyyMMdd-HHmmss")}.txt";
+                await DownloadFileAsync(file, LocationName.ExceptionFiles);
+            }
+
         }
 
 

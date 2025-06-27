@@ -53,6 +53,14 @@ namespace WayBeyond.UX.File.Maintenance
             set { SetProperty(ref _assemblyName, value); }
         }
 
+        private bool? _useAssebmly;
+
+        public bool? UseAssembly
+        {
+            get { return _useAssebmly; }
+            set { SetProperty(ref _useAssebmly, value); }
+        }
+
         private long? _dropFormatId;
 
         public long? DropFormatId

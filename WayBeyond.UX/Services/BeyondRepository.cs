@@ -301,6 +301,12 @@ namespace WayBeyond.UX.Services
             return client;
         }
 
+        public Task<DropFormat> GetDropByDropIdAsync(long? id)
+        {
+            DropFormat dropFormat = _db.DropFormats.Where(d => d.DropId == id).FirstOrDefault();
+            return Task.FromResult(dropFormat);
+        }
+
 
 
 

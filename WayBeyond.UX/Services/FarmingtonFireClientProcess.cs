@@ -14,12 +14,12 @@ namespace WayBeyond.UX.Services
         private IBeyondRepository _db;
         private ITransfer _transfer;
         private DropFileWrite _dropFileWrite;
-        public FarmingtonFireClientProcess(IBeyondRepository db, ITransfer transfer)
+        public FarmingtonFireClientProcess()
         {
-            _db = db;
+            _db = new BeyondRepository();
 
-            _transfer = transfer;
-            _dropFileWrite = new DropFileWrite(db);//, transfer);
+            _transfer = new Transfer();
+            _dropFileWrite = new DropFileWrite(_db);//, transfer);
         }
         public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
@@ -33,9 +33,13 @@ namespace WayBeyond.UX.Services
 
         public async Task<bool> ProcessEpicClientAsync(FileObject file, Client client)
         {
-            var localFile = await _transfer.DownloadFileAsync(file);
+            if (file == null)
+            {
+                file = await _transfer.DownloadFileAsync(file);
+            }
+            
             var batch = await _db.GetCurrentBatch();
-            var lines = System.IO.File.ReadAllLines(localFile.FullPath);
+            var lines = System.IO.File.ReadAllLines(file.FullPath);
             Debtor debtor = new ();
             List<Debtor> debtorList = new List<Debtor>();
             foreach (var line in lines)
@@ -65,8 +69,9 @@ namespace WayBeyond.UX.Services
                                 debtor.DebtorSSN = fields[11];
                                 debtor.DebtorEmployerName = fields[12];
                                 debtor.PatientsRelationship = fields[13];
-
+                                
                             }
+                            debtorList.Add(debtor);
                             break;
                         case "02":
                             if (debtor != null)
@@ -97,7 +102,7 @@ namespace WayBeyond.UX.Services
                         case "07":
                         case "08":
                         case "09":
-                            debtorList.Add(debtor);
+                            //debtorList.Add(debtor);
                             //debtor = null;
                             break;
                         default:
@@ -112,10 +117,10 @@ namespace WayBeyond.UX.Services
 
             await WriteDropFileAsync(client, debtorList, batch,null);
             
-            var results = await CreateClientLoadAsync(client, debtorList, batch, localFile);
+            var results = await CreateClientLoadAsync(client, debtorList, batch, file);
             //Archive Local and remote files
-            await _transfer.ArchiveFileAsync(localFile);
             await _transfer.ArchiveFileAsync(file);
+            //await _transfer.ArchiveFileAsync(file);
 
             return results;
         }

@@ -34,7 +34,7 @@ namespace WayBeyond.UX
 
             MainWindowViewModel.Exit += OnExit;
 
-            ConfigurationEncryptionService.EncryptConfiguration();
+           // ConfigurationEncryptionService.EncryptConfiguration();
         }
 
         private async void OnExit()

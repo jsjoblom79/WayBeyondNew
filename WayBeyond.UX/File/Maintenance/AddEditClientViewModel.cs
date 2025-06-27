@@ -89,6 +89,8 @@ namespace WayBeyond.UX.File.Maintenance
             editingClient.AssemblyName = editableClient.AssemblyName;
             editingClient.DropFormatId = editableClient.DropFormatId;
             editingClient.FileFormatId = editableClient.FileFormatId;
+            editingClient.UseAssembly = editableClient.UseAssembly;
+
             if (EditMode)
             {
                 await _db.UpdateObjectAsync(editingClient);
@@ -125,6 +127,8 @@ namespace WayBeyond.UX.File.Maintenance
                 editableClient.AssemblyName = editingClient.AssemblyName;
                 editableClient.DropFormatId = editingClient.DropFormatId;
                 editableClient.FileFormatId = editingClient.FileFormatId;
+                editableClient.UseAssembly = editingClient.UseAssembly;
+
                 if(_editingClient.FileFormatId != null)
                     editableClient.FileFormat = await _db.GetFileFormatByIdAsync(editingClient.FileFormatId);
                 if(_editingClient.DropFormatId != null)

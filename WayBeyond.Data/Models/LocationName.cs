@@ -18,6 +18,7 @@ namespace WayBeyond.Data.Models
         ClientLoadFile,
         EpicPlacementOutput,
         TexasTechMonthlyInput,
-        TexasTechMonthlyOutput
+        TexasTechMonthlyOutput,
+        ExceptionFiles
     }
 }

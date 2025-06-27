@@ -217,6 +217,8 @@ namespace WayBeyond.Data.Models
         public string? PatientEmpPhone { get; set; }
         public string? RGHRecordStatus { get; set; }
         public bool? IsMedicare { get; set; } = false;
+        public string? FacilityNumber { get; set; }
+        public string? FacilityDescription { get; set; }
 
         public Client? Client { get; set; }// This is used for Epic Meditech Clients.
 

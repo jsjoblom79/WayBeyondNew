@@ -23,6 +23,7 @@ namespace WayBeyond.UX.Reporting
             DeleteClientLoadCommand = new RelayCommand<ClientLoad>(OnDeleteClientLoadCommand);
             ClearClientLoads = new RelayCommand(OnClearClientLoads);
             CreateClientLoad = new RelayCommand(OnCreateClientLoad);
+            DownloadExceptionFile = new RelayCommand(OnDownloadExceptionFile);
         }
         #region Properties
 
@@ -74,7 +75,9 @@ namespace WayBeyond.UX.Reporting
 
         public RelayCommand ClearClientLoads { get; private set; }
         public RelayCommand CreateClientLoad { get; private set; }
+        public RelayCommand DownloadExceptionFile { get; private set; }
 
+         
         public event Action<string> StatusUpdate = delegate { };
 
         public async void OnViewLoaded()
@@ -93,7 +96,7 @@ namespace WayBeyond.UX.Reporting
                 {
                     _allBatches = allBatches.Result;
                     Batches = new ObservableCollection<ProcessedFileBatch?>(_allBatches);
-                    SelectedBatch = _allBatches.Where(b => b.UpdateDate == null).FirstOrDefault();
+                    SelectedBatch = _allBatches.LastOrDefault(b => b.UpdateDate == null);
                     if(SelectedBatch != null)
                     {
                         _currentClientLoads = SelectedBatch.ClientLoads.ToList();
@@ -184,9 +187,15 @@ namespace WayBeyond.UX.Reporting
                     StatusUpdate($"Batch: {SelectedBatch.BatchName} has been updated.\n Drop File Created.");
                 }
             }
+
+            // Download Exception Files
+            //await _transfer.GetExceptionFiles();
             OnViewLoaded();
         }
-
+        private async void OnDownloadExceptionFile()
+        {
+            await _transfer.GetExceptionFiles();
+        }
         private async void OnClearClientLoads()
         {
             SelectedBatch = null;

@@ -38,7 +38,7 @@ namespace WayBeyond.UX.Services
         Task<List<DropFormat>> GetAllDropFormatsAsync();
         Task<int> AddDropFormatAsync(DropFormat dropFormat);
         Task<DropFormat> GetDropFormatByIdAsync(long? id);
-
+        Task<DropFormat> GetDropByDropIdAsync(long? id);
         //DropFormatDetails
         Task<List<DropFormatDetail>> GetAllDropFormatDetailsByDropFormatId(long? id);
         Task<int> AddDropFormatDetailAsync(DropFormatDetail detail);

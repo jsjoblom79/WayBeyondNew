@@ -17,6 +17,8 @@ public partial class Client
 
     public string? AssemblyName { get; set; }
 
+    public bool? UseAssembly { get; set; }
+
     public long? DropFormatId { get; set; }
 
     public long? FileFormatId { get; set; }
