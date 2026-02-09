@@ -194,7 +194,7 @@ namespace WayBeyond.Data.Models
             get
             {
                 var result = string.Empty;
-                if (!string.IsNullOrEmpty(DebtorState) || !string.IsNullOrEmpty(DebtorZip) && DebtorZip.Length >= 5)
+                if (!string.IsNullOrEmpty(DebtorState) && !string.IsNullOrEmpty(DebtorZip) && DebtorZip.Length >= 5)
                 {
                     result = $"{DebtorState.Replace(" ","").Trim()} {DebtorZip.Substring(0, 5).Replace(" ","").Trim()}";
                 }

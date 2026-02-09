@@ -185,16 +185,20 @@ namespace WayBeyond.UX.Services
             }
             else
             {
+
                 var data = text.Split(' ');
-                switch (data.Count())
+                if (data.Count() > 1)
                 {
-                    case 1:
-                    case 2:
-                        return data[1];
-                    case 3:
-                        return $"{data[1]} {data[2]}";
-                    default:
-                        break;
+                    switch (data.Count())
+                    {
+                        case 1:
+                        case 2:
+                            return data[1];
+                        case 3:
+                            return $"{data[1]} {data[2]}";
+                        default:
+                            break;
+                    }
                 }
                 return null;
             }

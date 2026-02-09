@@ -13,6 +13,7 @@ using WayBeyond.UX.File.Location;
 using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
 using WayBeyond.UX.File.Settings;
+using WayBeyond.UX.Helpers;
 using WayBeyond.UX.Processing.EpicLoads;
 using WayBeyond.UX.Processing.LocalLoads;
 using WayBeyond.UX.Reporting;
@@ -101,6 +102,14 @@ namespace WayBeyond.UX
         {
             get { return _currentStatus; }
             set { SetProperty(ref _currentStatus, value); }
+        }
+
+        private string _appInfo;
+
+        public string AppInfo
+        {
+            get { return _appInfo; }
+            set { SetProperty(ref _appInfo, value); }
         }
 
         private BindableBase _currentViewModel;
@@ -244,6 +253,11 @@ namespace WayBeyond.UX
             UpdateStatus(obj);
         }
 
+        public void OnViewLoaded()
+        {
+            var info = new ApplicationInfoHelper();
+            AppInfo = info.ToString();
+        }
         #endregion
     }
 }

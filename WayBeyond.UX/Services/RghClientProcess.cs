@@ -27,7 +27,7 @@ namespace WayBeyond.UX.Services
             _transfer = transfer;
             _medicare = _db.GetClientByClientIdAsync(1348).Result;
             _nonMedicare = _db.GetClientByClientIdAsync(1081).Result;
-            _drop = new DropFileWrite(_db);
+            _drop = new DropFileWrite(_db, transfer);
         }
         public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {

@@ -237,7 +237,7 @@ namespace WayBeyond.UX.Services
             return files;
         }
 
-        public async Task GetExceptionFiles()
+        public async Task GetExceptionFilesAsync()
         {
             // This process will gather all the Exception Files for the day.
             // Set the local file path for the files.
@@ -251,10 +251,10 @@ namespace WayBeyond.UX.Services
             // Get only the files we want to download
             var dl_files = remote_files.Where(f => Regex.IsMatch(f.FileName, file_name_pattern) & f.CreateDate >= DateTime.Now.Date).ToList();
             // Download the files.
-            foreach(var file in dl_files)
+            foreach (var file in dl_files)
             {
                 // Create the alternate file name from the drop information.
-                long.TryParse(file.FileName.Substring(0, 4),out long dropId);
+                long.TryParse(file.FileName.Substring(0, 4), out long dropId);
                 var drop = await _db.GetDropByDropIdAsync(dropId);
                 file.AltFileName = $"{Path.GetFileNameWithoutExtension(drop.DropName)}_dupbak_{DateTime.Now.ToString("yyyyMMdd-HHmmss")}.txt";
                 await DownloadFileAsync(file, LocationName.ExceptionFiles);

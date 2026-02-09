@@ -5,13 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WayBeyond.UX.File.Remote"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:converters="clr-namespace:WayBeyond.UX.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:PasswordMaskConverter x:Key="PasswordMaskConverter"/>
+    </UserControl.Resources>
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:CallMethodAction TargetObject="{Binding}" MethodName="OnViewLoaded"/>
         </b:EventTrigger>
     </b:Interaction.Triggers>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -45,7 +50,13 @@
                 <DataGridTextColumn Header="Host" Binding="{Binding Host}" Width="Auto"/>
                 <DataGridTextColumn Header="Port" Binding="{Binding Port}" Width="Auto"/>
                 <DataGridTextColumn Header="Username" Binding="{Binding UserName}" Width="Auto"/>
-                <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="Auto"/>
+                <DataGridTemplateColumn Header="Password">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Password, Converter={StaticResource PasswordMaskConverter}}"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridCheckBoxColumn Header="Fingerprint Required" Binding="{Binding FingerprintRequired}" Width="Auto"/>
                 <DataGridTextColumn Header="Fingerprint" Binding="{Binding FingerPrint}" Width="Auto"/>
                 <DataGridTemplateColumn Width="Auto">

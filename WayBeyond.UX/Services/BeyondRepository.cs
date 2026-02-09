@@ -14,7 +14,7 @@ namespace WayBeyond.UX.Services
 
     public class BeyondRepository : IBeyondRepository
     {
-        private BeyondContext _db = new BeyondContext(ConfigurationManager.ConnectionStrings["WayBeyond"].ConnectionString);
+        private BeyondContext _db = new BeyondContext(Security.DecodeFromBase64(ConfigurationManager.ConnectionStrings["WayBeyond"].ConnectionString));
 
         #region RemoteConnections
         public Task<int> AddRemoteConnectionAsync(RemoteConnection connection)
@@ -305,6 +305,28 @@ namespace WayBeyond.UX.Services
         {
             DropFormat dropFormat = _db.DropFormats.Where(d => d.DropId == id).FirstOrDefault();
             return Task.FromResult(dropFormat);
+        }
+
+        public Task<List<Duplicate>> GetAllDuplicatesAsync()
+        {
+            return _db.Duplicates.ToListAsync();
+        }
+
+        public Task<List<Duplicate>> GetDuplicatesByDate(DateTime date)
+        {
+            return _db.Duplicates.Where(d => d.AddDate.Value.Date == date.Date).ToListAsync();
+        }
+
+        public Task<int> AddDuplicateAsync(Duplicate duplicate)
+        {
+            _db.Duplicates.Add(duplicate);
+            return _db.SaveChangesAsync();
+        }
+
+        public Task<int> AddDuplicatesAsync(List<Duplicate> duplicates)
+        {
+            _db.Duplicates.AddRange(duplicates);
+            return _db.SaveChangesAsync();
         }
 
 

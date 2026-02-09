@@ -19,7 +19,7 @@ namespace WayBeyond.UX.Services
             _db = new BeyondRepository();
 
             _transfer = new Transfer();
-            _dropFileWrite = new DropFileWrite(_db);//, transfer);
+            _dropFileWrite = new DropFileWrite(_db, _transfer);
         }
         public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {

@@ -11,11 +11,11 @@ namespace WayBeyond.UX.Services
     public class DropFileWrite
     {
         private static IBeyondRepository _db;
-        //private static ITransfer _transfer;
-        public DropFileWrite(IBeyondRepository db)//, ITransfer transfer)
+        private static ITransfer _transfer;
+        public DropFileWrite(IBeyondRepository db, ITransfer transfer)
         {
             _db = db;
-            //_transfer = transfer;   
+            _transfer = transfer;   
         }
         public bool WriteDropFile(Client client, List<Debtor> debtors, ProcessedFileBatch batch)
         {
@@ -127,6 +127,16 @@ namespace WayBeyond.UX.Services
 
         }
 
+        public async Task<bool> GetDuplicateRecords(Client client)
+        {
+            await _transfer.GetExceptionFilesAsync();
+
+            //foreach(var file in duplicateFiles)
+            //{
+                
+            //}
+            return true;
+        }
         public async Task<bool> CreateClientLoad(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
             var load = new ClientLoad

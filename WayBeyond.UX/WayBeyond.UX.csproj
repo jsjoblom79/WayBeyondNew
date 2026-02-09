@@ -8,10 +8,12 @@
 	  <UseWindowsForms>true</UseWindowsForms>
     <PackageIcon>wbd.png</PackageIcon>
     <StartupObject>WayBeyond.UX.App</StartupObject>
+    <ApplicationIcon>CRI-ETL.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Fonts\Font Awesome 6 Free Solid.otf" />
+    <None Remove="Resources\CRI-ETL.ico" />
     <None Remove="Resources\WayBeyond.db" />
     <None Remove="Resources\wbd.ico" />
     <None Remove="Resources\wbd.png" />
@@ -30,7 +32,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="CRI-ETL.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Fonts\Font Awesome 6 Free Solid.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\CRI-ETL.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\wbd.ico">

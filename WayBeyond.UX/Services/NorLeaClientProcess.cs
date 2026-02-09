@@ -28,7 +28,7 @@ namespace WayBeyond.UX.Services
             _db = db;
 
             _transfer = transfer;
-            _dropFileWrite = new(db);//, transfer);
+            _dropFileWrite = new(db, transfer);
             _dropFormat = _db.GetDropFormatByIdAsync(26).Result;
             _xlApp = new Excel.Application();
             _xlApp.DisplayAlerts = false;

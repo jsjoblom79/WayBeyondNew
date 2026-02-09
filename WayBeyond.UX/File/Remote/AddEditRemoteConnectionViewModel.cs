@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using WayBeyond.Data.Models;
 using WayBeyond.UX.Services;
 
@@ -46,6 +48,7 @@ namespace WayBeyond.UX.File.Remote
         #region Methods
         public RelayCommand SaveConnectionCommand { get; private set; }
         public RelayCommand CancelConnectionCommand { get; private set; }
+        public RelayCommand PasswordUpdated { get; private set; }
 
         public event Action<string> Completed;
 
@@ -62,9 +65,14 @@ namespace WayBeyond.UX.File.Remote
         {
             UpdateRemoteConnection(EditableConnection, _editingRemoteConnection);
         }
-
+        private void OnPasswordUpdate(object sender, RoutedEventArgs e)
+        {
+            EditableConnection.Password = ((PasswordBox)sender).Password;
+            
+        }
         private void UpdateRemoteConnection(NewEditableConnection editableConnection, RemoteConnection editingRemoteConnection)
         {
+
             if (EditMode)
             {
                 editingRemoteConnection.Host = editableConnection.Host;

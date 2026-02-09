@@ -18,6 +18,6 @@ namespace WayBeyond.UX.Services
         // TexasTech Reporting Specific Tasks
         Task<string[]> GetNewFiles(string writeFolder);
 
-        Task GetExceptionFiles();
+        Task GetExceptionFilesAsync();
     }
 }

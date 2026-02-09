@@ -194,7 +194,7 @@ namespace WayBeyond.UX.Reporting
         }
         private async void OnDownloadExceptionFile()
         {
-            await _transfer.GetExceptionFiles();
+            await _transfer.GetExceptionFilesAsync();
         }
         private async void OnClearClientLoads()
         {

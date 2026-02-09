@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WayBeyond.UX.File.Remote"
              xmlns:conv="clr-namespace:WayBeyond.UX.Converters"
+             xmlns:converters="clr-namespace:WayBeyond.UX.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <conv:NegatableBooleanToVisibilityConverter x:Key="VisConverter"/>
         <conv:NegatableBooleanToVisibilityConverter x:Key="NegVisConvert" Negate="True"/>
+        <converters:PasswordMaskConverter x:Key="PasswordMaskConverter"/>
         <Style TargetType="TextBox">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError"
@@ -52,7 +54,7 @@
             <TextBox Text="{Binding Host}" Margin="3" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
             <TextBox Text="{Binding Port}" Margin="3" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
             <TextBox Text="{Binding Username}" Margin="3" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
-            <TextBox Text="{Binding Password}" Margin="3" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
+            <PasswordBox converters:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay}"  Margin="3" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="1" Width="120" VerticalContentAlignment="Center"/>
             <CheckBox Content="{Binding FingerprintRequired}" Margin="3,5,3,3" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="3" Width="120"
                       VerticalAlignment="Center"/>
             <TextBox Text="{Binding FingerPrint}" Margin="3" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="3" Width="120" VerticalContentAlignment="Center"/>

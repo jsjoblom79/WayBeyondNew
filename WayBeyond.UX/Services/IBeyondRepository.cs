@@ -70,5 +70,12 @@ namespace WayBeyond.UX.Services
         Task<int> AddClientLoadAsync(ClientLoad clientLoad);
         Task<List<ClientLoad>> GetAllClientLoadsByBatchIdAsync(long? id);
         Task<List<ClientLoad>> GetClientLoadsByDateAsync(DateTime date);
+
+        //Duplicates
+        Task<List<Duplicate>> GetAllDuplicatesAsync();
+        Task<List<Duplicate>> GetDuplicatesByDate(DateTime date);
+        Task<int> AddDuplicateAsync(Duplicate duplicate);
+        Task<int> AddDuplicatesAsync(List<Duplicate> duplicates);
+        
     }
 }

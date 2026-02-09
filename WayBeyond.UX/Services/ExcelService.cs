@@ -187,7 +187,7 @@ namespace WayBeyond.UX.Services
                 case SpecialCase.Split3Comma:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var split3 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(',');
-                    return $"{split3[1].Trim()} {split3[2].Trim()}";
+                    return $"{split3[2].Trim()}";
                 case SpecialCase.Split1:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var sp1 = ((string)_xlWrkSht.Cells[row, detail.FileColumn].Text).Split(" ");
@@ -199,7 +199,7 @@ namespace WayBeyond.UX.Services
                     case SpecialCase.Split3:
                     if (string.IsNullOrWhiteSpace(_xlWrkSht.Cells[row, detail.FileColumn].Text)) return null;
                     var sp3 = ((string)_xlWrkSht.Cells[row,detail.FileColumn].Text).Split(",");
-                    return $"{sp3[1].ToCleanString()} {sp3[2].ToCleanString()}";
+                    return $"{sp3[2].ToCleanString()}";
                 default:
                     return null;
             }
