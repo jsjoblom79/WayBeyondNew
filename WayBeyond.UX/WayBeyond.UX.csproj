@@ -86,5 +86,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+<PropertyGroup>
+	<Version>2.0.0</Version>
+	<InformationalVersion>2.0.0</InformationalVersion>
+</PropertyGroup>
 
 </Project>

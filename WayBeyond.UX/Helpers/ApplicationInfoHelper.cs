@@ -24,7 +24,7 @@ namespace WayBeyond.UX.Helpers
 
         public override string ToString()
         {
-            return $"{Version}, InfoVersion: {InfoVersion}";
+            return $"{Version}";
         }
     }
 }
