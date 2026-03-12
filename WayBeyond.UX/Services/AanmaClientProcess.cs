@@ -109,7 +109,7 @@ namespace WayBeyond.UX.Services
                                         DebtorPhone = Encoding.ASCII.GetString(data, line.start + r01[18, 0] - 1, r01[18, 1]).Trim(),
                                         DebtorEmpPhone = Encoding.ASCII.GetString(data, line.start + r01[20, 0] - 1, r01[20, 1]).Trim(),
                                         DebtorSSN = Encoding.ASCII.GetString(data, line.start + r01[25, 0] - 1, r01[25, 1]).Trim(),
-                                        DebtorEmail = Encoding.ASCII.GetString(data, line.start + r01[33, 0] - 1, r01[33, 1]).Trim()
+                                        DebtorEmail = Encoding.ASCII.GetString(data, line.start + r01[33, 0] - 1, r01[33, 1]).Trim().ToValidEmail()
 
                                     };
                                     debtors.Add(debtor);

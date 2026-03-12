@@ -64,7 +64,7 @@ namespace WayBeyond.UX.Services
                         DebtorState = records[7].Trim(),
                         DebtorZip = records[8].Trim(),
                         DebtorPhone = records[9].ToCleanString().Trim(),
-                        DebtorEmail = records[10].Trim(),
+                        DebtorEmail = records[10].Trim().ToValidEmail(),
                         DebtorDOB = records[13].Trim().ToDateTimeYMD()
                     };
                     _debtors.Add(debtor);

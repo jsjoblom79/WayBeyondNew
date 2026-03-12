@@ -172,7 +172,7 @@ namespace WayBeyond.UX.Services
                 DateOfService = fields[14].ToDateTimeYMD(),
                 Client = _db.GetClientByClientId((long)DetermineClient(fields[16], fields[69].ToPayType())),
                 PatientsPhone = fields[23],
-                DebtorEmail = fields[25],
+                DebtorEmail = fields[25].ToValidEmail(),
                 PatientMiscData1 = fields[33].ToCleanString(),
                 AmountReferred = fields[72].ToDouble(),
                 InsuranceName = fields[76],

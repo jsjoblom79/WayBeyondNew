@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
@@ -12,6 +14,23 @@ namespace WayBeyond.UX.Services
 {
     public static class ExtentionMethods
     {
+        public static string? ToValidEmail(this string text)
+        {
+            string[] excludedDomains = new string[] { "none.com", "na.com", "n.com" };
+            try
+            {
+                MailAddress email = new MailAddress(text);
+                if (excludedDomains.Contains(email.Host.ToLower()))
+                {
+                    return string.Empty;
+                }
+                return email.Address == text ? email.Address : null;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
         public static double ToDouble(this string text)
         {
             if (text.Contains("$"))

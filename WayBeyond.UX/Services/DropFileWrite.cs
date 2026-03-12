@@ -22,7 +22,7 @@ namespace WayBeyond.UX.Services
             var drop = client.DropFormat;
             var dropDetails = drop.DropFormatDetails;
             var stringBuilder = new StringBuilder();
-
+            
             try
             {
                 //Writes the header record for the Drop File.
@@ -80,6 +80,10 @@ namespace WayBeyond.UX.Services
                                         break;
                                     case "InsuranceName":
                                         stringBuilder.Append(debtor.GetInsuranceName());
+                                        break;
+                                    case "DebtorEmail":
+                                        var email = ((string)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)).ToValidEmail();
+                                        stringBuilder.Append(email);
                                         break;
                                     case "DebtorEmpPhone":
                                     case "PatientsSSN":
