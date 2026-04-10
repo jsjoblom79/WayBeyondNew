@@ -34,7 +34,6 @@ WayBeyond is designed for debt collection agencies that receive account referral
 - Maps file columns to debtor record fields using configurable format definitions
 - Processes accounts for multiple Epic EHR clients (NorLea, RGH, AANMA, etc.)
 - Generates drop files for downstream collection workflows
-- Produces reporting exports including Transunion lists, bad debt, charity, PIF, cancels, and inventory reports
 - Manages remote file connections (SFTP/FTP) for automated file retrieval
 
 ---
@@ -47,7 +46,6 @@ WayBeyond is designed for debt collection agencies that receive account referral
 - **Local & Remote File Loading** — Pick up files locally or pull from remote connections
 - **Bad Email Tracking** — Maintain a list of known bad email domains and addresses
 - **Processed File Batch History** — Track which file batches have been processed
-- **Texas Tech Reporting** — Specialized reporting module for Texas-region clients
 - **Encrypted Configuration** — Sensitive connection settings are encrypted at rest
 - **MVVM Architecture** — Clean separation of UI and business logic using WPF + MVVM pattern
 
@@ -91,7 +89,6 @@ WayBeyond/
     │   └── LocalLoads/              # Local/manual file processing
     ├── Reporting/
     │   ├── ProcessedFilesView       # Processed batch history
-    │   └── TexasTech/               # Texas Tech reporting module
     ├── Services/                    # Business logic services
     │   ├── BeyondRepository.cs      # Main data access repository
     │   ├── ClientProcess.cs         # Core client file processing logic
@@ -101,7 +98,6 @@ WayBeyond/
     │   ├── Transfer.cs              # Remote file transfer service
     │   ├── ExcelService.cs          # Excel file reading service
     │   ├── DropFileWrite.cs         # Drop file output writer
-    │   ├── TexasTechService.cs      # Texas Tech reporting service
     │   └── ConfigurationEncryptionService.cs  # Settings encryption
     └── Helpers/                     # MVVM helpers (BindableBase, RelayCommand, etc.)
 ```
@@ -212,14 +208,6 @@ Navigate to the **Reporting** section to generate and export the following:
 | Report | Description |
 |---|---|
 | Processed Files | History of all processed file batches |
-| Inventory | Active accounts with no payment activity |
-| Bad Debt | Accounts flagged as over 200% FPL |
-| Charity | Accounts flagged as 0–200% FPL |
-| Cancels | Accounts closed with CCR status in the last month |
-| PIF | Paid-in-full accounts closed in the last month |
-| Transunion | Accounts eligible for credit reporting |
-
-The **Texas Tech** reporting module provides a specialized workflow for Texas-region clients, including TransUnion export preparation, expired account tracking, and Scode updates from TUResult data.
 
 ---
 
@@ -236,8 +224,6 @@ Key entities managed by the application:
 | `RemoteConnection` | SFTP/FTP connection settings |
 | `Debtor` | Debtor contact and account information |
 | `Account` | Individual account referral record |
-| `TexasDebtor` / `Patient` | Texas Tech-specific debtor and patient records |
-| `TUResult` | TransUnion scoring results |
 | `ProcessedFileBatch` | Audit log of processed file batches |
 | `BadEmailAddresses` | Known invalid email addresses/domains |
 | `Setting` | Application-level configuration key/value pairs |
