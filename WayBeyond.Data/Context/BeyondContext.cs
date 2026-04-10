@@ -55,6 +55,7 @@ public partial class BeyondContext : DbContext
     public virtual DbSet<ToInventory> ToInventories { get; set; }
     public virtual DbSet<ToCancel> ToCancels { get; set; }
     public virtual DbSet<Duplicate> Duplicates { get; set; }
+    public virtual DbSet<BadEmailAddresses> BadEmailAddresses { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite(_connectString);

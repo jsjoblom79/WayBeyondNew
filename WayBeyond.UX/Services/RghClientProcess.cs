@@ -21,6 +21,7 @@ namespace WayBeyond.UX.Services
         private FileObject _fileObject;
         private DropFileWrite _drop;
         private string[] _fileContents;
+        private string[] _xClude;
         public RghClientProcess(IBeyondRepository db, ITransfer transfer)
         {
             _db = db;
@@ -28,6 +29,7 @@ namespace WayBeyond.UX.Services
             _medicare = _db.GetClientByClientIdAsync(1348).Result;
             _nonMedicare = _db.GetClientByClientIdAsync(1081).Result;
             _drop = new DropFileWrite(_db, transfer);
+            _xClude = _db.GetBadEmailForComparisonAsync();
         }
         public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
@@ -64,7 +66,7 @@ namespace WayBeyond.UX.Services
                         DebtorState = records[7].Trim(),
                         DebtorZip = records[8].Trim(),
                         DebtorPhone = records[9].ToCleanString().Trim(),
-                        DebtorEmail = records[10].Trim().ToValidEmail(),
+                        DebtorEmail = records[10].Trim().ToValidEmail(_xClude),
                         DebtorDOB = records[13].Trim().ToDateTimeYMD()
                     };
                     _debtors.Add(debtor);

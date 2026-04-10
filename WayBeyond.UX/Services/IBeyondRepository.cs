@@ -76,6 +76,11 @@ namespace WayBeyond.UX.Services
         Task<List<Duplicate>> GetDuplicatesByDate(DateTime date);
         Task<int> AddDuplicateAsync(Duplicate duplicate);
         Task<int> AddDuplicatesAsync(List<Duplicate> duplicates);
-        
+
+        //BadEmailAddresses
+        Task<List<BadEmailAddresses>> GetAllBadEmailAddresses();
+        Task<int> AddBadEmailAddress(BadEmailAddresses badEmail);
+        string[] GetBadEmailForComparisonAsync();
+
     }
 }

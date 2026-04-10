@@ -82,7 +82,8 @@ namespace WayBeyond.UX.Services
                                         stringBuilder.Append(debtor.GetInsuranceName());
                                         break;
                                     case "DebtorEmail":
-                                        var email = ((string)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)).ToValidEmail();
+                                        var xCludes = _db.GetBadEmailForComparisonAsync();
+                                        var email = ((string)debtor.GetType().GetProperty(detail.Field).GetValue(debtor)).ToValidEmail(xCludes);
                                         stringBuilder.Append(email);
                                         break;
                                     case "DebtorEmpPhone":

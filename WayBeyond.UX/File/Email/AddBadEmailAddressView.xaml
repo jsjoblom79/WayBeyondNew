@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="WayBeyond.UX.File.Email.AddBadEmailAddressView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WayBeyond.UX.File.Email"
+             xmlns:conv="clr-namespace:WayBeyond.UX.Converters"
+             xmlns:e="clr-namespace:WayBeyond.UX.Services"
+             xmlns:model="clr-namespace:WayBeyond.Data.Models;assembly=WayBeyond.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <conv:NegatableBooleanToVisibilityConverter x:Key="VisConverter"/>
+        <conv:NegatableBooleanToVisibilityConverter x:Key="NegVisConvert" Negate="True"/>  
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" DataContext="{Binding BadEmail}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- Labels -->
+            <Label Grid.Row="1" Grid.Column="1" Content="ID:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="Username:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Grid.Row="3" Grid.Column="1" Content="Domain:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Grid.Row="4" Grid.Column="1" Content="Address:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <Label Grid.Row="5" Grid.Column="1" Content="Type:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <!-- TextBoxes -->
+            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Id}" Margin="5" IsReadOnly="True" VerticalContentAlignment="Center" Background="Transparent" BorderThickness="0"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Username}" Margin="5" VerticalContentAlignment="Center"/>
+            <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding Domain}" Margin="5" VerticalContentAlignment="Center"/>
+            <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding EmailAddress}" Margin="5" VerticalContentAlignment="Center"/>
+            <ComboBox ItemsSource="{e:EnumCollection EnumType=model:BadEmailType}" Grid.Row="5" Grid.Column="2" Text="{Binding BadEmailType}" Margin="5" VerticalContentAlignment="Center"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Button Content="Add" Command="{Binding SaveBadEmailCommand}" Visibility="{Binding EditMode, Converter={StaticResource NegVisConvert}}"
+                Width="75" Margin="3"/>
+                <Button Content="Cancel" Command="{Binding CancelBadEmailCommand}"
+                Width="75" Margin="3"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

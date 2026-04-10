@@ -15,6 +15,7 @@
         xmlns:epic="clr-namespace:WayBeyond.UX.Processing.EpicLoads"
         xmlns:report="clr-namespace:WayBeyond.UX.Reporting"
         xmlns:texas="clr-namespace:WayBeyond.UX.Reporting.TexasTech"
+        xmlns:email="clr-namespace:WayBeyond.UX.File.Email"
         mc:Ignorable="d"
         Title="CRI - Extract Transform Load" Height="650" Width="1000" WindowStartupLocation="CenterScreen"
         Icon="/Resources/CRI-ETL.ico" >
@@ -73,6 +74,12 @@
         <DataTemplate DataType="{x:Type texas:TexasTechViewModel}">
             <texas:TexasTechView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type email:BadEmailViewModel}">
+            <email:BadEmailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type email:AddBadEmailAddressViewModel}">
+            <email:AddBadEmailAddressView/>
+        </DataTemplate>
     </Window.Resources>
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
@@ -88,7 +95,6 @@
         <Menu Grid.Row="0" FontSize="14" Background="Transparent"
               BorderBrush="black" BorderThickness="0,0,0,1">
             <MenuItem Header="File"  Margin="3">
-                
                 <MenuItem Header="Remote Connections" Command="{Binding NavigateCommand}"
                           CommandParameter="connection" Margin="3">
                     <MenuItem.Icon>
@@ -121,6 +127,13 @@
                             <TextBlock Text="&#xf15c;" FontFamily="{StaticResource FontAwesome}"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Bad Email Addresses" Command="{Binding NavigateCommand}"
+                          CommandParameter="bademail" Margin="3">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf0e0;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Exit" Command="{Binding NavigateCommand}"

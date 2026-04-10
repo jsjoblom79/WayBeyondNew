@@ -329,6 +329,31 @@ namespace WayBeyond.UX.Services
             return _db.SaveChangesAsync();
         }
 
+        public Task<List<BadEmailAddresses>> GetAllBadEmailAddresses() => _db.BadEmailAddresses.ToListAsync();
+
+        public Task<int> AddBadEmailAddress(BadEmailAddresses badEmail)
+        {
+            _db.BadEmailAddresses.Add(badEmail);
+            return _db.SaveChangesAsync();
+        }
+
+        public string[] GetBadEmailForComparisonAsync()
+        {
+            var values = _db.BadEmailAddresses
+                .Where(x => x.Username != null && x.Username != "")
+                .Select(x => x.Username.ToLower())
+            .Concat(
+                _db.BadEmailAddresses.Where(x => x.Domain != null && x.Domain != "")
+                .Select(x => x.Domain.ToLower()))
+            .Concat(
+                _db.BadEmailAddresses.Where(x => x.EmailAddress != null && x.EmailAddress != "")
+                .Select(x => x.EmailAddress.ToLower()))
+            .Distinct()
+            .ToArray();
+
+            return values;
+        }
+
 
 
 

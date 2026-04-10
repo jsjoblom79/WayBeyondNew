@@ -9,6 +9,7 @@ using Unity;
 using WayBeyond.Data.Models;
 using WayBeyond.UX.File.Drops.Drop;
 using WayBeyond.UX.File.Drops.Formats;
+using WayBeyond.UX.File.Email;
 using WayBeyond.UX.File.Location;
 using WayBeyond.UX.File.Maintenance;
 using WayBeyond.UX.File.Remote;
@@ -39,6 +40,8 @@ namespace WayBeyond.UX
         private ProcessedFilesViewModel _processedFilesViewModel;
         private EpicClientLoadViewModel _epicClientLoadViewModel;
         private TexasTechViewModel _texasTechViewModel;
+        private BadEmailViewModel _badEmailViewModel;
+        private AddBadEmailAddressViewModel _addBadEmailAddressViewModel;
 
         public MainWindowViewModel()
         {
@@ -59,6 +62,8 @@ namespace WayBeyond.UX
             _processedFilesViewModel = ContainerHelper.Container.Resolve<ProcessedFilesViewModel>();
             _epicClientLoadViewModel = ContainerHelper.Container.Resolve<EpicClientLoadViewModel>();
             _texasTechViewModel = ContainerHelper.Container.Resolve<TexasTechViewModel>();
+            _badEmailViewModel = ContainerHelper.Container.Resolve<BadEmailViewModel>();
+            _addBadEmailAddressViewModel = ContainerHelper.Container.Resolve<AddBadEmailAddressViewModel>();
 
             _settingsViewModel.Completed += UpdateStatus;
             _settingsViewModel.AddEditSettingRequest += AddEditSettingCommand;
@@ -94,6 +99,10 @@ namespace WayBeyond.UX
             //ProcessedFiles
             _processedFilesViewModel.StatusUpdate += UpdateStatus;
             _epicClientLoadViewModel.Completed -= UpdateStatus;
+
+            _badEmailViewModel.AddBadEmailAddress += AddBadEmailAddressCommand;
+            _badEmailViewModel.StatusUpdate += UpdateStatus;
+            _addBadEmailAddressViewModel.Completed += BadEmailAddressComplete;
         }
 
         private string _currentStatus;
@@ -161,6 +170,9 @@ namespace WayBeyond.UX
                 case "texas":
                     CurrentViewModel = _texasTechViewModel;
                     break;
+                case "bademail":
+                    CurrentViewModel = _badEmailViewModel;
+                    break;
                 default:
                     break;
             }
@@ -187,6 +199,11 @@ namespace WayBeyond.UX
         private void RemoteSettingComplete(string obj)
         {
             CurrentViewModel = _remoteConnectionViewModel;
+            UpdateStatus(obj);
+        }
+        private void BadEmailAddressComplete(string obj)
+        {
+            CurrentViewModel = _badEmailViewModel;
             UpdateStatus(obj);
         }
         private void AddEditSettingCommand(Setting obj, bool editMode)
@@ -252,7 +269,12 @@ namespace WayBeyond.UX
             CurrentViewModel = _fileFormatViewModel;
             UpdateStatus(obj);
         }
-
+        private void AddBadEmailAddressCommand(BadEmailAddresses email, bool arg2)
+        {
+            _addBadEmailAddressViewModel.EditMode = arg2;
+            _addBadEmailAddressViewModel.SetBadEmail(email);
+            CurrentViewModel = _addBadEmailAddressViewModel;
+        }
         public void OnViewLoaded()
         {
             var info = new ApplicationInfoHelper();

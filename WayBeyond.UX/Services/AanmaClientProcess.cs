@@ -21,12 +21,14 @@ namespace WayBeyond.UX.Services
         private ITransfer _transfer;
         public event Action<string> ProcessUpdates;
         private DropFileWrite _drop;
+        private string[] _xClude;
         public AanmaClientProcess(IBeyondRepository db, ITransfer transfer)
         {
             _db = db;
 
             _transfer = transfer;
             _drop = new DropFileWrite(_db, transfer);
+            _xClude = _db.GetBadEmailForComparisonAsync();
         }
         public async Task<bool> CreateClientLoadAsync(Client client, List<Debtor> debtors, ProcessedFileBatch batch, FileObject file)
         {
@@ -109,7 +111,7 @@ namespace WayBeyond.UX.Services
                                         DebtorPhone = Encoding.ASCII.GetString(data, line.start + r01[18, 0] - 1, r01[18, 1]).Trim(),
                                         DebtorEmpPhone = Encoding.ASCII.GetString(data, line.start + r01[20, 0] - 1, r01[20, 1]).Trim(),
                                         DebtorSSN = Encoding.ASCII.GetString(data, line.start + r01[25, 0] - 1, r01[25, 1]).Trim(),
-                                        DebtorEmail = Encoding.ASCII.GetString(data, line.start + r01[33, 0] - 1, r01[33, 1]).Trim().ToValidEmail()
+                                        DebtorEmail = Encoding.ASCII.GetString(data, line.start + r01[33, 0] - 1, r01[33, 1]).Trim().ToValidEmail(_xClude)
 
                                     };
                                     debtors.Add(debtor);

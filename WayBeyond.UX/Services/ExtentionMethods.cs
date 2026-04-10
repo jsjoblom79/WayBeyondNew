@@ -14,16 +14,24 @@ namespace WayBeyond.UX.Services
 {
     public static class ExtentionMethods
     {
-        public static string? ToValidEmail(this string text)
+        public static string? ToValidEmail(this string text, string[] excludedEmail)
         {
-            string[] excludedDomains = new string[] { "none.com", "na.com", "n.com" };
             try
             {
                 MailAddress email = new MailAddress(text);
-                if (excludedDomains.Contains(email.Host.ToLower()))
+                if(excludedEmail.Contains(email.User.ToLower()))
                 {
                     return string.Empty;
                 }
+                if (excludedEmail.Contains(email.Host.ToLower()))
+                {
+                    return string.Empty;
+                }
+                if(excludedEmail.Contains(email.Address.ToLower()))
+                {
+                    return string.Empty;
+                }
+
                 return email.Address == text ? email.Address : null;
             }
             catch (Exception)

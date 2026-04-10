@@ -22,7 +22,7 @@ namespace WayBeyond.UX.Services
         private Excel.Workbook _xlWrkBk;
         private Excel.Workbooks _xlWrkBks;
         private Excel.Worksheet _xlWrkSht;
-
+        private string[] _xClude;
         public NorLeaClientProcess(IBeyondRepository db, ITransfer transfer)
         {
             _db = db;
@@ -33,6 +33,7 @@ namespace WayBeyond.UX.Services
             _xlApp = new Excel.Application();
             _xlApp.DisplayAlerts = false;
             _xlApp.Visible = true;
+            _xClude = _db.GetBadEmailForComparisonAsync();
         }
         public event Action<string> ProcessUpdates = delegate { };
 
@@ -172,7 +173,7 @@ namespace WayBeyond.UX.Services
                 DateOfService = fields[14].ToDateTimeYMD(),
                 Client = _db.GetClientByClientId((long)DetermineClient(fields[16], fields[69].ToPayType())),
                 PatientsPhone = fields[23],
-                DebtorEmail = fields[25].ToValidEmail(),
+                DebtorEmail = fields[25].ToValidEmail(_xClude),
                 PatientMiscData1 = fields[33].ToCleanString(),
                 AmountReferred = fields[72].ToDouble(),
                 InsuranceName = fields[76],
