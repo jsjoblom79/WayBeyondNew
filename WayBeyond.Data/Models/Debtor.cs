@@ -159,7 +159,7 @@ namespace WayBeyond.Data.Models
         public ClientId? ClientName { get; set; }
         public string? DebtorHomePhone
         {
-            get => !string.IsNullOrWhiteSpace(_debtorCell) ? _debtorPhone : _debtorPhone;
+            get => !string.IsNullOrWhiteSpace(_debtorCell) ? _debtorCell : _debtorPhone;
         }
         public string? FirstMiddleName
         {
